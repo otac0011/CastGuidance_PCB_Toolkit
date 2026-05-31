@@ -1,12 +1,14 @@
-# Jupiter PCB Toolkit
+# CastGuidance PCB Toolkit
 
-> **Releases-only repository.** This repo hosts the prebuilt Windows installer / executable for Jupiter PCB Toolkit. The source code is proprietary and lives in a private repository.
+**Documentation hub:** <https://otac0011.github.io/CastGuidance_PCB_Toolkit/> — download links, user manual, verification details, datasheets.
+
+> **Releases-only repository.** This repo hosts the prebuilt Windows installer / executable for CastGuidance PCB Toolkit. The source code is proprietary and lives in a private repository.
 
 ## Get the latest release
 
-→ **[Download the latest release](https://github.com/otac0011/Jupiter_PCB_Toolkit/releases/latest)** (Windows .exe, ~190 MB self-contained)
+→ **[Download the latest release](https://github.com/otac0011/CastGuidance_PCB_Toolkit/releases/latest)** (Windows .exe, ~190 MB self-contained)
 
-Open `JupiterPCBToolkit.exe`. On first launch you'll be asked to accept the End User License Agreement. No installer step — the executable is a self-contained PyInstaller bundle.
+Open `CastGuidancePCBToolkit.exe`. On first launch you'll be asked to accept the End User License Agreement. No installer step — the executable is a self-contained PyInstaller bundle.
 
 ## What it does
 
@@ -39,11 +41,11 @@ This is **not** open-source software. Source code is held privately.
 
 The "Open Datasheet" button inside the toolkit links to PDFs hosted on this repository's GitHub Pages:
 
-→ <https://otac0011.github.io/Jupiter_PCB_Toolkit/>
+→ <https://otac0011.github.io/CastGuidance_PCB_Toolkit/>
 
 ## Reporting a bug
 
-[Open an issue](https://github.com/otac0011/Jupiter_PCB_Toolkit/issues). Please include the toolkit version (visible in the title bar), what page or wizard step you were on, and a screenshot if applicable.
+[Open an issue](https://github.com/otac0011/CastGuidance_PCB_Toolkit/issues). Please include the toolkit version (visible in the title bar), what page or wizard step you were on, and a screenshot if applicable.
 
 ## Disclaimer
 
@@ -51,4 +53,4 @@ PCB designs and electronic circuits can pose safety and reliability risks. All v
 
 ---
 
-© 2026 Jupiter PCB Toolkit Developer. All rights reserved.
+© 2026 CastGuidance PCB Toolkit Developer. All rights reserved.
