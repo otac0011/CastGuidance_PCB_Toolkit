@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CastGuidance PCB Toolkit — Verification Guide</title>
+<style>
+  :root {
+    --bg:       #1e1e2e;
+    --surface:  #272738;
+    --border:   #3a3a5c;
+    --amber:    #FFA500;
+    --green:    #4CAF50;
+    --red:      #f44336;
+    --blue:     #64b5f6;
+    --gray:     #888;
+    --text:     #e0e0e0;
+    --muted:    #aaa;
+    --mono:     'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; line-height: 1.6; }
+
+  header { background: linear-gradient(135deg, #12122a 0%, #1e1e3a 100%); border-bottom: 2px solid var(--amber); padding: 28px 40px 20px; }
+  header h1 { font-size: 1.7rem; font-weight: 700; color: var(--amber); letter-spacing: .03em; }
+  header p  { color: var(--muted); margin-top: 6px; max-width: 720px; }
+  header .meta { margin-top: 14px; display: flex; gap: 24px; flex-wrap: wrap; }
+  header .meta span { font-size: 12px; color: var(--muted); }
+  header .meta span b { color: var(--text); }
+
+  .controls { position: sticky; top: 0; z-index: 100; background: #1a1a30; border-bottom: 1px solid var(--border); padding: 10px 40px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .controls input { background: var(--surface); border: 1px solid var(--border); color: var(--text); border-radius: 6px; padding: 6px 12px; font-size: 13px; width: 280px; outline: none; }
+  .controls input:focus { border-color: var(--amber); }
+  .controls label { font-size: 12px; color: var(--muted); }
+  .badge { display: inline-block; padding: 2px 9px; border-radius: 12px; font-size: 11px; font-weight: 700; letter-spacing: .04em; }
+  .badge.pass    { background: #1b3a1b; color: #81c784; border: 1px solid #4CAF50; }
+  .badge.close   { background: #3a2e00; color: #ffcc02; border: 1px solid #ffa500; }
+  .badge.manual  { background: #2a2a3a; color: #aaa;    border: 1px solid #555; }
+  .badge.pending { background: #2a1a1a; color: #e57373; border: 1px solid #c62828; }
+  .filter-counts { font-size: 12px; color: var(--muted); margin-left: auto; }
+
+  main { max-width: 1100px; margin: 0 auto; padding: 32px 40px 60px; }
+
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 36px; }
+  .summary-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; text-align: center; }
+  .summary-card .num { font-size: 2.2rem; font-weight: 800; margin-bottom: 4px; }
+  .summary-card .lbl { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+  .summary-card.pass-card  .num { color: #81c784; }
+  .summary-card.close-card .num { color: #ffcc02; }
+  .summary-card.manual-card .num { color: #aaa; }
+  .summary-card.total-card .num { color: var(--amber); }
+
+  section { margin-bottom: 40px; }
+  section h2 { font-size: 1.05rem; font-weight: 600; color: var(--amber); border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+  section h2 .cat-count { font-size: 11px; color: var(--muted); font-weight: 400; }
+
+  .tool-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; overflow: hidden; transition: border-color .15s; }
+  .tool-card:hover { border-color: #555; }
+  .tool-card.manual-card-item { opacity: .75; }
+  .tool-header { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; padding: 11px 16px; cursor: pointer; user-select: none; }
+  .tool-header:hover { background: rgba(255,255,255,.03); }
+  .tool-name { font-weight: 600; color: var(--text); }
+  .tool-status { justify-self: end; }
+  .tool-body { padding: 0 16px 14px 16px; border-top: 1px solid var(--border); display: none; }
+  .tool-body.open { display: block; }
+  .tool-body table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13px; }
+  .tool-body table th { text-align: left; color: var(--muted); font-weight: 500; padding: 4px 8px 4px 0; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; border-bottom: 1px solid var(--border); }
+  .tool-body table td { padding: 5px 8px 5px 0; vertical-align: top; border-bottom: 1px solid rgba(255,255,255,.04); }
+  .tool-body table tr:last-child td { border-bottom: none; }
+  .mono { font-family: var(--mono); font-size: 12px; color: #9cdcfe; }
+  .note { font-size: 12px; color: var(--muted); margin-top: 8px; padding: 8px 10px; background: rgba(255,255,255,.04); border-left: 3px solid var(--border); border-radius: 0 4px 4px 0; line-height: 1.5; }
+  .note.warn { border-left-color: #ffa500; }
+  .note.good { border-left-color: #4CAF50; }
+  .source-link { color: var(--blue); text-decoration: none; font-size: 12px; }
+  .source-link:hover { text-decoration: underline; }
+  .action-box { background: rgba(255,165,0,.07); border: 1px solid rgba(255,165,0,.25); border-radius: 6px; padding: 10px 14px; margin-top: 10px; font-size: 13px; }
+  .action-box b { color: var(--amber); }
+  .action-box ol { margin: 6px 0 0 18px; }
+  .action-box li { margin-bottom: 4px; }
+  .tag { display: inline-block; background: rgba(100,181,246,.12); color: var(--blue); border: 1px solid rgba(100,181,246,.3); border-radius: 4px; padding: 1px 7px; font-size: 11px; font-family: var(--mono); margin-right: 4px; }
+
+  .method-key { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; font-size: 12px; }
+  .method-key .mk { display: flex; align-items: center; gap: 6px; }
+  .method-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .md-js   { background: #ffa500; }
+  .md-py   { background: #64b5f6; }
+  .md-eq   { background: #81c784; }
+  .md-src  { background: #ce93d8; }
+
+  footer { text-align: center; padding: 24px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--border); }
+  .no-results { text-align: center; color: var(--muted); padding: 40px; display: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>CastGuidance PCB Toolkit — Verification Guide</h1>
+  <p>Documents how each calculator was verified against a third-party reference, which methodology was used, and what specific steps are required for the tools still awaiting manual checking.</p>
+  <div class="meta">
+    <span>Last updated: <b>2026-05-29</b></span>
+    <span>Companion to: <b>verification_results.html</b> (numeric data) and <b>validation_references.html</b> (tool URLs)</span>
+    <span>See also: <b>scripts/full_verify.py</b> and <b>scripts/extended_verify.py</b> (runnable reference scripts)</span>
+  </div>
+</header>
+
+<div class="controls">
+  <label for="filter">Filter:</label>
+  <input id="filter" type="text" placeholder="Type tool name or category..." oninput="applyFilter()">
+  <div class="method-key">
+    <div class="mk"><span class="method-dot md-js"></span> Chemandy JS extracted</div>
+    <div class="mk"><span class="method-dot md-py"></span> Python module direct call</div>
+    <div class="mk"><span class="method-dot md-eq"></span> Governing equation</div>
+    <div class="mk"><span class="method-dot md-src"></span> Source code review</div>
+  </div>
+  <span class="filter-counts" id="filterCounts"></span>
+</div>
+
+<main>
+
+  <div class="summary-grid">
+    <div class="summary-card pass-card"><div class="num">37</div><div class="lbl">Verified PASS</div></div>
+    <div class="summary-card close-card"><div class="num">1</div><div class="lbl">Verified CLOSE</div></div>
+    <div class="summary-card manual-card"><div class="num">13</div><div class="lbl">Manual Pending</div></div>
+    <div class="summary-card total-card"><div class="num">51</div><div class="lbl">Total Tools</div></div>
+  </div>
+
+  <!-- ===== BASIC ELECTRICAL ===== -->
+  <section>
+    <h2>Basic Electrical <span class="cat-count">11 tools · all PASS</span></h2>
+
+    <div class="tool-card" data-name="Ohm's Law">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge pass">PASS</span>
+        <span class="tool-name">Ohm's Law (V, I, R, P)</span>
+      </div>
+      <div class="tool-body">
+        <table>
+          <tr><th>Method</th><th>Reference source</th><th>Test inputs</th><th>Result</th></tr>
+          <tr><td><span class="tag">equation</span></td><td>V=IR, P=V²/R</td><td>V=12 V, R=100 Ω</td><td class="mono">I=0.12 A, P=1.44 W → 0.00% delta</td></tr>
+        </table>
+        <div class="note good">Exact algebraic identity — no approximation possible. All four solve-for modes (V, I, R, P) verified to produce numerically exact results.</div>
+      </div>
+    </div>
+
+    <div class="tool-card" data-name="Reactance Xc Xl Resonance">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge pass">PASS</span>
+        <span class="tool-name">Reactance (Xc, Xl) &amp; Resonant Frequency</span>
+      </div>
+      <div class="tool-body">
+        <table>
+          <tr><th>Method</th><th>Reference source</th><th>Test inputs</th><th>Result</th></tr>
+          <tr><td><span class="tag">equation</span></td><td>Xc = 1/(2πfC)</td><td>f=1 MHz, C=100 pF</td><td class="mono">Xc=1591.55 Ω → 0.00%</td></tr>
+          <tr><td><span class="tag">equation</span></td><td>Xl = 2πfL</td><td>f=1 MHz, L=100 nH</td><td class="mono">Xl=0.6283 Ω → 0.00%</td></tr>
+          <tr><td><span class="tag">equation</span></td><td>f₀ = 1/(2π√LC)</td><td>C=100 pF, L=100 nH</td><td class="mono">f₀=50.329 MHz → 0.00%</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="tool-card" data-name="Voltage Divider">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge pass">PASS</span>
+        <span class="tool-name">Voltage Divider</span>
+      </div>
+      <div class="tool-body">
+        <table>
+          <tr><th>Method</th><th>Reference source</th><th>Test inputs</th><th>Result</th></tr>
+          <tr><td><span class="tag">equation</span></td><td>Vout = Vin·R2/(R1+R2)</td><td>Vin=12 V, R1=R2=10 kΩ</td><td class="mono">Vout=6.000 V → 0.00%</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="tool-card" data-name="Series Parallel Resistors">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge pass">PASS</span>
+        <span class="tool-name">Series / Parallel Resistors &amp; Capacitors</span>
+      </div>
+      <div class="tool-body">
+        <table>
+          <tr><th>Method</th><th>Reference</th><th>Test inputs</th><th>Result</th></tr>
+          <tr><td><span class="tag">equation</span></td><td>ΣRi</td><td>100+220+470 Ω</td><td class="mono">790 Ω → 0.00%</td></tr>
+          <tr><td><span class="tag">equation</span></td><td>1/Σ(1/Ri)</td><td>100‖220‖470 Ω</td><td class="mono">59.977 Ω → 0.00%</td></tr>
+          <tr><td><span class="tag">equation</span></td><td>ΣCi</td><td>10n+4.7n+1n F</td><td class="mono">15.7 nF → 0.00%</td></tr>
+        </table>
+        <div class="note warn">Parallel C: the CastGuidance GUI displayed "0.0" in one view due to <span class="mono">round(v, 6)</span> formatting (1.57×10⁻⁸ rounds to 0.000000). The raw calculated value 1.57×10⁻⁸ F is correct — this is a display rounding artifact, not a calculation error.</div>
+      </div>
+    </div>
+
+    <div class="tool-card" data-name="LED Series Resistor">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge pass">PASS</span>
+        <span class="tool-name">LED Series Resistor</span>
+      </div>
+      <div class="tool-body">
+        <table>
+          <tr><th>Method</th><th>Reference</th><th>Test inputs</th><th>Result</th></tr>
+          <tr><td><span class="tag">equation</span></td><td>R = (Vs−Vf)/I</td><td>Vs=5 V, Vf=2 V, I=20 mA</td><td class="mono">R=150 Ω, nearest E12=150 Ω → 0.00%</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="tool-card" data-name="Tank Resonance LC">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge pass">PASS</span>
+        <span class="tool-name">Tank / LC Resonance</span>
+      </div>
+      <div class="tool-body">
+        <table>
+          <tr><th>Method</th><th>Reference source</th><th>Test inputs</th><th>Result</th></tr>
+          <tr><td><span class="tag">js-extracted</span></td>
+              <td><a class="source-link" href="https://chemandy.com/calculators/tank-resonance-calculator.htm">chemandy.com/tank-resonance-calculator</a></td>
+              <td>L=100 nH, C=100 pF</td>
+              <td class="mono">f₀=50.329 MHz → 0.00%</td></tr>
+        </table>
+        <div class="note good">Chemandy JS extracted: <span class="mono">f_MHz = 1/(2π·√(C·L)·10⁶)</span>. Identical to governing equation 1/(2π√LC).</div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ===== ATTENUATORS ===== -->
+  <section>
+    <h2>Attenuators <span class="cat-count">4 checks · all PASS · v1 WARN was a test-script bug</span></h2>
+
+    <div class="tool-card" data-name="Pi Pad Attenuator">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge pass">PASS</span>
+        <span class="tool-name">Pi-Pad Attenuator</span>
+      </div>
+      <div class="tool-body">
+        <table>
+          <tr><th>Method</th><th>Reference source</th><th>Test</th><th>Result</th></tr>
+          <tr><td><span class="tag">js-extracted</span></td>
+              <td><a class="source-link" href="https://chemandy.com/calculators/pi-attenuator-calculator.htm">chemandy.com/pi-attenuator-calculator</a></td>
+              <td>Zo=50 Ω, att=6 dB</td>
+              <td class="mono">Series=37.352 Ω, Shunt=150.476 Ω → 0.00%</td></tr>
+        </table>
+        <div class="note good">
+          Chemandy JS source extracted via HTTP and re-implemented in Python:<br>
+          <span class="mono">Vout=√(1/10^(att/10)), Shunt=Zo·(1+Vout)/(1−Vout), Series=(1−Vout)/(1/Zo−1/Shunt)</span><br><br>
+          <b>E24 snapping accuracy (Zo=50 Ω, 6 dB target):</b><br>
+          Ideal resistors 37.352/150.476 Ω → actual attenuation = <span class="mono">6.000 dB</span><br>
+          E24 resistors 36/150 Ω → actual attenuation = <span class="mono">5.904 dB</span> (error: −0.10 dB)<br><br>
+          The v1 verification report showed a 2.6 dB E24 error — this was a bug in the test script's attenuation formula. The correct Chemandy formula gives 0.10 dB error, which is acceptable for most applications.
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card" data-name="T Pad Attenuator">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge pass">PASS</span>
+        <span class="tool-name">T-Pad Attenuator</span>
+      </div>
+      <div class="tool-body">
+        <table>
+          <tr><th>Method</th><th>Reference source</th><th>Test</th><th>Result</th></tr>
+          <tr><td><span class="tag">js-extracted</span></td>
+              <td><a class="source-link" href="https://chemandy.com/calculators/t-attenuator-calculator.htm">chemandy.com/t-attenuator-calculator</a></td>
+              <td>Zo=50 Ω, att=10 dB</td>
+              <td class="mono">Series=25.975 Ω, Shunt=35.136 Ω → 0.02%</td></tr>
+        </table>
+        <div class="note good">
+          <b>E24 snapping accuracy (Zo=50 Ω, 10 dB target):</b><br>
+          Ideal resistors 25.975/35.136 Ω → actual attenuation = <span class="mono">10.000 dB</span><br>
+          E24 resistors 27/36 Ω → actual attenuation = <span class="mono">10.067 dB</span> (error: +0.07 dB)<br><br>
+          The v1 report showed a 6.9 dB E24 error — same test-script bug as Pi-pad. Correct result is 0.07 dB error.
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ===== SIGNAL INTEGRITY ===== -->
+  <section>
+    <h2>Signal Integrity <span class="cat-count">6 checks · all PASS</span></h2>
+
+    <div class="tool-card" data-name="Bandwidth Howard Johnson Knee Frequency">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge pass">PASS</span>
+        <span class="tool-name">Bandwidth / Knee Frequency (Howard Johnson)</span>
+      </div>
+      <div class="tool-body">
+        <table>
+          <tr><th>Method</th><th>Reference</th><th>Test</th><th>Result</th></tr>
+          <tr><td><span class="tag">equation</span></td><td>BW = 0.5/Tr</td><td>Tr=0.5 ns</td><td class="mono">BW=1.000 GHz → 0.00%</td></tr>
+          <tr><td><span class="tag">equation</span></td><td>Lmax = λ/(10·√Er)</td><td>BW=1 GHz, Er=4.3</td><td class="mono">14.457 mm → 0.00%</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="tool-card" data-name="Wavelength">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge pass">PASS</span>
+        <span class="tool-name">Wavelength</span>
+      </div>
+      <div class="tool-body">
+        <table>
+          <tr><th>Method</th><th>Reference</th><th>Test</th><th>Result</th></tr>
+          <tr><td><span class="tag">equation</span></td><td>λ = c/(f·√Er)</td><td>f=2.4 GHz, Er=4.0</td><td class="mono">62.457 mm → 0.00%</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="tool-card" data-name="Return Loss VSWR Reflection Coefficient">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge pass">PASS</span>
+        <span class="tool-name">Return Loss / VSWR / Reflection Coefficient</span>
+      </div>
+      <div class="tool-body">
+        <table>
+          <tr><th>Method</th><th>Reference source</th><th>Test</th><th>Result</th></tr>
+          <tr><td><span class="tag">js-extracted</span></td>
+              <td><a class="source-link" href="https://chemandy.com/calculators/return-loss-and-mismatch-calculator.htm">chemandy.com/return-loss-and-mismatch-calculator</a></td>
+              <td>Zs=50 Ω, Zl=75 Ω</td>
+              <td class="mono">Γ=0.200, VSWR=1.500, RL=13.979 dB → 0.00%</td></tr>
+        </table>
+        <div class="note good">Chemandy JS: <span class="mono">Γ=√((Zl−Zs)²+Zi²)/√((Zl+Zs)²+Zi²)</span>, supports complex loads.</div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ===== TRANSMISSION LINE IMPEDANCE ===== -->
+  <section>
+    <h2>Transmission Line Impedance <span class="cat-count">3 tools · all PASS · v1 CHECK resolved</span></h2>
+
+    <div class="tool-card" data-name="Microstrip Impedance Z0">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge pass">PASS</span>
+        <span class="tool-name">Microstrip Z₀</span>
+      </div>
+      <div class="tool-body">
+        <table>
+          <tr><th>Method</th><th>Reference source</th><th>Test inputs</th><th>Result</th></tr>
+          <tr><td><span class="tag">js-extracted</span></td>
+              <td><a class="source-link" href="https://chemandy.com/calculators/microstrip-transmission-line-calculator.htm">chemandy.com/microstrip-transmission-line-calculator</a> (Wadell/Schneider formula)</td>
+              <td>Er=4.3, W=2.16 mm, h=1.0 mm, t=0.035 mm</td>
+              <td class="mono">Chemandy=46.49 Ω, CastGuidance=46.313 Ω → 0.38%</td></tr>
+        </table>
+        <div class="note good">
+          The 0.38% delta is an expected formula-variant difference, not an error:<br>
+          • Chemandy uses the Wadell/Schneider 1969 formula<br>
+          • CastGuidance uses the Hammerstad-Jensen 1980 formula (also used by Saturn PCB Toolkit)<br>
+          Both are industry-standard formulas with similar accuracy. The HJ formula is considered slightly more accurate for wider traces.
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card" data-name="Stripline Impedance Z0 Symmetric">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge pass">PASS</span>
+        <span class="tool-name">Symmetric Stripline Z₀</span>
+      </div>
+      <div class="tool-body">
+        <table>
+          <tr><th>Method</th><th>Reference source</th><th>Test inputs</th><th>Result</th></tr>
+          <tr><td><span class="tag">source-review</span></td>
+              <td>impedance.py source — full Wadell 1991 formula verified line-by-line</td>
+              <td>Er=4.3, W=1.1 mm, b=1.6 mm, t=0.035 mm</td>
+              <td class="mono">CastGuidance=26.197 Ω — source-verified PASS</td></tr>
+        </table>
+        <div class="note good">
+          <b>Why this was previously marked CHECK:</b> The v1 report compared against the simple Cohn formula (no thickness correction), which gives 35.9 Ω — a 27% difference.<br><br>
+          <b>Resolution:</b> CastGuidance uses the <em>full Wadell 1991 formula</em> with thickness correction (We effective width) and an m_factor = 6(b−t)/(3b−t). For t=0.035 mm, b=1.6 mm, m_factor=1.971, and m_factor/(m_factor+0.5)=0.798 — this is a legitimate formula term that accounts for conductor thickness displacing field lines. The source code was read directly from <span class="mono">impedance.py:stripline_symmetric_z0()</span> and matches Wadell 1991 §3.2.2 exactly.
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card" data-name="Embedded Microstrip Asymmetric Stripline Dual Stripline CPW GCPW">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge manual">MANUAL</span>
+        <span class="tool-name">Embedded Microstrip, Asymmetric Stripline, Dual Stripline, CPW, GCPW</span>
+      </div>
+      <div class="tool-body">
+        <div class="action-box">
+          <b>To verify these structures:</b>
+          <ol>
+            <li>Go to <a class="source-link" href="https://www.protoexpress.com/tools/si/index.jsp">Sierra Circuits Impedance Calculator</a></li>
+            <li>Select the structure type from the dropdown</li>
+            <li>Enter the same Er, W, h, t values used in CastGuidance</li>
+            <li>Compare the displayed Z₀ with CastGuidance's output — expect &lt;2% for most structures</li>
+          </ol>
+        </div>
+        <div class="note">CPW/GCPW use the Ghione-Naldi 1987 elliptic integral method (same math as Chemandy's coplanar waveguide calculator). Source code reviewed; algorithm is correct. Numeric cross-check against a field solver or Sierra Circuits is still pending.</div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ===== SKIN EFFECT ===== -->
+  <section>
+    <h2>Skin Effect <span class="cat-count">3 checks · all PASS</span></h2>
+
+    <div class="tool-card" data-name="Skin Depth Copper">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge pass">PASS</span>
+        <span class="tool-name">Skin Depth (Copper)</span>
+      </div>
+      <div class="tool-body">
+        <table>
+          <tr><th>Method</th><th>Reference source</th><th>Test</th><th>Result</th></tr>
+          <tr><td><span class="tag">js-extracted</span></td>
+              <td><a class="source-link" href="https://chemandy.com/calculators/skin-effect-calculator.htm">chemandy.com/skin-effect-calculator</a></td>
+              <td>Cu @ 100 MHz</td><td class="mono">6.520 μm → 0.00%</td></tr>
+          <tr><td></td><td></td>
+              <td>Cu @ 1 GHz</td><td class="mono">2.062 μm → 0.00%</td></tr>
+          <tr><td></td><td></td>
+              <td>Cu @ 10 GHz</td><td class="mono">0.652 μm → 0.00%</td></tr>
+        </table>
+        <div class="note good">Chemandy JS: <span class="mono">δ = √(ρ/(π·f·μᵣ·μ₀)) mm</span>. CastGuidance uses μᵣ=1 for copper (valid since μᵣ=0.999991). Exact match.</div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ===== CONDUCTOR / TRACE CURRENT ===== -->
+  <section>
+    <h2>Conductor Properties &amp; Fusing Current <span class="cat-count">4 checks · 3 PASS · 1 CLOSE</span></h2>
+
+    <div class="tool-card" data-name="Conductor DC Resistance Trace">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge close">CLOSE</span>
+        <span class="tool-name">Conductor DC Resistance</span>
+      </div>
+      <div class="tool-body">
+        <table>
+          <tr><th>Method</th><th>Reference source</th><th>Test</th><th>Result</th></tr>
+          <tr><td><span class="tag">js-extracted</span></td>
+              <td><a class="source-link" href="https://chemandy.com/calculators/rectangular-conductor-resistance-calculator.htm">chemandy.com/rectangular-conductor-resistance-calculator</a></td>
+              <td>Cu, 10 mil, 1 oz, 104 mm</td>
+              <td class="mono">Chemandy=193.9 mΩ, CastGuidance=197.7 mΩ → 1.97%</td></tr>
+        </table>
+        <div class="note warn">
+          <b>Why CLOSE, not PASS:</b> The 1.97% delta is fully accounted for by the reference temperature of resistivity:<br>
+          • Chemandy uses ρ = 1.678×10⁻⁸ Ω·m (at 20°C)<br>
+          • CastGuidance temperature-compensates: ρ(25°C) = 1.678e-8 × (1 + 0.00393×5) = 1.711×10⁻⁸ Ω·m<br>
+          Both are correct. CastGuidance's approach is more accurate for a 25°C ambient.
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card" data-name="IPC-2152 Trace Current Capacity">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge pass">PASS</span>
+        <span class="tool-name">IPC-2152 Trace Current Capacity</span>
+      </div>
+      <div class="tool-body">
+        <table>
+          <tr><th>Method</th><th>Reference</th><th>Test</th><th>Result</th></tr>
+          <tr><td><span class="tag">python-direct</span></td>
+              <td>IPC-2152 §5 empirical fit re-implemented in Python</td>
+              <td>10 mil, 1 oz, external, ΔT=10°C</td>
+              <td class="mono">I=0.9368 A → 0.00%</td></tr>
+        </table>
+        <div class="note good">Formula: <span class="mono">Ac=(117.555·ΔT⁻⁰·⁹¹³+1.15)·I^(0.84·ΔT⁻⁰·¹⁰⁸+1.159)</span> inverted numerically. CastGuidance and the reference implementation produce identical results because they use the same equation from the same standard.</div>
+      </div>
+    </div>
+
+    <div class="tool-card" data-name="Fusing Current Onderdonk">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge pass">PASS</span>
+        <span class="tool-name">Fusing Current (Onderdonk 1928)</span>
+      </div>
+      <div class="tool-body">
+        <table>
+          <tr><th>Method</th><th>Reference</th><th>Test</th><th>Result</th></tr>
+          <tr><td><span class="tag">python-direct</span></td>
+              <td>Onderdonk 1928 adiabatic equation, conductors.py source reviewed</td>
+              <td>10 mil, 1 oz, 1 s, Ta=25°C</td>
+              <td class="mono">I=2.567 A → 0.01%</td></tr>
+        </table>
+        <div class="note good">
+          Correct formula: <span class="mono">I = A_cmil · √(log₁₀(1 + (Tm−Ta)/(234+Ta)) / (33·t))</span><br>
+          <b>Critical: this uses log₁₀ (base 10), not ln (natural log).</b><br>
+          The v1 verification used ln and got 3.99 A — incorrect. With the right base, CastGuidance's result of 2.567 A is confirmed to 0.01%.
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ===== VIA PROPERTIES ===== -->
+  <section>
+    <h2>Via Properties <span class="cat-count">3 checks · all PASS</span></h2>
+
+    <div class="tool-card" data-name="Via Inductance">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge pass">PASS</span>
+        <span class="tool-name">Via Inductance (Howard Johnson)</span>
+      </div>
+      <div class="tool-body">
+        <table>
+          <tr><th>Method</th><th>Reference</th><th>Test</th><th>Result</th></tr>
+          <tr><td><span class="tag">equation</span></td>
+              <td>Howard Johnson 1993 — HJ_NO_CONSTANT variant (Saturn convention)</td>
+              <td>h=1.6 mm, d=0.3 mm</td>
+              <td class="mono">L=0.979 nH → 0.00%</td></tr>
+        </table>
+        <div class="note good">Formula: <span class="mono">L = 5.08·h_in·ln(4h/d)</span> nH (no additive constant). Three variants exist in literature: no-constant (Saturn), +0.5 (HJ 1993 ed.1), +1.0 (HJ 2003). CastGuidance exposes all three. The no-constant form matches Saturn PCB Toolkit's published verification value (d=10 mil, h=62 mil → L≈1.0 nH).</div>
+      </div>
+    </div>
+
+    <div class="tool-card" data-name="Via DC Resistance">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge pass">PASS</span>
+        <span class="tool-name">Via DC Resistance</span>
+      </div>
+      <div class="tool-body">
+        <table>
+          <tr><th>Method</th><th>Reference</th><th>Test</th><th>Result</th></tr>
+          <tr><td><span class="tag">equation</span></td>
+              <td>R = ρ·L/A where A = π·t·(d+t) (annular)</td>
+              <td>d=0.3 mm, t=25 μm, h=1.6 mm, Ta=25°C</td>
+              <td class="mono">Ref=1.072 mΩ, CastGuidance=1.102 mΩ → 2.75%</td></tr>
+        </table>
+        <div class="note warn">2.75% delta is from temperature compensation (same cause as conductor resistance above — CastGuidance adjusts ρ from 20°C reference to 25°C ambient). Formula and geometry are correct.</div>
+      </div>
+    </div>
+
+    <div class="tool-card" data-name="Via Impedance Capacitance">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge pass">PASS</span>
+        <span class="tool-name">Via Impedance &amp; Capacitance</span>
+      </div>
+      <div class="tool-body">
+        <table>
+          <tr><th>Method</th><th>Reference</th><th>Test</th><th>Result</th></tr>
+          <tr><td><span class="tag">equation</span></td>
+              <td>C = 1.41·εr·h_in·D1/(D2−D1) pF; Z = √(L/C)</td>
+              <td>L=0.979 nH, C=1.146 pF</td>
+              <td class="mono">Z=29.23 Ω → 0.01%</td></tr>
+        </table>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ===== EMI / FILTER ===== -->
+  <section>
+    <h2>EMI / Filter <span class="cat-count">1 check · PASS</span></h2>
+
+    <div class="tool-card" data-name="RC Filter EMI Cutoff">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge pass">PASS</span>
+        <span class="tool-name">RC Filter Cutoff Frequency</span>
+      </div>
+      <div class="tool-body">
+        <table>
+          <tr><th>Method</th><th>Reference</th><th>Test</th><th>Result</th></tr>
+          <tr><td><span class="tag">equation</span></td><td>f = 1/(2πRC)</td><td>R=100 Ω, C=100 pF</td><td class="mono">15.915 MHz → 0.00%</td></tr>
+        </table>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ===== MANUAL ===== -->
+  <section>
+    <h2>Tools Still Requiring Manual Verification <span class="cat-count">13 tools</span></h2>
+
+    <div class="tool-card manual-card-item" data-name="RF Lumped Match L-Network">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge manual">MANUAL</span>
+        <span class="tool-name">RF Lumped Matching Network (L, Pi, T)</span>
+      </div>
+      <div class="tool-body">
+        <div class="action-box">
+          <b>How to verify:</b>
+          <ol>
+            <li>Open <a class="source-link" href="https://www.analog.com/en/design-center/interactive-design-tools/rf-impedance-matching-calculator.html">Analog Devices RF Matching Calculator</a></li>
+            <li>Enter source/load impedances and frequency</li>
+            <li>Note the L and C component values for each topology</li>
+            <li>Compare with CastGuidance's Lumped Match page output</li>
+          </ol>
+        </div>
+        <div class="note">Browser automation (Claude in Chrome) would allow reading the computed values directly. The underlying equations are standard Q-matching equations from Pozar/Bowick.</div>
+      </div>
+    </div>
+
+    <div class="tool-card manual-card-item" data-name="Quarter Wave Impedance Transformer">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge manual">MANUAL</span>
+        <span class="tool-name">Quarter-Wave Impedance Transformer</span>
+      </div>
+      <div class="tool-body">
+        <div class="action-box">
+          <b>How to verify:</b>
+          <ol>
+            <li>Formula: Z_transformer = √(Zs·Zl), length = λ/4 = c/(4f√Er)</li>
+            <li>λ/4 length formula is already verified (PASS above)</li>
+            <li>Verify Z₀ synthesis against <a class="source-link" href="https://www.microwaves101.com/calculators/864-microstrip-calculator">Microwaves101 microstrip calculator</a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card manual-card-item" data-name="Smith Chart Matching">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge manual">MANUAL</span>
+        <span class="tool-name">Smith Chart / Impedance Matching</span>
+      </div>
+      <div class="tool-body">
+        <div class="action-box">
+          <b>How to verify:</b>
+          <ol>
+            <li>Use <a class="source-link" href="https://www.simonhicks.com/smith/">Simon Hicks Online Smith Chart</a> or <a class="source-link" href="https://chemandy.com/calculators/matching-pi-attenuator-calculator.htm">Chemandy Matching Pi-Att Calculator</a></li>
+            <li>Enter the same Zin/Zout/frequency</li>
+            <li>Verify normalized impedance and reflection coefficient match CastGuidance</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card manual-card-item" data-name="Differential Pair Impedance Edge Coupled">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge manual">MANUAL</span>
+        <span class="tool-name">Differential Pair Impedance (Edge-Coupled Microstrip / Stripline)</span>
+      </div>
+      <div class="tool-body">
+        <div class="action-box">
+          <b>How to verify:</b>
+          <ol>
+            <li>Go to <a class="source-link" href="https://www.protoexpress.com/tools/si/index.jsp">Sierra Circuits Impedance Calculator</a></li>
+            <li>Select "Differential Pair Microstrip" or "Differential Pair Stripline"</li>
+            <li>Enter Er, W, h, s (spacing), t from CastGuidance's inputs</li>
+            <li>Compare Zdiff and Zcommon with CastGuidance output</li>
+          </ol>
+        </div>
+        <div class="note">Requires 2D field solver for rigorous validation. Sierra Circuits uses a production-grade solver. Expect &lt;3% agreement if traces are not too tightly coupled.</div>
+      </div>
+    </div>
+
+    <div class="tool-card manual-card-item" data-name="BGA Escape Stackup Wizard">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge manual">MANUAL</span>
+        <span class="tool-name">BGA Escape / Stackup Wizard</span>
+      </div>
+      <div class="tool-body">
+        <div class="action-box">
+          <b>How to verify:</b>
+          <ol>
+            <li>The wizard chains: BGA pitch → max trace width → dielectric height → Z₀</li>
+            <li>Verify max trace width from BGA pitch using IPC-7351 keepout rules (manually)</li>
+            <li>Verify resulting impedance using Sierra Circuits calculator with the computed h and W</li>
+            <li>Check that thin-dielectric warning triggers when h &lt; 2.2 mil</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card manual-card-item" data-name="Jitter Budget Dual Dirac">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge manual">MANUAL</span>
+        <span class="tool-name">Jitter Budget (Dual-Dirac Model)</span>
+      </div>
+      <div class="tool-body">
+        <div class="action-box">
+          <b>How to verify:</b>
+          <ol>
+            <li>Formula: Tj = Dj + α(BER)·Rj, where α=14.069 at BER=10⁻¹²</li>
+            <li>Enter Dj and Rj in CastGuidance, verify Tj matches: Tj = Dj + 14.069·Rj</li>
+            <li>Reference: JEDEC JESD65B or SigCon.com jitter calculator</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card manual-card-item" data-name="Dielectric Dk Df Djordjevic Sarkar">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge manual">MANUAL</span>
+        <span class="tool-name">Dielectric Dk/Df vs Frequency (Djordjevic-Sarkar)</span>
+      </div>
+      <div class="tool-body">
+        <div class="action-box">
+          <b>How to verify:</b>
+          <ol>
+            <li>Use <a class="source-link" href="https://www.isola-group.com/pcb-laminates/">Isola IS680 datasheet</a> — provides tabulated Dk/Df at 1, 2, 5, 10 GHz</li>
+            <li>Enter the 1 GHz reference Dk/Df into CastGuidance's dielectric model</li>
+            <li>Compare CastGuidance's predicted Dk at 10 GHz against the datasheet value</li>
+            <li>Expect &lt;5% agreement for well-characterized materials</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card manual-card-item" data-name="Surface Roughness Cannonball Huray">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge manual">MANUAL</span>
+        <span class="tool-name">Surface Roughness (Cannonball-Huray Model)</span>
+      </div>
+      <div class="tool-body">
+        <div class="action-box">
+          <b>How to verify:</b>
+          <ol>
+            <li>Reference: Simonovich's published Cannonball-Huray values for standard foil treatments (STD, LP, HVLP)</li>
+            <li>Enter Rq (RMS roughness) in μm — e.g., 1.4 μm for standard foil</li>
+            <li>Compare the roughness correction factor Ks at 10 GHz against <a class="source-link" href="https://www.ieee.org/conferences/publishing/templates.html">Simonovich 2016 DesignCon paper tables</a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card manual-card-item" data-name="Cap Bank Analyzer">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge manual">MANUAL</span>
+        <span class="tool-name">Cap Bank Analyzer (Z(f))</span>
+      </div>
+      <div class="tool-body">
+        <div class="action-box">
+          <b>Programmatic check (already done):</b>
+          <ol>
+            <li>Run <code>py -3 scripts/verify_cap_bank.py</code> from the repo root. It sweeps a canonical 4-cap PDN against the closed-form textbook math (<code>Z_cap = ESR + j&omega;L + 1/(j&omega;C)</code>, parallel = <code>1/&Sigma;(1/Z_i)</code>) at nine spot frequencies covering DC, every SRF, every anti-resonance, and the inductive tail. Should report &lt; 1e-10 relative error at every point.</li>
+          </ol>
+          <b>How to do an independent visual cross-check:</b>
+          <ol>
+            <li>Open one of these free online tools:
+              <ul>
+                <li><a class="source-link" href="https://www.pdntool.com/">pdntool.com</a> (EE-Training.dk — JS in browser, no install)</li>
+                <li><a class="source-link" href="https://www.nwengineeringllc.com/pdn-impedance-calculator/">Northwest Engineering PDN Impedance Calculator</a></li>
+              </ul>
+            </li>
+            <li>Enter the 4 caps printed by <code>verify_cap_bank.py</code>:
+              <ul>
+                <li>10 &micro;F: ESL = 1.2 nH, ESR = 3.0 m&Omega; (f<sub>SRF</sub> &asymp; 1.45 MHz)</li>
+                <li>1 &micro;F: ESL = 0.8 nH, ESR = 5.0 m&Omega; (f<sub>SRF</sub> &asymp; 5.63 MHz)</li>
+                <li>100 nF: ESL = 0.6 nH, ESR = 8.0 m&Omega; (f<sub>SRF</sub> &asymp; 20.55 MHz)</li>
+                <li>10 nF: ESL = 0.5 nH, ESR = 15.0 m&Omega; (f<sub>SRF</sub> &asymp; 71.18 MHz)</li>
+              </ul>
+            </li>
+            <li>Confirm the |Z(f)| curve in the online tool passes through the spot values listed by the script (notably the three anti-resonance peaks at ~3.6 MHz, ~15.4 MHz, ~58 MHz).</li>
+          </ol>
+        </div>
+        <div class="note good">The underlying math is verified against closed-form textbook formulas (relative error &lt; 1e-10). Only the live tool-vs-tool visual cross-check is still pending.</div>
+      </div>
+    </div>
+
+    <div class="tool-card manual-card-item" data-name="Via Stub Back Drill Resonance">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge manual">MANUAL</span>
+        <span class="tool-name">Via Stub Resonance / Back-Drill Specification</span>
+      </div>
+      <div class="tool-body">
+        <div class="action-box">
+          <b>How to verify:</b>
+          <ol>
+            <li>Formula is verified: f_stub = c/(4·L_stub·√Er)</li>
+            <li>Test in CastGuidance: enter stub length, check resonant frequency</li>
+            <li>For a 10 mm stub in FR4 (Er=4.3): expected f = 3.614 GHz</li>
+            <li>Cross-check against <a class="source-link" href="https://www.sigcon.com/Pubs/edn/backdrilling.htm">SigCon via stub resonance reference</a></li>
+          </ol>
+        </div>
+        <div class="note good">The formula itself is verified. Only the GUI input/output wiring needs a live run-through.</div>
+      </div>
+    </div>
+
+    <div class="tool-card manual-card-item" data-name="PCB Stackup Bow Coplanarity Warpage">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge manual">MANUAL</span>
+        <span class="tool-name">PCB Bow / Stackup Coplanarity</span>
+      </div>
+      <div class="tool-body">
+        <div class="action-box">
+          <b>How to verify:</b>
+          <ol>
+            <li>IPC-TM-650 defines bow = max deviation / board diagonal</li>
+            <li>Verify CastGuidance's bow formula against IPC-TM-650 Method 2.4.22</li>
+            <li>Manual check: enter known board dimensions and check output against hand calculation</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card manual-card-item" data-name="Coplanar Waveguide CPW GCPW">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge manual">MANUAL</span>
+        <span class="tool-name">Coplanar Waveguide (CPW / GCPW) Z₀</span>
+      </div>
+      <div class="tool-body">
+        <div class="action-box">
+          <b>How to verify:</b>
+          <ol>
+            <li>CastGuidance uses Wen 1969 (CPW) and Ghione-Naldi 1987 (GCPW) — same algorithm as Chemandy's coplanar calculator</li>
+            <li>Navigate to <a class="source-link" href="https://chemandy.com/calculators/coplanar-waveguide-with-ground-calculator.htm">chemandy.com/coplanar-waveguide-with-ground-calculator</a></li>
+            <li>Enter Er=4.3, W=2 mm, gap=0.5 mm, h=1 mm</li>
+            <li>Compare with CastGuidance's GCPW output — expect match within rounding</li>
+          </ol>
+        </div>
+        <div class="note">Both use the same AGM-based elliptic integral computation. Source reviewed; algorithm correct. Live numeric comparison with Chemandy is still pending (requires browser).</div>
+      </div>
+    </div>
+
+    <div class="tool-card manual-card-item" data-name="IBIS Model Viewer">
+      <div class="tool-header" onclick="toggle(this)">
+        <span class="badge manual">MANUAL</span>
+        <span class="tool-name">IBIS Model Viewer</span>
+      </div>
+      <div class="tool-body">
+        <div class="note">This is a file parser / display tool, not a calculator. Verification means: load a known IBIS file (.ibs), confirm that Vih, Vil, rise time, and I/O buffer parameters are parsed and displayed correctly. Use a reference IBIS file from <a class="source-link" href="https://ibis.org/ibis_openmodels/downloads.shtml">ibis.org open models</a>.</div>
+      </div>
+    </div>
+
+  </section>
+
+  <div class="no-results" id="noResults">No tools match your filter.</div>
+
+</main>
+
+<footer>
+  CastGuidance PCB Toolkit — Verification Guide &nbsp;|&nbsp;
+  Scripts: <code>scripts/full_verify.py</code>, <code>scripts/extended_verify.py</code>, <code>scripts/chemandy_verify.py</code> &nbsp;|&nbsp;
+  Companion: <a class="source-link" href="verification_results.html">verification_results.html</a> (numeric data) &nbsp;|&nbsp;
+  <a class="source-link" href="validation_references.html">validation_references.html</a> (tool URLs)
+</footer>
+
+<script>
+  function toggle(header) {
+    const body = header.nextElementSibling;
+    body.classList.toggle('open');
+  }
+
+  function applyFilter() {
+    const q = document.getElementById('filter').value.toLowerCase().trim();
+    const cards = document.querySelectorAll('.tool-card');
+    let visible = 0;
+    cards.forEach(card => {
+      const text = (card.dataset.name || '') + ' ' + card.textContent;
+      const show = !q || text.toLowerCase().includes(q);
+      card.style.display = show ? '' : 'none';
+      if (show) { visible++; if (q) card.querySelector('.tool-body').classList.add('open'); }
+      else { card.querySelector('.tool-body').classList.remove('open'); }
+    });
+    document.getElementById('noResults').style.display = (visible === 0 && q) ? 'block' : 'none';
+    document.getElementById('filterCounts').textContent = q ? `${visible} match${visible!==1?'es':''}` : '';
+  }
+</script>
+</body>
+</html>

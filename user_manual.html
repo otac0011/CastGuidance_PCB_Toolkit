@@ -1,0 +1,816 @@
+<!--
+Copyright (c) 2026 CastGuidance PCB Toolkit Developer. All rights reserved.
+SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>CastGuidance PCB Toolkit — User Manual</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    :root {
+      --bg: #1a1a1a;
+      --panel: #232323;
+      --panel-2: #2a2a2a;
+      --border: #353535;
+      --text: #e6e6e6;
+      --text-dim: #b0b0b0;
+      --text-mute: #888;
+      --accent: #d9842a;
+      --accent-dim: rgba(217,132,42,0.6);
+      --good: #6fcf6f;
+      --warn: #f0b252;
+      --bad:  #e26b6b;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 0.92em; }
+
+    /* Layout */
+    .container { max-width: 1080px; margin: 0 auto; padding: 28px 24px 80px; }
+    h1 { font-size: 30px; margin: 0 0 6px; letter-spacing: -0.01em; }
+    h2 { font-size: 22px; margin: 36px 0 14px; padding-bottom: 6px; border-bottom: 1px solid var(--border); letter-spacing: -0.01em; }
+    h2 .count { color: var(--text-mute); font-weight: 400; font-size: 14px; margin-left: 8px; }
+    h3 { font-size: 17px; margin: 0 0 6px; color: var(--accent); }
+    p { margin: 6px 0; }
+
+    .lede { color: var(--text-dim); margin: 0 0 18px; }
+
+    /* Search */
+    .search-bar {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg);
+      padding: 12px 0 14px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 22px;
+    }
+    .search-bar input {
+      width: 100%;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 14px;
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+      box-sizing: border-box;
+    }
+    .search-bar input:focus { border-color: var(--accent); }
+    .search-bar .hint { display: block; color: var(--text-mute); font-size: 11px; margin-top: 6px; }
+
+    /* TOC */
+    .toc {
+      background: var(--panel);
+      border-left: 3px solid var(--accent);
+      padding: 14px 20px;
+      border-radius: 4px;
+      margin-bottom: 26px;
+    }
+    .toc h3 { color: var(--text); margin: 0 0 8px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .toc ul { list-style: none; padding: 0; margin: 0; column-count: 3; column-gap: 24px; }
+    .toc li { margin: 3px 0; font-size: 13px; break-inside: avoid; }
+
+    /* Tool cards */
+    .tool {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px 20px;
+      margin: 12px 0;
+    }
+    .tool-head {
+      display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+    .tool-title { font-size: 17px; font-weight: 600; color: var(--accent); }
+    .cat-chip {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(217,132,42,0.15);
+      color: var(--accent);
+      border: 1px solid var(--accent-dim);
+    }
+
+    .bluf {
+      background: var(--panel-2);
+      border-left: 3px solid var(--accent);
+      padding: 8px 12px;
+      border-radius: 3px;
+      font-size: 13.5px;
+      margin: 8px 0;
+    }
+    .bluf b { color: var(--accent); }
+    .why { margin: 8px 0; font-size: 13.5px; color: var(--text-dim); }
+    .layman { margin: 8px 0; font-size: 13.5px; }
+
+    table.typ {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 12.5px;
+    }
+    table.typ th, table.typ td {
+      border: 1px solid var(--border);
+      padding: 6px 9px;
+      text-align: left;
+      vertical-align: top;
+    }
+    table.typ th { background: var(--panel-2); color: var(--text); font-weight: 600; }
+    table.typ td.num { font-family: ui-monospace, Menlo, Consolas, monospace; color: var(--text-dim); white-space: nowrap; }
+
+    .footer {
+      margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--border);
+      color: var(--text-mute); font-size: 12px;
+    }
+
+    /* Filter "no match" overlay */
+    .no-match { display: none; color: var(--text-mute); padding: 40px; text-align: center; font-style: italic; }
+    body.filter-active .no-match.active { display: block; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+<h1>CastGuidance PCB Toolkit — User Manual</h1>
+<p class="lede">
+  A plain-English guide to every tool in the kit. Each entry tells you
+  <b>when to use it</b>, <b>why it matters</b>, what's actually happening
+  under the hood, and <b>typical values</b> you'd put in for common board types.
+</p>
+
+<div class="search-bar">
+  <input id="filter" type="text" placeholder="Search tools — try 'impedance', 'wire', 'antenna', 'BGA'…" autofocus>
+  <span class="hint">Tip: type any word from a tool name, summary, or description to narrow the list.</span>
+</div>
+
+<div class="toc">
+  <h3>Contents</h3>
+  <ul>
+    <li><a href="#cat-reference">Reference (12)</a></li>
+    <li><a href="#cat-core">Core PCB (13)</a></li>
+    <li><a href="#cat-si">Signal Integrity (5)</a></li>
+    <li><a href="#cat-pi">Power Integrity (4)</a></li>
+    <li><a href="#cat-rf">RF / Microwave (5)</a></li>
+    <li><a href="#cat-mech">Mechanical &amp; DFM (4)</a></li>
+    <li><a href="#cat-thermal">Thermal (2)</a></li>
+    <li><a href="#cat-power">Power Electronics (1)</a></li>
+    <li><a href="#cat-emc">EMC / EMI (1)</a></li>
+    <li><a href="#cat-hsd">High-Speed Digital (1)</a></li>
+    <li><a href="#cat-wizard">PCB Design Wizard (1)</a></li>
+  </ul>
+</div>
+
+<div class="no-match" id="noMatch">No tools match that search term.</div>
+
+<!-- ============================================================ -->
+<!-- REFERENCE                                                    -->
+<!-- ============================================================ -->
+<h2 id="cat-reference">Reference <span class="count">(12 tools)</span></h2>
+
+<div class="tool" data-name="Ohm's Law V I R P resistor power"><div class="tool-head">
+  <span class="tool-title">Ohm's Law</span><span class="cat-chip">Reference</span>
+</div>
+  <div class="bluf"><b>When to use:</b> any time you know two of voltage, current, resistance, or power, and need the other two.</div>
+  <p class="why"><b>Why it matters:</b> Ohm's law (V = I·R) and the power equation (P = V·I) are the foundation of every electronics calculation. Getting them right keeps the smoke inside the chips.</p>
+  <p class="layman"><b>In plain English:</b> Tells you how big a resistor to use, how much current a circuit will draw, or how much heat it'll dissipate — given any two of the four numbers.</p>
+  <table class="typ">
+    <tr><th>Scenario</th><th>Inputs</th><th>Output</th></tr>
+    <tr><td>LED current limit</td><td class="num">V=5V, R=330Ω</td><td class="num">I≈15mA, P≈75mW</td></tr>
+    <tr><td>1 W resistor sizing</td><td class="num">V=12V, I=0.1A</td><td class="num">R=120Ω, P=1.2W</td></tr>
+    <tr><td>Buck Vdrop allowance</td><td class="num">I=1A, R=0.05Ω</td><td class="num">V=50mV, P=50mW</td></tr>
+  </table>
+</div>
+
+<div class="tool" data-name="Conversion calculator unit distance temperature dB dBm rectangular polar"><div class="tool-head">
+  <span class="tool-title">Conversion Calculator</span><span class="cat-chip">Reference</span>
+</div>
+  <div class="bluf"><b>When to use:</b> converting between units — mils ↔ mm, °C ↔ °F, dB ↔ ratio, rect ↔ polar.</div>
+  <p class="why"><b>Why it matters:</b> PCB datasheets mix mils, mm, inches, °C, °F, dBm and dBV freely. A single bad conversion can leave a trace 25.4× the right width.</p>
+  <p class="layman"><b>In plain English:</b> Like a Swiss-army knife for any "wait, what's that in mm?" moment. Type the number on one side, read it on the other.</p>
+</div>
+
+<div class="tool" data-name="SI prefix kilo mega giga milli micro nano pico"><div class="tool-head">
+  <span class="tool-title">SI Prefix Reference</span><span class="cat-chip">Reference</span>
+</div>
+  <div class="bluf"><b>When to use:</b> reading a datasheet and trying to remember what zepto, atto, ronto, or quetta mean.</div>
+  <p class="why"><b>Why it matters:</b> A lookup table that fits on a card. Beats Googling for the 50th time.</p>
+  <p class="layman"><b>In plain English:</b> Every "kilo / mega / nano / pico" prefix and its power-of-ten, in one screen.</p>
+</div>
+
+<div class="tool" data-name="dBm dBV mW watts Vrms reference chart"><div class="tool-head">
+  <span class="tool-title">dBm Reference Chart</span><span class="cat-chip">Reference</span>
+</div>
+  <div class="bluf"><b>When to use:</b> moving between RF power (dBm), real watts, and Vrms across an impedance.</div>
+  <p class="why"><b>Why it matters:</b> Most RF datasheets quote levels in dBm; spec analyzers report dBm or dBV; the bench DMM speaks volts. This chart aligns them.</p>
+  <p class="layman"><b>In plain English:</b> A table that says "+10 dBm = 10 mW = 707 mVrms (into 50 Ω)". Pick your impedance, read across the row.</p>
+  <table class="typ">
+    <tr><th>Level</th><th>50 Ω</th><th>75 Ω</th></tr>
+    <tr><td>0 dBm</td><td class="num">1 mW · 224 mVrms</td><td class="num">1 mW · 274 mVrms</td></tr>
+    <tr><td>+30 dBm</td><td class="num">1 W · 7.07 Vrms</td><td class="num">1 W · 8.66 Vrms</td></tr>
+    <tr><td>−40 dBm</td><td class="num">100 nW · 2.24 mVrms</td><td class="num">100 nW · 2.74 mVrms</td></tr>
+  </table>
+</div>
+
+<div class="tool" data-name="Mechanical reference ANSI drill UNC screw thread tap size"><div class="tool-head">
+  <span class="tool-title">Mechanical Reference</span><span class="cat-chip">Reference</span>
+</div>
+  <div class="bluf"><b>When to use:</b> picking a drill bit, choosing tap size for a standoff thread, or matching a clearance hole to a screw.</div>
+  <p class="why"><b>Why it matters:</b> Mechanical and electrical PCB tasks usually overlap at the holes — and ANSI / UNC tables aren't memorable.</p>
+  <p class="layman"><b>In plain English:</b> Two searchable tables: every numbered/lettered drill (#80 through Z) with diameters in inch and mm, and every UNC screw size (#4-40, #6-32, 10-32, 1/4-20…) with thread pitch and tap-drill size.</p>
+</div>
+
+<div class="tool" data-name="Wire ampacity AWG resistance fusing voltage drop magnet wire insulation thermal"><div class="tool-head">
+  <span class="tool-title">Wire Ampacity / Resistance / Thermal</span><span class="cat-chip">Reference</span>
+</div>
+  <div class="bluf"><b>When to use:</b> sizing an off-board wire — power feeders, battery interconnects, motor leads, magnet-wire windings, antenna feeds.</div>
+  <p class="why"><b>Why it matters:</b> Undersized wire melts insulation or starts fires. Oversized wire wastes weight and cost. Voltage drop on long runs starves the load. This single tool answers all three.</p>
+  <p class="layman"><b>In plain English:</b> Pick a gauge, conductor (copper / aluminum / nichrome / constantan / silver-plated, solid or stranded), insulation type (PVC, THHN, XLPE, PTFE, Kapton, silicone, magnet-wire classes A through R), ambient temp, length, and the current you want to push. Get the max safe current, voltage drop, wire temperature, fusing current, and warnings for thermal runaway or insulation melt.</p>
+  <table class="typ">
+    <tr><th>Application</th><th>Typical input</th><th>Typical output</th></tr>
+    <tr><td>5 V USB cable</td><td class="num">20 AWG / Cu stranded / PVC 75 / 25 °C / 5 m / 2 A / 5 V</td><td class="num">V drop 7%, R 0.17 Ω, wire 35 °C</td></tr>
+    <tr><td>12 V automotive feed</td><td class="num">14 AWG / Cu stranded / Polyolefin 125 / 40 °C / 10 m / 10 A / 12 V</td><td class="num">V drop 7.8%, P loss 9.4 W</td></tr>
+    <tr><td>Motor winding (magnet wire)</td><td class="num">30 AWG / Cu solid / Class H 180 / 80 °C / 50 m / 0.5 A</td><td class="num">wire 100 °C, R 17.2 Ω</td></tr>
+    <tr><td>NEC 14 AWG branch</td><td class="num">14 AWG / Cu solid / THHN 90 / 30 °C / 30 m / 15 A / 120 V</td><td class="num">V drop 3.4%, wire 46 °C</td></tr>
+  </table>
+</div>
+
+<div class="tool" data-name="Reactance LC resonance Xc Xl Q factor capacitor inductor"><div class="tool-head">
+  <span class="tool-title">Reactance &amp; LC Resonance</span><span class="cat-chip">Reference</span>
+</div>
+  <div class="bluf"><b>When to use:</b> figuring out the impedance of a cap or inductor at a frequency, or where an LC tank resonates.</div>
+  <p class="why"><b>Why it matters:</b> Filters, decoupling networks, oscillators, and matching networks all live or die by resonance and reactance.</p>
+  <p class="layman"><b>In plain English:</b> Type a capacitance and a frequency, see how many ohms it presents. Type a capacitor and an inductor together, see what frequency they resonate at. Q tells you how sharp the resonance peak is.</p>
+  <table class="typ">
+    <tr><th>Scenario</th><th>Inputs</th><th>Output</th></tr>
+    <tr><td>100 nF decoupling at 100 MHz</td><td class="num">C=100nF, f=100MHz</td><td class="num">Xc≈16 mΩ</td></tr>
+    <tr><td>2.4 GHz WiFi LC tank</td><td class="num">L=1nH, C=4.4pF</td><td class="num">f=2.40 GHz, Q≈30</td></tr>
+    <tr><td>5 MHz IF tank</td><td class="num">L=10μH, C=100pF</td><td class="num">f=5.03 MHz</td></tr>
+  </table>
+</div>
+
+<div class="tool" data-name="LED series resistor current-limiting Vf"><div class="tool-head">
+  <span class="tool-title">LED Series Resistor</span><span class="cat-chip">Reference</span>
+</div>
+  <div class="bluf"><b>When to use:</b> picking a current-limiting resistor for a single LED or LED string.</div>
+  <p class="why"><b>Why it matters:</b> LEDs are current-driven; without a series resistor they self-destruct. Picking the right resistor (and a standard E12/E24 value you can actually buy) is one of the most common bench tasks.</p>
+  <p class="layman"><b>In plain English:</b> Tell it your supply voltage, the LED's forward voltage, and the current you want — it picks the resistor and rounds to the nearest part you can order.</p>
+  <table class="typ">
+    <tr><th>LED type</th><th>Typical Vf</th><th>Typical I</th></tr>
+    <tr><td>Red 5 mm</td><td class="num">1.8–2.0 V</td><td class="num">10–20 mA</td></tr>
+    <tr><td>White / blue 5 mm</td><td class="num">2.8–3.4 V</td><td class="num">15–25 mA</td></tr>
+    <tr><td>High-power 1 W</td><td class="num">3.0–3.5 V</td><td class="num">350 mA</td></tr>
+  </table>
+</div>
+
+<div class="tool" data-name="Voltage divider resistor R1 R2"><div class="tool-head">
+  <span class="tool-title">Voltage Divider</span><span class="cat-chip">Reference</span>
+</div>
+  <div class="bluf"><b>When to use:</b> bringing a higher voltage down to an ADC-friendly range, or building a bias network.</div>
+  <p class="why"><b>Why it matters:</b> A two-resistor divider is the simplest analog circuit there is, but picking R1 and R2 that survive E-series rounding and don't load the source is fiddly.</p>
+  <p class="layman"><b>In plain English:</b> Enter any two of (Vin, Vout, R1, R2) and it gives you the other two — already rounded to standard E12/E24 part values.</p>
+</div>
+
+<div class="tool" data-name="Series parallel resistors capacitors inductors combine network"><div class="tool-head">
+  <span class="tool-title">Series / Parallel R-L-C</span><span class="cat-chip">Reference</span>
+</div>
+  <div class="bluf"><b>When to use:</b> combining up to 8 resistors, capacitors, or inductors in series or parallel.</div>
+  <p class="why"><b>Why it matters:</b> Need a 23.7 kΩ resistor from your stock of standard values? Or 47 nF total from two existing footprints? This is the calculator.</p>
+  <p class="layman"><b>In plain English:</b> Multi-resistor parallel-combination formula (1/Rt = 1/R1 + 1/R2 + …) on demand, plus inductors and caps with the right combining rules.</p>
+</div>
+
+<div class="tool" data-name="PPM frequency tolerance crystal oscillator drift"><div class="tool-head">
+  <span class="tool-title">PPM Frequency Tolerance</span><span class="cat-chip">Reference</span>
+</div>
+  <div class="bluf"><b>When to use:</b> converting a crystal datasheet's ppm spec into actual Hz of drift, or vice-versa.</div>
+  <p class="why"><b>Why it matters:</b> Communications standards have tight frequency tolerances (CAN bus ≤500 ppm, USB ≤500 ppm, Ethernet ≤100 ppm, GPS ≤0.5 ppm). Mismatching ppm vs Hz at design time costs a re-spin.</p>
+  <p class="layman"><b>In plain English:</b> Enter "25 MHz, ±20 ppm" and get back "±500 Hz drift". Bidirectional.</p>
+  <table class="typ">
+    <tr><th>Standard</th><th>Tolerance</th><th>@ 25 MHz</th></tr>
+    <tr><td>USB 2.0</td><td class="num">±500 ppm</td><td class="num">±12.5 kHz</td></tr>
+    <tr><td>CAN 1 Mbps</td><td class="num">±500 ppm</td><td class="num">±12.5 kHz</td></tr>
+    <tr><td>Ethernet 1G</td><td class="num">±100 ppm</td><td class="num">±2.5 kHz</td></tr>
+    <tr><td>TCXO grade</td><td class="num">±1 to 5 ppm</td><td class="num">±25–125 Hz</td></tr>
+  </table>
+</div>
+
+<div class="tool" data-name="Crystal load capacitor XTAL C1 C2 parallel resonant"><div class="tool-head">
+  <span class="tool-title">XTAL Load Capacitor</span><span class="cat-chip">Reference</span>
+</div>
+  <div class="bluf"><b>When to use:</b> sizing the two load caps (C1, C2) for a Pierce oscillator around a parallel-resonant crystal.</div>
+  <p class="why"><b>Why it matters:</b> The crystal datasheet specifies a load capacitance (e.g. 12 pF, 18 pF, 20 pF). Get the load wrong and the oscillator runs off-frequency or fails to start.</p>
+  <p class="layman"><b>In plain English:</b> Crystal sees its specified load when C1 in series with C2 (plus the chip's pin capacitance and PCB stray) equals the datasheet number. This tool inverts that and gives you C1 / C2 values.</p>
+  <table class="typ">
+    <tr><th>Crystal CL</th><th>Typical C1 = C2 (12 pF stray total)</th></tr>
+    <tr><td>10 pF</td><td class="num">8 pF</td></tr>
+    <tr><td>18 pF</td><td class="num">24 pF</td></tr>
+    <tr><td>20 pF</td><td class="num">28 pF</td></tr>
+  </table>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- CORE PCB                                                     -->
+<!-- ============================================================ -->
+<h2 id="cat-core">Core PCB <span class="count">(13 tools)</span></h2>
+
+<div class="tool" data-name="Conductor impedance microstrip stripline coplanar CPW GCPW Hammerstad Wadell"><div class="tool-head">
+  <span class="tool-title">Conductor Impedance (analytic)</span><span class="cat-chip">Core PCB</span>
+</div>
+  <div class="bluf"><b>When to use:</b> dialing in trace width on a controlled-impedance line — 50 Ω single-ended, 100 Ω diff, or a custom value.</div>
+  <p class="why"><b>Why it matters:</b> If a trace isn't the right Z₀, you get reflections, ringing, EMI, and lost margin on every fast edge. The analytic formulas (Hammerstad-Jensen microstrip, Wadell stripline, Ghione-Naldi coplanar) are what every fab house, board-house Z-coupon calculator, and field solver uses for first-pass design.</p>
+  <p class="layman"><b>In plain English:</b> Pick the topology (microstrip / stripline / coplanar with ground), enter dielectric height, copper thickness, εr — and either solve for width given Z₀, or read Z₀ given a width.</p>
+  <table class="typ">
+    <tr><th>Stackup</th><th>Geometry</th><th>Result</th></tr>
+    <tr><td>4-layer outer microstrip 50 Ω</td><td class="num">FR-4 (Dk 4.3), h = 4 mil, t = 1.4 mil</td><td class="num">w ≈ 7 mil</td></tr>
+    <tr><td>6-layer inner stripline 50 Ω</td><td class="num">FR-4, b = 7 mil total, t = 1.4 mil</td><td class="num">w ≈ 5 mil</td></tr>
+    <tr><td>2-layer 1.6 mm 50 Ω microstrip</td><td class="num">Dk 4.3, h = 60 mil, t = 1.4 mil</td><td class="num">w ≈ 110 mil</td></tr>
+  </table>
+</div>
+
+<div class="tool" data-name="Trace impedance openEMS 3D FDTD field solver microstrip stripline"><div class="tool-head">
+  <span class="tool-title">Trace Impedance (openEMS 3D)</span><span class="cat-chip">Core PCB</span>
+</div>
+  <div class="bluf"><b>When to use:</b> when the analytic formula's assumptions break — embedded microstrip, asymmetric stripline, weird coplanar geometries, or anywhere you want a second-opinion sanity check.</div>
+  <p class="why"><b>Why it matters:</b> Analytic equations are calibrated for "ideal" geometries; real boards have soldermask, etch slope, asymmetric reference planes, and edge-of-board effects that shift Z₀ by 2–5%. A 3D field solver handles all of that. The closed-form analytic answer is shown alongside so you can see the discrepancy.</p>
+  <p class="layman"><b>In plain English:</b> Wraps openEMS (a free 3D electromagnetic simulator) inside the GUI. Pick a topology, set the geometry, hit "Run 3D Simulation" — wait 30 s to a few minutes, get a measured Z₀ from a real FDTD field simulation. Also has a "Preview 3D Geometry" button so you can eyeball the structure before running.</p>
+</div>
+
+<div class="tool" data-name="Differential pair edge broadside coupled coupling NEXT 100 ohm"><div class="tool-head">
+  <span class="tool-title">Differential Pairs</span><span class="cat-chip">Core PCB</span>
+</div>
+  <div class="bluf"><b>When to use:</b> sizing a differential pair (USB, HDMI, MIPI, PCIe, Ethernet, LVDS, CAN-FD).</div>
+  <p class="why"><b>Why it matters:</b> Differential signaling is the dominant choice above ~250 MBd for noise rejection, but every protocol specifies a different Zdiff (typ. 90 Ω USB, 100 Ω Ethernet/PCIe, 90 Ω HDMI). Get the spacing wrong and the eye closes.</p>
+  <p class="layman"><b>In plain English:</b> Enter trace width and spacing (edge-coupled) or vertical separation (broadside-coupled); read back Zdiff, Zcommon, the coupling coefficient, and a near-end crosstalk estimate.</p>
+  <table class="typ">
+    <tr><th>Standard</th><th>Zdiff</th><th>Typ. 4-layer outer w/s</th></tr>
+    <tr><td>USB 2.0 / 3.x</td><td class="num">90 Ω ± 10%</td><td class="num">5/7 mil on 4 mil FR-4</td></tr>
+    <tr><td>Ethernet / PCIe</td><td class="num">100 Ω ± 10%</td><td class="num">5/9 mil on 4 mil FR-4</td></tr>
+    <tr><td>HDMI</td><td class="num">100 Ω ± 15%</td><td class="num">5/9 mil typical</td></tr>
+  </table>
+</div>
+
+<div class="tool" data-name="Conductor properties IPC-2152 IPC-2221 trace current width temperature rise"><div class="tool-head">
+  <span class="tool-title">Conductor Properties (IPC-2152 / IPC-2221)</span><span class="cat-chip">Core PCB</span>
+</div>
+  <div class="bluf"><b>When to use:</b> sizing a power-carrying trace — VBus, motor drivers, regulator outputs.</div>
+  <p class="why"><b>Why it matters:</b> Too narrow and the trace gets hot, browns the board, eventually fuses. Too wide and you waste real estate. IPC-2152 (modern) and IPC-2221 (legacy) are the universally-referenced standards; the new IPC-2152 numbers run roughly 2× higher than the old IPC-2221 numbers, so getting the standard right matters.</p>
+  <p class="layman"><b>In plain English:</b> Enter the current you need to carry and the temperature rise you'll tolerate (10 °C is conservative, 30 °C is aggressive). Get back the minimum trace width. Pick external (outer-layer) or internal (buried under copper).</p>
+  <table class="typ">
+    <tr><th>Current</th><th>10 °C rise external (1 oz)</th><th>30 °C rise external (1 oz)</th></tr>
+    <tr><td>1 A</td><td class="num">≈ 20 mil</td><td class="num">≈ 10 mil</td></tr>
+    <tr><td>3 A</td><td class="num">≈ 80 mil</td><td class="num">≈ 30 mil</td></tr>
+    <tr><td>10 A</td><td class="num">≈ 400 mil</td><td class="num">≈ 130 mil</td></tr>
+  </table>
+</div>
+
+<div class="tool" data-name="Fusing current Onderdonk trace melt"><div class="tool-head">
+  <span class="tool-title">Fusing Current (Onderdonk)</span><span class="cat-chip">Core PCB</span>
+</div>
+  <div class="bluf"><b>When to use:</b> finding the fault-current that would melt a PCB trace, or designing a deliberate sacrificial trace as a fuse.</div>
+  <p class="why"><b>Why it matters:</b> A trace can survive 10× its steady-state ampacity for a few milliseconds. Knowing the actual melt-current helps you specify upstream protection (or refuse to specify upstream protection if the trace itself is the fuse).</p>
+  <p class="layman"><b>In plain English:</b> Enter trace cross-section (or just AWG / width × thickness), ambient, and the duration the fault lasts. Get the current at which the trace reaches copper's melting point (1085 °C).</p>
+</div>
+
+<div class="tool" data-name="Min spacing IPC-2221 IEC-60664 voltage clearance creepage CTI"><div class="tool-head">
+  <span class="tool-title">Min Conductor Spacing</span><span class="cat-chip">Core PCB</span>
+</div>
+  <div class="bluf"><b>When to use:</b> placing two traces (or two pads) at different voltages and need to know how close they can legally get.</div>
+  <p class="why"><b>Why it matters:</b> Mains-powered boards have to comply with IEC 60664-1 (clearance + creepage); board-level signals follow IPC-2221C. UL / CE compliance pivots on these numbers — too-close traces is a guaranteed lab rejection.</p>
+  <p class="layman"><b>In plain English:</b> Enter the voltage between two conductors and the environmental category (sealed enclosure vs open air); get the minimum allowable spacing.</p>
+  <table class="typ">
+    <tr><th>Voltage</th><th>IPC-2221 external (B1)</th><th>IEC clearance (poll deg 2)</th></tr>
+    <tr><td>30 V</td><td class="num">0.10 mm</td><td class="num">0.20 mm</td></tr>
+    <tr><td>250 V (mains)</td><td class="num">0.63 mm</td><td class="num">1.5 mm</td></tr>
+    <tr><td>500 V</td><td class="num">2.5 mm</td><td class="num">3.0 mm</td></tr>
+  </table>
+</div>
+
+<div class="tool" data-name="Wavelength c frequency speed of light vacuum fraction"><div class="tool-head">
+  <span class="tool-title">Wavelength</span><span class="cat-chip">Core PCB</span>
+</div>
+  <div class="bluf"><b>When to use:</b> computing λ at a frequency and the fractional wavelengths (λ/4, λ/2) that define stub resonance, antenna size, and "distributed" thresholds.</div>
+  <p class="why"><b>Why it matters:</b> Anything longer than ~λ/20 is a transmission line; anything shorter is lumped. Knowing where that crossover lives on your board tells you when to start caring about controlled impedance.</p>
+  <p class="layman"><b>In plain English:</b> Enter a frequency and εeff, get λ in mm or inch. Also reports λ/4 and λ/20 (the typical lumped/distributed boundary).</p>
+  <table class="typ">
+    <tr><th>Frequency</th><th>λ in FR-4 (εeff ≈ 3)</th><th>λ/20 → distributed</th></tr>
+    <tr><td>100 MHz</td><td class="num">1730 mm</td><td class="num">86 mm</td></tr>
+    <tr><td>2.4 GHz</td><td class="num">72 mm</td><td class="num">3.6 mm</td></tr>
+    <tr><td>10 GHz</td><td class="num">17.3 mm</td><td class="num">0.9 mm</td></tr>
+  </table>
+</div>
+
+<div class="tool" data-name="Er effective microstrip Kirschning Jansen dispersion"><div class="tool-head">
+  <span class="tool-title">εr Effective</span><span class="cat-chip">Core PCB</span>
+</div>
+  <div class="bluf"><b>When to use:</b> finding the effective dielectric constant a microstrip line "sees" at a given frequency.</div>
+  <p class="why"><b>Why it matters:</b> Microstrip lives partly in air and partly in substrate, so its εeff is somewhere between 1 and the bulk Dk. Above ~1 GHz, εeff also rises with frequency (Kirschning-Jansen dispersion). Length-tuning RF circuits without this correction puts a 5–15% error on every quarter-wave line.</p>
+  <p class="layman"><b>In plain English:</b> Enter Dk, width, height, frequency → get εeff with proper dispersion correction. Mostly used internally by other tools, but exposed here when you want the raw number.</p>
+</div>
+
+<div class="tool" data-name="Bandwidth knee frequency rise time trace length termination required"><div class="tool-head">
+  <span class="tool-title">Bandwidth &amp; Max Length</span><span class="cat-chip">Core PCB</span>
+</div>
+  <div class="bluf"><b>When to use:</b> deciding whether a trace needs end-termination, and how long it can be before reflections matter.</div>
+  <p class="why"><b>Why it matters:</b> Below the bandwidth knee (≈ 0.5 / rise_time), a trace is "short" and lumped. Above it the trace is a transmission line and you must terminate. Most digital design problems live exactly at this boundary.</p>
+  <p class="layman"><b>In plain English:</b> Enter rise time (or clock frequency), εeff, get the knee frequency and the maximum trace length (about λ/6 of the knee) before termination becomes mandatory.</p>
+  <table class="typ">
+    <tr><th>Edge rate</th><th>Knee BW</th><th>Max length (FR-4)</th></tr>
+    <tr><td>1 ns</td><td class="num">≈ 500 MHz</td><td class="num">≈ 50 mm</td></tr>
+    <tr><td>200 ps</td><td class="num">≈ 2.5 GHz</td><td class="num">≈ 10 mm</td></tr>
+    <tr><td>50 ps</td><td class="num">≈ 10 GHz</td><td class="num">≈ 2.5 mm</td></tr>
+  </table>
+</div>
+
+<div class="tool" data-name="Via properties inductance capacitance resistance impedance Howard Johnson"><div class="tool-head">
+  <span class="tool-title">Via Properties</span><span class="cat-chip">Core PCB</span>
+</div>
+  <div class="bluf"><b>When to use:</b> any time you're putting a via in a current-carrying or RF path.</div>
+  <p class="why"><b>Why it matters:</b> A via has parasitic R, L, C, a self Z₀, and a current-carrying limit — all of which matter for high-speed signal vias, decoupling-cap mounting, and high-current power vias. Howard Johnson's standard via-inductance formula (L = 5.08·h·ln(4h/d)) is the universal reference.</p>
+  <p class="layman"><b>In plain English:</b> Enter drill, plating, board thickness — get DC resistance, parasitic inductance (in three common conventions: no-constant / +0.5 / +1.0), capacitance to the surrounding antipad, characteristic impedance of the barrel, and a per-via thermal resistance. Also computes the equivalent for an array of N vias in parallel.</p>
+  <table class="typ">
+    <tr><th>Via type</th><th>Typical geometry</th><th>Typical L_via</th></tr>
+    <tr><td>0.3 mm signal via, 4-layer 1.6 mm</td><td class="num">10 mil drill, 62 mil through</td><td class="num">≈ 1.0 nH</td></tr>
+    <tr><td>HDI 0.15 mm, blind L1-L2</td><td class="num">6 mil drill, 5 mil deep</td><td class="num">≈ 0.18 nH</td></tr>
+    <tr><td>Thermal / power via</td><td class="num">12 mil drill</td><td class="num">≈ 0.9 nH; θ ≈ 60 K/W</td></tr>
+  </table>
+</div>
+
+<div class="tool" data-name="Differential via stub Nyquist resonance back-drill"><div class="tool-head">
+  <span class="tool-title">Differential Via Stub</span><span class="cat-chip">Core PCB</span>
+</div>
+  <div class="bluf"><b>When to use:</b> deciding the back-drill depth (or whether to back-drill at all) for a differential through-via on a high-speed pair.</div>
+  <p class="why"><b>Why it matters:</b> The unused bottom of a through-via is a quarter-wave open stub. Once stub_length ≈ λ/4 at your Nyquist frequency, the channel gets a sharp ~20 dB notch right in your eye. Most PCIe-Gen5+, 100GbE, and OIF-CEI links can't ship without back-drilling.</p>
+  <p class="layman"><b>In plain English:</b> Tell it your protocol (PCIe, USB-C/SS, 100GbE…) and the via depth — get the maximum stub it tolerates before the eye closes. See also <a href="#tool-via_stub_impact">Via Stub Impact</a> for the full S21 / eye / budget version.</p>
+</div>
+
+<div class="tool" data-name="Planar spiral inductor Modified Wheeler Mohan 1999"><div class="tool-head">
+  <span class="tool-title">Planar Spiral Inductor</span><span class="cat-chip">Core PCB</span>
+</div>
+  <div class="bluf"><b>When to use:</b> designing an on-PCB spiral coil — RFID, antenna match, low-pass output filter inductor, wireless-charging coil.</div>
+  <p class="why"><b>Why it matters:</b> Discrete chip inductors max out around 470 nH at sane current; for bigger values or where you want a custom Q, you wind it into the copper. The Modified-Wheeler formula (Mohan et al. 1999) is the most-cited closed-form predictor.</p>
+  <p class="layman"><b>In plain English:</b> Enter number of turns, inner diameter, conductor width, spacing. Get the inductance, DC resistance, and self-resonant frequency.</p>
+</div>
+
+<div class="tool" data-name="Embedded resistor sheet resistance R_sheet thin film"><div class="tool-head">
+  <span class="tool-title">Embedded Resistor</span><span class="cat-chip">Core PCB</span>
+</div>
+  <div class="bluf"><b>When to use:</b> specifying buried thin-film resistors (Ohmega-Ply, TICER, NiCr) on a high-density board.</div>
+  <p class="why"><b>Why it matters:</b> Removing thousands of discrete 0402 resistors by burying them in a planar layer saves real estate and lowers parasitic inductance — but you have to size the L/W ratio against the sheet resistance.</p>
+  <p class="layman"><b>In plain English:</b> R = R_sheet · (length / width). Enter the sheet resistance the foil vendor quotes (50 Ω/sq, 100 Ω/sq, 250 Ω/sq, 1000 Ω/sq are typical) plus your length and width, get the resistance. Or solve in reverse.</p>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- SIGNAL INTEGRITY                                             -->
+<!-- ============================================================ -->
+<h2 id="cat-si">Signal Integrity <span class="count">(5 tools)</span></h2>
+
+<div class="tool" id="tool-via_stub_impact" data-name="Via stub impact S21 eye budget PCIe SerDes back drill"><div class="tool-head">
+  <span class="tool-title">Via Stub Impact (S21 + eye + budget)</span><span class="cat-chip">Signal Integrity</span>
+</div>
+  <div class="bluf"><b>When to use:</b> any high-speed serial link (PCIe Gen3+, USB-SS, 25/50/100 GbE, MIPI C-PHY, CXL).</div>
+  <p class="why"><b>Why it matters:</b> The single biggest serial-link killer on a stackup is a quarter-wave via stub. This tool tells you exactly how much budget the stub costs in dB, how much eye height/width it eats, and whether your protocol's FEC can absorb it — backed by manufacturer-published IL budgets for every major SerDes standard.</p>
+  <p class="layman"><b>In plain English:</b> Pick a protocol from the dropdown (PCIe Gen5, USB4, 100G PAM4, etc.) — it pre-loads the data rate, modulation, rise time, and channel budget. Enter stub length, used via length, drill, antipad, pad. See the |S21| curve, the IL adder at Nyquist and 2× Nyquist, the eye closure, and a colour-coded "Back-drill required / OK / Watch" recommendation.</p>
+  <table class="typ">
+    <tr><th>Protocol</th><th>Tolerable stub (typ.)</th></tr>
+    <tr><td>PCIe Gen3 (8 GT/s)</td><td class="num">≤ ~30 mil</td></tr>
+    <tr><td>PCIe Gen5 (32 GT/s)</td><td class="num">≤ ~12 mil</td></tr>
+    <tr><td>112G PAM4</td><td class="num">≤ ~6 mil — back-drill mandatory</td></tr>
+  </table>
+</div>
+
+<div class="tool" data-name="Dielectric Dk Df frequency Djordjevic Sarkar causal"><div class="tool-head">
+  <span class="tool-title">Dielectric Dk/Df vs Frequency</span><span class="cat-chip">Signal Integrity</span>
+</div>
+  <div class="bluf"><b>When to use:</b> when your laminate datasheet only gives Dk/Df at one frequency (typically 10 GHz) and you need the value at another frequency for an SI calculation.</div>
+  <p class="why"><b>Why it matters:</b> Dk drops with frequency (typ. 4.5 at 1 MHz to 3.9 at 20 GHz for FR-4). Df rises with frequency. Using the wrong number throws off impedance, propagation delay, and insertion loss budgets at the few-percent level — which matters for tight-tolerance designs.</p>
+  <p class="layman"><b>In plain English:</b> Pick a laminate (Megtron 6, Rogers RO4350B, FR-4, etc.) from the dropdown — it loads the datasheet point and fits a causal Djordjevic-Sarkar model. Enter the target frequency, get Dk/Df at that frequency. Or pick "Custom" and enter your own datasheet numbers.</p>
+</div>
+
+<div class="tool" data-name="Conductor loss roughness Hammerstad Cannonball Huray copper foil"><div class="tool-head">
+  <span class="tool-title">Conductor Loss (Roughness)</span><span class="cat-chip">Signal Integrity</span>
+</div>
+  <div class="bluf"><b>When to use:</b> estimating how much extra loss the copper roughness on your foil adds vs. an ideal smooth conductor.</div>
+  <p class="why"><b>Why it matters:</b> Above ~5 GHz, foil tooth-height contributes more loss than the underlying skin-effect math predicts. Without correction, your channel insertion-loss budget under-estimates real loss by 1.5–3×.</p>
+  <p class="layman"><b>In plain English:</b> Pick the foil class (STD / RTF / VLP / HVLP / Hyper-VLP) and frequency. Get a multiplier (e.g. K = 2.1 at 10 GHz on a 4 μm Rz foil) that you apply on top of the smooth-conductor loss. Uses Cannonball-Huray as the default model (the industry standard, verified against Polar Si9000e).</p>
+  <table class="typ">
+    <tr><th>Foil class</th><th>Rz (μm)</th><th>K @ 10 GHz</th></tr>
+    <tr><td>STD</td><td class="num">5.7</td><td class="num">2.5</td></tr>
+    <tr><td>RTF</td><td class="num">4.4</td><td class="num">2.1</td></tr>
+    <tr><td>VLP</td><td class="num">3.5</td><td class="num">1.8</td></tr>
+    <tr><td>HVLP</td><td class="num">2.0</td><td class="num">1.3</td></tr>
+  </table>
+</div>
+
+<div class="tool" data-name="Insertion loss budget channel dielectric conductor stub connector dB"><div class="tool-head">
+  <span class="tool-title">Channel Insertion Loss Budget</span><span class="cat-chip">Signal Integrity</span>
+</div>
+  <div class="bluf"><b>When to use:</b> tallying up the total dB loss of a high-speed channel from end to end.</div>
+  <p class="why"><b>Why it matters:</b> Every SerDes spec has a hard IL ceiling (e.g. PCIe Gen5 = 36 dB total at Nyquist). Hit that ceiling and the link won't train. Knowing where your dB is going — dielectric vs conductor vs roughness vs stub vs connector — tells you what to optimize first.</p>
+  <p class="layman"><b>In plain English:</b> Enter trace length, geometry, laminate, foil class, Nyquist frequency, and connector loss. Get a per-component breakdown of the dB loss budget across the channel.</p>
+</div>
+
+<div class="tool" data-name="Jitter budget Tj dual Dirac BER eye"><div class="tool-head">
+  <span class="tool-title">Jitter Budget (Tj)</span><span class="cat-chip">Signal Integrity</span>
+</div>
+  <div class="bluf"><b>When to use:</b> verifying a serial link will meet its bit-error-rate target given component jitter specs.</div>
+  <p class="why"><b>Why it matters:</b> SerDes specs allocate jitter across the TX, channel, and RX. The dual-Dirac model lets you predict total peak-to-peak jitter at an arbitrary BER (1e-12, 1e-15) from the per-source random and deterministic components.</p>
+  <p class="layman"><b>In plain English:</b> Enter random jitter (RJ, σ in ps) and deterministic jitter (DJ, p-p in ps) for each source. Get the total Tj at your target BER plotted on an eye-diagram backdrop.</p>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- POWER INTEGRITY                                              -->
+<!-- ============================================================ -->
+<h2 id="cat-pi">Power Integrity <span class="count">(4 tools)</span></h2>
+
+<div class="tool" data-name="PDN target plane capacitance Bogatin Smith"><div class="tool-head">
+  <span class="tool-title">PDN Target &amp; Plane Cap</span><span class="cat-chip">Power Integrity</span>
+</div>
+  <div class="bluf"><b>When to use:</b> computing the target impedance your power-distribution network has to hit, and what the bare GND/PWR plane pair contributes for free.</div>
+  <p class="why"><b>Why it matters:</b> Z_target = ΔV_allowed / ΔI_transient is the foundational PDN-design equation (Smith &amp; Bogatin 2017). Plane capacitance (ε·A/h) handles the high-frequency end "for free" if the plane pair is tight.</p>
+  <p class="layman"><b>In plain English:</b> Enter rail voltage, allowed ripple % (1% typical for digital, 50 mV for FPGA core), and peak transient current. Get the impedance ceiling. Also enter plane area and Dk to see the natural plane capacitance and the Xc-frequency knee where the planes alone stop being enough.</p>
+</div>
+
+<div class="tool" data-name="MLCC DC bias derating effective capacitance temperature X7R Y5V"><div class="tool-head">
+  <span class="tool-title">MLCC DC-Bias Derating</span><span class="cat-chip">Power Integrity</span>
+</div>
+  <div class="bluf"><b>When to use:</b> finding the actual capacitance of an MLCC under operating bias — usually 30–80% of the nominal sticker value.</div>
+  <p class="why"><b>Why it matters:</b> A "10 µF 10 V X7R 0603" datasheet'd at 0 V often delivers 4 µF at 5 V bias. Your PDN model is wrong by that much if you use the sticker value.</p>
+  <p class="layman"><b>In plain English:</b> Pick the part from the library (or enter the curve manually). Enter your actual bias voltage and operating temperature. Get the real effective capacitance, both at room temp and over the temperature range.</p>
+  <table class="typ">
+    <tr><th>Part</th><th>Bias</th><th>Effective C</th></tr>
+    <tr><td>10 µF 10 V X7R 0603</td><td class="num">3.3 V</td><td class="num">≈ 6 µF</td></tr>
+    <tr><td>10 µF 10 V X7R 0603</td><td class="num">5 V</td><td class="num">≈ 4 µF</td></tr>
+    <tr><td>22 µF 6.3 V X5R 0805</td><td class="num">5 V</td><td class="num">≈ 8 µF</td></tr>
+  </table>
+</div>
+
+<div class="tool" data-name="Mounting inductance L_mnt via pad decoupling capacitor"><div class="tool-head">
+  <span class="tool-title">Mounting Inductance (L_mnt)</span><span class="cat-chip">Power Integrity</span>
+</div>
+  <div class="bluf"><b>When to use:</b> figuring the parasitic loop inductance from a decoupling cap's pad, through the via, down to the plane, and back up.</div>
+  <p class="why"><b>Why it matters:</b> Above ~100 MHz the mounting inductance dominates the cap's effective impedance — much more than the cap's own ESL. A 0402 with 0.6 nH ESL mounted on a 4-layer board's outer layer easily picks up 1.5 nH of mounting L, tripling the high-frequency Z.</p>
+  <p class="layman"><b>In plain English:</b> Enter via height, drill diameter, pad geometry, and number of vias per cap terminal. Get the loop inductance the cap actually sees on the rail.</p>
+  <table class="typ">
+    <tr><th>Mounting style</th><th>Typical L_mnt</th></tr>
+    <tr><td>Single-via per pad, 4-layer outer (62 mil)</td><td class="num">≈ 2 nH</td></tr>
+    <tr><td>Dual-via per pad, 4-layer outer</td><td class="num">≈ 1 nH</td></tr>
+    <tr><td>Via-in-pad on HDI</td><td class="num">≈ 0.2 nH</td></tr>
+  </table>
+</div>
+
+<div class="tool" data-name="Cap bank analyzer decoupling Z(f) anti resonance NISM Sandler"><div class="tool-head">
+  <span class="tool-title">Cap Bank Analyzer (Z(f))</span><span class="cat-chip">Power Integrity</span>
+</div>
+  <div class="bluf"><b>When to use:</b> verifying a parallel decoupling-cap network meets the target impedance across the full band, before you commit to a BoM.</div>
+  <p class="why"><b>Why it matters:</b> The classic "spread cap values logarithmically across the band" approach creates anti-resonance peaks between every adjacent SRF pair. Without simulating the |Z(f)| curve you can't see whether one of those peaks pokes above the target. Sandler's NISM flatness metric (Z_max/Z_min ≤ 2 = 6 dB) is the modern best-practice acceptance criterion.</p>
+  <p class="layman"><b>In plain English:</b> Build a parallel cap bank from the MLCC library or by typing in C / ESL / ESR per branch. Plot |Z(f)| vs the target line, see the anti-resonance peaks and the NISM flatness number.</p>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- RF / MICROWAVE                                               -->
+<!-- ============================================================ -->
+<h2 id="cat-rf">RF / Microwave <span class="count">(5 tools)</span></h2>
+
+<div class="tool" data-name="Pi pad attenuator resistive symmetric asymmetric"><div class="tool-head">
+  <span class="tool-title">Pi-Pad Attenuator</span><span class="cat-chip">RF</span>
+</div>
+  <div class="bluf"><b>When to use:</b> dropping signal level by a fixed dB (e.g. test-equipment pads, mixer level-setting, ADC input attenuation) using three resistors.</div>
+  <p class="why"><b>Why it matters:</b> Resistive pads are the simplest, broadest-band attenuators there are — flat from DC to many GHz if you pick low-parasitic 0402s. The "Pi" topology (shunt-series-shunt) is the most common.</p>
+  <p class="layman"><b>In plain English:</b> Enter source Z, load Z, and dB of attenuation. Get the three resistor values, snapped to E24 standard parts. Symmetric (same Z both sides) and asymmetric (Zin ≠ Zout, "matching pad") are both supported.</p>
+  <table class="typ">
+    <tr><th>Use case</th><th>Inputs</th><th>Result</th></tr>
+    <tr><td>50 Ω inline 10 dB pad</td><td class="num">Z=50 Ω, A=10 dB</td><td class="num">96 Ω shunt, 71 Ω series</td></tr>
+    <tr><td>50→75 Ω matching pad</td><td class="num">Zs=50, Zl=75, A=6 dB</td><td class="num">86.5 / 2386 / 45.8 Ω</td></tr>
+  </table>
+</div>
+
+<div class="tool" data-name="T pad attenuator resistive series shunt series"><div class="tool-head">
+  <span class="tool-title">T-Pad Attenuator</span><span class="cat-chip">RF</span>
+</div>
+  <div class="bluf"><b>When to use:</b> same as Pi-pad, but for the dual topology (series-shunt-series). Sometimes lays out cleaner.</div>
+  <p class="why"><b>Why it matters:</b> Topologically identical performance to a Pi-pad of equal dB. Pick whichever fits the layout better. T-pads tend to have less-extreme resistor values for moderate attenuations (3–10 dB).</p>
+  <p class="layman"><b>In plain English:</b> Same workflow as Pi-pad — three resistors, E24-snapped.</p>
+</div>
+
+<div class="tool" data-name="L match impedance lumped two element complex load"><div class="tool-head">
+  <span class="tool-title">L-Match (Impedance)</span><span class="cat-chip">RF</span>
+</div>
+  <div class="bluf"><b>When to use:</b> matching an antenna, mixer, or amplifier port that has some complex impedance (R+jX) to a real Z₀ (usually 50 Ω) at a single frequency.</div>
+  <p class="why"><b>Why it matters:</b> Two-element matching is the simplest narrowband match there is, and it's the right starting point before you go to Pi or T. Always-correct math, narrowband Q.</p>
+  <p class="layman"><b>In plain English:</b> Enter the complex load impedance, source impedance, and target frequency. Get the L and C values for the four possible L-network arrangements, plus the resulting Q (which sets bandwidth).</p>
+</div>
+
+<div class="tool" data-name="Quarter wave match multi section binomial Chebyshev VSWR bandwidth"><div class="tool-head">
+  <span class="tool-title">Quarter-Wave Match (Multi-section)</span><span class="cat-chip">RF</span>
+</div>
+  <div class="bluf"><b>When to use:</b> matching two unequal real impedances (e.g. 50 Ω to 200 Ω) with a multi-section transmission-line transformer.</div>
+  <p class="why"><b>Why it matters:</b> More sections = wider bandwidth in exchange for length. Binomial (maximally flat) is monotonic; Chebyshev (equal ripple) is broader-band. Both classics from Pozar.</p>
+  <p class="layman"><b>In plain English:</b> Enter source Z, load Z, number of sections, and design frequency. Get per-section impedance, per-section trace width (from Hammerstad-Jensen inverse), and per-section physical length (each section uses its own εeff so each is electrically a true λ/4). Outputs a VSWR-vs-frequency plot for verification.</p>
+</div>
+
+<div class="tool" data-name="Lumped LC match L Pi T network parasitic S11 package"><div class="tool-head">
+  <span class="tool-title">Lumped LC Match (L / Pi / T)</span><span class="cat-chip">RF</span>
+</div>
+  <div class="bluf"><b>When to use:</b> three-element narrow-band matching (Pi or T) when you need more selectivity than the two-element L can give, or when you're stuck with specific component package parasitic.</div>
+  <p class="why"><b>Why it matters:</b> Pi/T networks add a Q knob — you trade bandwidth for sharpness. The tool also models the package parasitics of the L/C parts so you can see what S11 the real implementation will hit, not the ideal-component answer.</p>
+  <p class="layman"><b>In plain English:</b> Choose L / Pi / T, set the source and load impedances, the centre frequency, and your desired Q. Get the component values snapped to E-series, with a frequency-sweep S11 plot showing what a 0402 part's parasitic L/C does to the result.</p>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- MECHANICAL / DFM                                             -->
+<!-- ============================================================ -->
+<h2 id="cat-mech">Mechanical &amp; DFM <span class="count">(4 tools)</span></h2>
+
+<div class="tool" data-name="Padstack thru hole pad BGA land clearance corner annular ring"><div class="tool-head">
+  <span class="tool-title">Padstack Calculator</span><span class="cat-chip">Mechanical/DFM</span>
+</div>
+  <div class="bluf"><b>When to use:</b> sizing pads, lands, and clearances for thru-holes, BGAs, and discrete SMDs.</div>
+  <p class="why"><b>Why it matters:</b> A pad that's too small loses copper after etch; too big and you can't route between BGA balls. Every fab house has minimum annular-ring rules, and a real layout has to plan to those rules.</p>
+  <p class="layman"><b>In plain English:</b> Four sub-tools: thru-hole pad sizing (lead + clearance + annular ring), BGA land sizing, pad-clearance rule, and corner-to-corner pad pitch.</p>
+</div>
+
+<div class="tool" data-name="Stackup symmetry bow twist IPC-6012E copper coverage warpage"><div class="tool-head">
+  <span class="tool-title">Stackup Symmetry &amp; Bow</span><span class="cat-chip">Mechanical/DFM</span>
+</div>
+  <div class="bluf"><b>When to use:</b> evaluating whether a stackup design will warp during reflow.</div>
+  <p class="why"><b>Why it matters:</b> Asymmetric copper density top-vs-bottom is the #1 cause of board warpage. Warped boards fail BGA reflow, fail mechanical fit-up, and fail in-circuit test. IPC-6012E sets the bow/twist limits.</p>
+  <p class="layman"><b>In plain English:</b> Enter per-layer copper coverage (rough estimate: 80% for power planes, 30% for signal layers). Get a symmetry score and a board-size-dependent IPC-6012E pass/fail.</p>
+</div>
+
+<div class="tool" data-name="Paste aperture IPC-7525 stencil area ratio aspect ratio"><div class="tool-head">
+  <span class="tool-title">Paste Aperture (IPC-7525)</span><span class="cat-chip">Mechanical/DFM</span>
+</div>
+  <div class="bluf"><b>When to use:</b> designing the stencil aperture for a tight SMT footprint (0201, 01005, fine-pitch BGA, QFN thermal pad).</div>
+  <p class="why"><b>Why it matters:</b> If the aperture's area-ratio (opening area / wall area) drops below ≈ 0.66, paste won't release cleanly and you get skips. IPC-7525B is the universal standard. For most paste types you also want aspect ratio (width/thickness) ≥ 1.5.</p>
+  <p class="layman"><b>In plain English:</b> Enter aperture width, length, and stencil thickness. Get both ratios with a pass/fail.</p>
+</div>
+
+<div class="tool" data-name="BGA escape routing channels signal layer count breakout"><div class="tool-head">
+  <span class="tool-title">BGA Escape Routing</span><span class="cat-chip">Mechanical/DFM</span>
+</div>
+  <div class="bluf"><b>When to use:</b> planning the layer count needed to fully break out a BGA at a given pitch.</div>
+  <p class="why"><b>Why it matters:</b> BGA pin count grows faster than perimeter, so beyond ~25 pins you can't escape all signals from a single layer. Figuring out the layer count before you commit to a stackup avoids expensive re-spins.</p>
+  <p class="layman"><b>In plain English:</b> Enter BGA pitch (1.0 mm / 0.8 mm / 0.65 mm / 0.5 mm / 0.4 mm), pad/via diameters, and trace width. Get the routing channels per row and the signal-layer count needed for full breakout.</p>
+  <table class="typ">
+    <tr><th>BGA pitch</th><th>Channels (3 mil trace)</th></tr>
+    <tr><td>1.0 mm</td><td class="num">2 traces per channel</td></tr>
+    <tr><td>0.8 mm</td><td class="num">1 trace per channel</td></tr>
+    <tr><td>0.5 mm</td><td class="num">0 — requires HDI / micro-via</td></tr>
+  </table>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- THERMAL                                                      -->
+<!-- ============================================================ -->
+<h2 id="cat-thermal">Thermal <span class="count">(2 tools)</span></h2>
+
+<div class="tool" data-name="Thermal management junction temperature heatsink theta JA Tj_max"><div class="tool-head">
+  <span class="tool-title">Thermal Management</span><span class="cat-chip">Thermal</span>
+</div>
+  <div class="bluf"><b>When to use:</b> predicting the operating junction temperature of an IC and the safety margin you have left.</div>
+  <p class="why"><b>Why it matters:</b> Every 10 °C above rated junction temp roughly halves device life. Datasheets give θ_JA and θ_JC (and sometimes Ψ_JT), and a thermal-budget calculation answers "do I need a heatsink, or is the bare package enough?"</p>
+  <p class="layman"><b>In plain English:</b> Enter power dissipation, ambient temperature, package thermal resistance, optional heatsink. Get Tj with margin to Tj_max.</p>
+  <table class="typ">
+    <tr><th>Package</th><th>Typical θ_JA</th></tr>
+    <tr><td>SOT-23 small-signal</td><td class="num">250 °C/W</td></tr>
+    <tr><td>QFN 5×5 mm exposed pad</td><td class="num">30–40 °C/W</td></tr>
+    <tr><td>TO-220 + clip heatsink</td><td class="num">2–10 °C/W</td></tr>
+  </table>
+</div>
+
+<div class="tool" data-name="Thermal via array exposed pad Lee spreading resistance solder voiding"><div class="tool-head">
+  <span class="tool-title">Thermal Via Array</span><span class="cat-chip">Thermal</span>
+</div>
+  <div class="bluf"><b>When to use:</b> sizing the via array under a thermally-grounded SMT pad (QFN exposed pad, DC-DC inductor, RF PA).</div>
+  <p class="why"><b>Why it matters:</b> The total θ from exposed pad to plane is dominated by the via array. Doubling the via count drops θ by less than half (diminishing returns from Lee spreading resistance), and solder voiding can spike the path resistance by 30%+ if the area-ratio is bad.</p>
+  <p class="layman"><b>In plain English:</b> Enter the exposed-pad size, via geometry, and number of vias. Get the parallel-via θ + Lee spreading-resistance term + a solder-voiding penalty, summed to the total θ.</p>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- POWER ELECTRONICS                                            -->
+<!-- ============================================================ -->
+<h2 id="cat-power">Power Electronics <span class="count">(1 tool)</span></h2>
+
+<div class="tool" data-name="Buck boost converter inductor output cap CCM ripple"><div class="tool-head">
+  <span class="tool-title">Buck / Boost Inductor</span><span class="cat-chip">Power Electronics</span>
+</div>
+  <div class="bluf"><b>When to use:</b> sizing the inductor and output cap for a CCM-mode buck or boost converter.</div>
+  <p class="why"><b>Why it matters:</b> The inductor sets ripple current and the boundary between CCM and DCM. The output cap sets ripple voltage. Getting either wrong gives audible whining at light load or rail noise at heavy load.</p>
+  <p class="layman"><b>In plain English:</b> Enter Vin, Vout, Iout, switching frequency, and target ripple ratio (30% typical). Get the minimum inductance for CCM and the output cap needed for your ripple-voltage budget.</p>
+  <table class="typ">
+    <tr><th>Converter</th><th>Inputs</th><th>L / C</th></tr>
+    <tr><td>5 V → 3.3 V, 2 A, 1 MHz</td><td class="num">Δi = 30%</td><td class="num">L ≈ 2.2 µH, C ≈ 22 µF</td></tr>
+    <tr><td>12 V → 5 V, 3 A, 500 kHz</td><td class="num">Δi = 30%</td><td class="num">L ≈ 8.2 µH, C ≈ 47 µF</td></tr>
+    <tr><td>3.7 V → 12 V boost, 0.5 A</td><td class="num">Δi = 40%</td><td class="num">L ≈ 6.8 µH, C ≈ 22 µF</td></tr>
+  </table>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- EMC                                                          -->
+<!-- ============================================================ -->
+<h2 id="cat-emc">EMC / EMI <span class="count">(1 tool)</span></h2>
+
+<div class="tool" data-name="EMC EMI radiated emissions small loop FCC CISPR Class A B"><div class="tool-head">
+  <span class="tool-title">Radiated Emissions — Small Loop</span><span class="cat-chip">EMC</span>
+</div>
+  <div class="bluf"><b>When to use:</b> sanity-checking whether a switching-supply current loop will pass FCC Class B at 3 m — <i>before</i> sending the board to the EMC lab.</div>
+  <p class="why"><b>Why it matters:</b> Loop area and harmonic content set the E-field. Cutting loop area in half cuts radiation by 6 dB. Knowing this at layout time is 100× cheaper than re-spinning after a failed scan.</p>
+  <p class="layman"><b>In plain English:</b> Enter the loop area, the harmonic current and frequency, and the measurement distance. Get a predicted E-field in dBµV/m, compared against FCC and CISPR Class A and B limits.</p>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- HIGH-SPEED DIGITAL                                           -->
+<!-- ============================================================ -->
+<h2 id="cat-hsd">High-Speed Digital <span class="count">(1 tool)</span></h2>
+
+<div class="tool" data-name="DDR length matching JEDEC DDR3 DDR4 DDR5 skew trim"><div class="tool-head">
+  <span class="tool-title">DDR Length Matching</span><span class="cat-chip">High-Speed Digital</span>
+</div>
+  <div class="bluf"><b>When to use:</b> length-tuning a DDR memory bus to JEDEC tolerances.</div>
+  <p class="why"><b>Why it matters:</b> DDR3 / DDR4 / DDR5 have tight per-byte-group skew tolerances (±25 mil typical for DQ, ±10 mil for CK/CMD). Get one byte lane out of spec and the whole interface fails training at boot.</p>
+  <p class="layman"><b>In plain English:</b> Paste in or enter the as-routed length of every DQ, DQS, CMD, ADDR, CK signal grouped by byte lane. Tool tags any signal that needs trimming, and recommends how much to add or shorten.</p>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- WIZARD                                                       -->
+<!-- ============================================================ -->
+<h2 id="cat-wizard">PCB Design Wizard <span class="count">(1 tool)</span></h2>
+
+<div class="tool" data-name="Design wizard preset stackup trace rules via schedule first board"><div class="tool-head">
+  <span class="tool-title">PCB Design Wizard</span><span class="cat-chip">Wizard</span>
+</div>
+  <div class="bluf"><b>When to use:</b> starting a new design from a blank sheet and you want an opinionated set of "good defaults" for stackup, trace rules, and via schedule.</div>
+  <p class="why"><b>Why it matters:</b> Most PCB mistakes happen at the start, before any traces are drawn — wrong stackup, wrong trace minimums, vias too small for the signals. A wizard catches those before they're baked in.</p>
+  <p class="layman"><b>In plain English:</b> A step-by-step questionnaire (board class, target speeds, manufacturer, layer count budget, mechanical constraints, RF or pure digital) that walks you to a recommended stackup, trace/space rules, via schedule, and a printable HTML/Markdown report you can save with the project.</p>
+</div>
+
+
+<div class="footer">
+  <p>For the formal license, see the <code>LICENSE</code> file in the repo root or the in-app License dialog (<b>Help → License Agreement</b>). For verification details on every formula, see <a href="verification_results.html">verification_results.html</a> and <a href="verification_guide.html">verification_guide.html</a>. Source code: <a href="https://github.com/otac0011/CastGuidance_PCB_Toolkit">github.com/otac0011/CastGuidance_PCB_Toolkit</a>.</p>
+</div>
+
+</div><!-- /container -->
+
+<script>
+// Live filter — fades out tool cards (and the category header above
+// them) whose data-name attribute or visible text doesn't contain the
+// query.  Empty query restores everything.
+(function() {
+  const input = document.getElementById('filter');
+  const noMatch = document.getElementById('noMatch');
+  const tools = Array.from(document.querySelectorAll('.tool'));
+  const headers = Array.from(document.querySelectorAll('h2'));
+
+  function applyFilter() {
+    const q = input.value.trim().toLowerCase();
+    document.body.classList.toggle('filter-active', q.length > 0);
+    let anyMatch = false;
+    for (const t of tools) {
+      const hay = (t.dataset.name || '') + ' ' + t.textContent;
+      const match = q === '' || hay.toLowerCase().includes(q);
+      t.style.display = match ? '' : 'none';
+      if (match) anyMatch = true;
+    }
+    // Hide a category header whose every child .tool is hidden.
+    for (const h of headers) {
+      // Find the next h2 sibling and check tools in between
+      let visible = false;
+      let n = h.nextElementSibling;
+      while (n && n.tagName !== 'H2') {
+        if (n.classList && n.classList.contains('tool') && n.style.display !== 'none') {
+          visible = true;
+          break;
+        }
+        n = n.nextElementSibling;
+      }
+      h.style.display = (q === '' || visible) ? '' : 'none';
+    }
+    noMatch.classList.toggle('active', !anyMatch);
+  }
+  input.addEventListener('input', applyFilter);
+})();
+</script>
+</body>
+</html>

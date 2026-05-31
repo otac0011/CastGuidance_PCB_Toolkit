@@ -1,378 +1,409 @@
-<!DOCTYPE html>
+<!doctype html>
+<!--
+Copyright (c) 2026 CastGuidance PCB Toolkit Developer. All rights reserved.
+SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
+-->
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jupiter PCB Toolkit — Laminate Datasheets</title>
+  <meta charset="utf-8">
+  <title>CastGuidance PCB Toolkit — PCB engineering calculator suite</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Free Windows desktop tool with 49 PCB engineering calculators — impedance, signal integrity, power integrity, RF matching, thermal, EMC, DFM. Open-source-friendly EULA.">
   <style>
     :root {
       --bg: #1a1a1a;
-      --surface: #252525;
-      --border: #333;
-      --accent: #e8a020;
-      --text: #e0e0e0;
-      --muted: #888;
-      --link: #e8a020;
+      --panel: #232323;
+      --panel-2: #2a2a2a;
+      --border: #353535;
+      --text: #e6e6e6;
+      --text-dim: #b0b0b0;
+      --text-mute: #888;
+      --accent: #d9842a;
+      --accent-2: #e8a040;
+      --accent-dim: rgba(217,132,42,0.6);
+      --good: #6fcf6f;
+      --warn: #f0b252;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body {
+      margin: 0;
       background: var(--bg);
       color: var(--text);
-      font-family: "Segoe UI", system-ui, sans-serif;
-      font-size: 15px;
+      font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       line-height: 1.6;
     }
-    header {
-      background: var(--surface);
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* Top nav */
+    .topnav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(26,26,26,0.92);
+      backdrop-filter: blur(6px);
       border-bottom: 1px solid var(--border);
-      padding: 24px 40px;
+      padding: 10px 20px;
     }
-    header h1 {
-      font-size: 1.6rem;
+    .topnav-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+    }
+    .topnav .brand { font-weight: 600; color: var(--text); }
+    .topnav .brand span { color: var(--accent); }
+    .topnav nav { display: flex; gap: 18px; margin-left: auto; flex-wrap: wrap; font-size: 14px; }
+    .topnav nav a { color: var(--text-dim); }
+    .topnav nav a:hover { color: var(--accent); text-decoration: none; }
+
+    /* Hero */
+    .hero {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 60px 24px 40px;
+    }
+    .hero h1 {
+      font-size: 44px;
+      margin: 0 0 12px;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+    .hero h1 span { color: var(--accent); }
+    .hero .tag {
+      font-size: 19px;
+      color: var(--text-dim);
+      max-width: 700px;
+      margin: 0 0 28px;
+    }
+    .cta-row {
+      display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+      margin-top: 24px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 11px 22px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 14.5px;
+      transition: transform 0.05s ease;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary {
+      background: var(--accent);
+      color: #1a1a1a;
+      border: 1px solid var(--accent);
+    }
+    .btn-primary:hover {
+      background: var(--accent-2);
+      text-decoration: none;
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover {
+      border-color: var(--accent);
       color: var(--accent);
-      letter-spacing: 0.02em;
+      text-decoration: none;
     }
-    header p {
-      color: var(--muted);
-      margin-top: 4px;
-      font-size: 0.9rem;
-    }
-    main {
-      max-width: 960px;
-      margin: 40px auto;
-      padding: 0 24px;
-    }
-    h2 {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--muted);
-      margin: 36px 0 12px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 6px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    th {
-      text-align: left;
-      font-size: 0.75rem;
+    .pill {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(217,132,42,0.15);
+      border: 1px solid var(--accent-dim);
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      color: var(--muted);
-      padding: 8px 12px;
-      border-bottom: 1px solid var(--border);
+      margin-bottom: 12px;
     }
-    td {
-      padding: 10px 12px;
-      border-bottom: 1px solid var(--border);
-      vertical-align: middle;
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+    /* Sections */
+    section { padding: 36px 0; border-top: 1px solid var(--border); }
+    section:first-of-type { border-top: none; }
+    section h2 {
+      font-size: 24px;
+      margin: 0 0 6px;
+      letter-spacing: -0.01em;
     }
-    tr:last-child td { border-bottom: none; }
-    tr:hover td { background: rgba(255,255,255,0.03); }
-    .name { font-weight: 600; }
-    .mfr  { color: var(--muted); font-size: 0.85rem; }
-    .val  { font-variant-numeric: tabular-nums; }
-    a {
-      color: var(--link);
-      text-decoration: none;
-      font-size: 0.85rem;
-      padding: 4px 10px;
-      border: 1px solid var(--accent);
-      border-radius: 4px;
-      white-space: nowrap;
+    section .section-lede {
+      color: var(--text-dim);
+      font-size: 14.5px;
+      margin: 0 0 22px;
+      max-width: 720px;
     }
-    a:hover { background: var(--accent); color: #111; }
-    footer {
-      text-align: center;
-      color: var(--muted);
-      font-size: 0.8rem;
-      padding: 40px 0 24px;
+
+    /* Card grid */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
     }
-    footer a { border: none; padding: 0; color: var(--muted); }
-    footer a:hover { background: none; color: var(--text); }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px 20px;
+      transition: border-color 0.15s ease, transform 0.05s ease;
+    }
+    .card:hover {
+      border-color: var(--accent-dim);
+    }
+    .card a.card-title {
+      display: block;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+    .card a.card-title:hover { text-decoration: none; color: var(--accent-2); }
+    .card p {
+      margin: 0;
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+    .card .meta {
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--text-mute);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .card.placeholder {
+      opacity: 0.55;
+      border-style: dashed;
+    }
+    .card.placeholder a.card-title { color: var(--text-dim); cursor: default; }
+
+    /* Stats strip */
+    .stats {
+      display: flex; gap: 28px; flex-wrap: wrap; margin: 20px 0 0;
+      font-size: 14px; color: var(--text-dim);
+    }
+    .stats span b { color: var(--accent); font-weight: 600; }
+
+    /* Footer */
+    footer.site-foot {
+      margin-top: 50px;
+      border-top: 1px solid var(--border);
+      padding: 28px 24px 60px;
+      color: var(--text-mute);
+      font-size: 12.5px;
+    }
+    footer.site-foot .container { padding: 0; }
+    footer.site-foot a { color: var(--text-dim); }
+
+    /* Visual accents */
+    code, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 12.5px; color: var(--text-dim); }
+
+    @media (max-width: 600px) {
+      .hero { padding: 40px 20px 24px; }
+      .hero h1 { font-size: 32px; }
+    }
   </style>
 </head>
 <body>
 
-<header>
-  <h1>Jupiter PCB Toolkit — Laminate Datasheets</h1>
-  <p>Manufacturer datasheets for all materials bundled with the toolkit. Click a row to open the PDF.</p>
-</header>
+<div class="topnav">
+  <div class="topnav-inner">
+    <span class="brand">Cast<span>Guidance</span> PCB Toolkit</span>
+    <nav>
+      <a href="#download">Download</a>
+      <a href="#docs">Docs</a>
+      <a href="#datasheets">Datasheets</a>
+      <a href="#verification">Verification</a>
+      <a href="#media">Media</a>
+      <a href="https://github.com/otac0011/CastGuidance_PCB_Toolkit" target="_blank">GitHub</a>
+    </nav>
+  </div>
+</div>
 
-<main>
-
-  <!-- Panasonic -->
-  <h2>Panasonic</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Material</th>
-        <th>Dk (10 GHz)</th>
-        <th>Df (10 GHz)</th>
-        <th>Tg (°C)</th>
-        <th>Z-CTE (ppm/°C)</th>
-        <th>Datasheet</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="name">Megtron 6</span><br><span class="mfr">R-5775 — Panasonic</span></td>
-        <td class="val">3.45</td>
-        <td class="val">0.0020</td>
-        <td class="val">185</td>
-        <td class="val">45</td>
-        <td><a href="datasheets/Panasonic_Megtron_6.pdf" target="_blank">Open PDF</a></td>
-      </tr>
-      <tr>
-        <td><span class="name">Megtron 7</span><br><span class="mfr">R-5785 — Panasonic</span></td>
-        <td class="val">3.40</td>
-        <td class="val">0.0020</td>
-        <td class="val">200</td>
-        <td class="val">42</td>
-        <td><a href="datasheets/Panasonic_Megtron_7.pdf" target="_blank">Open PDF</a></td>
-      </tr>
-      <tr>
-        <td><span class="name">Megtron 8</span><br><span class="mfr">Panasonic</span></td>
-        <td class="val">3.10</td>
-        <td class="val">0.0012</td>
-        <td class="val">220</td>
-        <td class="val">40</td>
-        <td><a href="datasheets/Panasonic_Megtron_8.pdf" target="_blank">Open PDF</a></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- Rogers -->
-  <h2>Rogers Corporation</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Material</th>
-        <th>Dk (10 GHz)</th>
-        <th>Df (10 GHz)</th>
-        <th>Tg (°C)</th>
-        <th>Z-CTE (ppm/°C)</th>
-        <th>Datasheet</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="name">RO4350B</span><br><span class="mfr">Rogers Corporation</span></td>
-        <td class="val">3.48</td>
-        <td class="val">0.0037</td>
-        <td class="val">&gt;280</td>
-        <td class="val">32</td>
-        <td><a href="datasheets/Rogers_RO4000_Series.pdf" target="_blank">Open PDF</a></td>
-      </tr>
-      <tr>
-        <td><span class="name">RO4003C</span><br><span class="mfr">Rogers Corporation</span></td>
-        <td class="val">3.38</td>
-        <td class="val">0.0027</td>
-        <td class="val">&gt;280</td>
-        <td class="val">46</td>
-        <td><a href="datasheets/Rogers_RO4000_Series.pdf" target="_blank">Open PDF</a></td>
-      </tr>
-      <tr>
-        <td><span class="name">RT/duroid 5880</span><br><span class="mfr">Rogers Corporation (PTFE composite)</span></td>
-        <td class="val">2.20</td>
-        <td class="val">0.0009</td>
-        <td class="val">—</td>
-        <td class="val">82</td>
-        <td><a href="datasheets/Rogers_5880.pdf" target="_blank">Open PDF</a></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- Isola -->
-  <h2>Isola</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Material</th>
-        <th>Dk (10 GHz)</th>
-        <th>Df (10 GHz)</th>
-        <th>Tg (°C)</th>
-        <th>Z-CTE (ppm/°C)</th>
-        <th>Datasheet</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="name">370HR</span><br><span class="mfr">Isola</span></td>
-        <td class="val">4.04</td>
-        <td class="val">0.0220</td>
-        <td class="val">180</td>
-        <td class="val">49</td>
-        <td><a href="datasheets/Isola_370HR.pdf" target="_blank">Open PDF</a></td>
-      </tr>
-      <tr>
-        <td><span class="name">Astra MT77</span><br><span class="mfr">Isola</span></td>
-        <td class="val">3.00</td>
-        <td class="val">0.0017</td>
-        <td class="val">200</td>
-        <td class="val">45</td>
-        <td><a href="datasheets/Isola_Astra_MT77.pdf" target="_blank">Open PDF</a></td>
-      </tr>
-      <tr>
-        <td><span class="name">Tachyon 100G</span><br><span class="mfr">Isola</span></td>
-        <td class="val">3.02</td>
-        <td class="val">0.0021</td>
-        <td class="val">200</td>
-        <td class="val">40</td>
-        <td><a href="datasheets/Isola_Tachyon_100G.pdf" target="_blank">Open PDF</a></td>
-      </tr>
-      <tr>
-        <td><span class="name">TerraGreen 400G</span><br><span class="mfr">Isola</span></td>
-        <td class="val">3.36</td>
-        <td class="val">0.0030</td>
-        <td class="val">200</td>
-        <td class="val">40</td>
-        <td><a href="datasheets/Isola_TerraGreen_400G.pdf" target="_blank">Open PDF</a></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- AGC -->
-  <h2>AGC / Taconic</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Material</th>
-        <th>Dk (10 GHz)</th>
-        <th>Df (10 GHz)</th>
-        <th>Tg (°C)</th>
-        <th>Z-CTE (ppm/°C)</th>
-        <th>Datasheet</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="name">FastRise 28</span><br><span class="mfr">AGC</span></td>
-        <td class="val">2.80</td>
-        <td class="val">0.0012</td>
-        <td class="val">200</td>
-        <td class="val">35</td>
-        <td><a href="datasheets/AGC_FastRise_28.pdf" target="_blank">Open PDF</a></td>
-      </tr>
-      <tr>
-        <td><span class="name">FastRise TC</span><br><span class="mfr">AGC</span></td>
-        <td class="val">3.40</td>
-        <td class="val">0.0025</td>
-        <td class="val">225</td>
-        <td class="val">22</td>
-        <td><a href="datasheets/AGC_FastRise_TC.pdf" target="_blank">Open PDF</a></td>
-      </tr>
-      <tr>
-        <td><span class="name">N4000-13</span><br><span class="mfr">AGC Nelco</span></td>
-        <td class="val">3.70</td>
-        <td class="val">0.0090</td>
-        <td class="val">210</td>
-        <td class="val">50</td>
-        <td><a href="datasheets/AGC_Nelco_N4000_13.pdf" target="_blank">Open PDF</a></td>
-      </tr>
-      <tr>
-        <td><span class="name">TLY-5</span><br><span class="mfr">AGC (Taconic) — PTFE woven glass</span></td>
-        <td class="val">2.20</td>
-        <td class="val">0.0009</td>
-        <td class="val">—</td>
-        <td class="val">70</td>
-        <td><a href="datasheets/AGC_TLY_5.pdf" target="_blank">Open PDF</a></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- ITEQ -->
-  <h2>ITEQ</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Material</th>
-        <th>Dk (10 GHz)</th>
-        <th>Df (10 GHz)</th>
-        <th>Tg (°C)</th>
-        <th>Z-CTE (ppm/°C)</th>
-        <th>Datasheet</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="name">IT-988GSE</span><br><span class="mfr">ITEQ</span></td>
-        <td class="val">3.28</td>
-        <td class="val">0.0016</td>
-        <td class="val">230</td>
-        <td class="val">26</td>
-        <td><a href="datasheets/ITEQ_IT_988GSE.pdf" target="_blank">Open PDF</a></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- Elite Material Co. -->
-  <h2>Elite Material Co.</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Material</th>
-        <th>Dk (10 GHz)</th>
-        <th>Df (10 GHz)</th>
-        <th>Tg (°C)</th>
-        <th>Z-CTE (ppm/°C)</th>
-        <th>Datasheet</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="name">EM-370Z</span><br><span class="mfr">Elite Material Co.</span></td>
-        <td class="val">4.10</td>
-        <td class="val">0.0160</td>
-        <td class="val">180</td>
-        <td class="val">50</td>
-        <td><a href="datasheets/EM_370Z.pdf" target="_blank">Open PDF</a></td>
-      </tr>
-      <tr>
-        <td><span class="name">EM-528</span><br><span class="mfr">Elite Material Co.</span></td>
-        <td class="val">4.20</td>
-        <td class="val">0.0130</td>
-        <td class="val">175</td>
-        <td class="val">45</td>
-        <td><a href="datasheets/EM_528.pdf" target="_blank">Open PDF</a></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- Generic -->
-  <h2>Generic Reference</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Material</th>
-        <th>Dk (10 GHz)</th>
-        <th>Df (10 GHz)</th>
-        <th>Tg (°C)</th>
-        <th>Z-CTE (ppm/°C)</th>
-        <th>Datasheet</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="name">FR-4 (Generic)</span><br><span class="mfr">Various — reference: Isola 370HR</span></td>
-        <td class="val">4.40</td>
-        <td class="val">0.0200</td>
-        <td class="val">140</td>
-        <td class="val">70</td>
-        <td><a href="datasheets/Isola_370HR.pdf" target="_blank">Open PDF</a></td>
-      </tr>
-    </tbody>
-  </table>
-
-</main>
-
-<footer>
-  <p>
-    <a href="https://github.com/otac0011/Jupiter_PCB_Toolkit">Jupiter PCB Toolkit</a> —
-    datasheets sourced from manufacturer publications; provided for reference only.
+<div class="hero">
+  <div class="pill">Free desktop tool · Windows · Single-EXE</div>
+  <h1>Forty-nine PCB&nbsp;engineering calculators in&nbsp;<span>one&nbsp;window</span>.</h1>
+  <p class="tag">
+    Impedance, signal integrity, power integrity, RF matching, thermal, EMC,
+    DFM, high-speed digital — all in one self-contained Windows app with
+    Altium-style dark UI, every formula sourced and verified, and a friendly
+    EULA that lets you use it commercially.
   </p>
+  <div class="cta-row">
+    <a class="btn btn-primary" href="https://github.com/otac0011/CastGuidance_PCB_Toolkit/releases/latest">
+      Download for Windows (~190 MB)
+    </a>
+    <a class="btn btn-ghost" href="user_manual.html">Read the user manual</a>
+    <a class="btn btn-ghost" href="https://github.com/otac0011/CastGuidance_PCB_Toolkit" target="_blank">Source &amp; releases on GitHub</a>
+  </div>
+  <div class="stats">
+    <span><b>49</b> tools</span>
+    <span><b>11</b> categories</span>
+    <span><b>18</b> bundled laminate datasheets</span>
+    <span><b>20+</b> SerDes protocol presets</span>
+  </div>
+</div>
+
+<div class="container">
+
+<section id="download">
+  <h2>Download</h2>
+  <p class="section-lede">Self-contained PyInstaller bundle. No installer step. Accept the EULA on first launch and you're running.</p>
+  <div class="cards">
+    <div class="card">
+      <a class="card-title" href="https://github.com/otac0011/CastGuidance_PCB_Toolkit/releases/latest">Latest release</a>
+      <p>Always points at the newest stable build. Open the linked release page and grab <code>CastGuidancePCBToolkit.exe</code>.</p>
+      <div class="meta">GitHub Releases</div>
+    </div>
+    <div class="card">
+      <a class="card-title" href="https://github.com/otac0011/CastGuidance_PCB_Toolkit/releases">All releases</a>
+      <p>Browse the full history of builds with their release notes. Each release lists every change since the previous one.</p>
+      <div class="meta">Version history</div>
+    </div>
+    <div class="card">
+      <a class="card-title" href="https://github.com/otac0011/CastGuidance_PCB_Toolkit/releases.atom">Release feed (Atom)</a>
+      <p>Subscribe in your RSS reader to get notified of every new release.</p>
+      <div class="meta">Atom / RSS</div>
+    </div>
+  </div>
+</section>
+
+<section id="docs">
+  <h2>Documentation</h2>
+  <p class="section-lede">Plain-English explanations of every tool, plus the formal verification work behind the numbers.</p>
+  <div class="cards">
+    <div class="card">
+      <a class="card-title" href="user_manual.html">User manual</a>
+      <p>The complete guide to all 49 tools — when to use each, why it matters, what it does in plain English, and typical values for common board designs. Has a live search filter and category TOC.</p>
+      <div class="meta">~60 KB · single HTML page</div>
+    </div>
+    <div class="card placeholder">
+      <a class="card-title">Quick-start tutorials</a>
+      <p>Step-by-step walkthroughs of common workflows (designing a USB-C charger, controlled-impedance stackup, RF matching).</p>
+      <div class="meta">Coming soon</div>
+    </div>
+    <div class="card placeholder">
+      <a class="card-title">FAQ</a>
+      <p>Common gotchas, units questions, "what number do I put here?".</p>
+      <div class="meta">Coming soon</div>
+    </div>
+  </div>
+</section>
+
+<section id="datasheets">
+  <h2>Bundled laminate datasheets</h2>
+  <p class="section-lede">PDFs for every PCB laminate the toolkit lets you pick from (Panasonic, Rogers, Isola, AGC, ITEQ, Elite, FR-4 reference). Mirrored here so the in-app "Open Datasheet" button always has a live link.</p>
+  <div class="cards">
+    <div class="card">
+      <a class="card-title" href="datasheets.html">Browse all datasheets</a>
+      <p>Sortable list of Panasonic Megtron 6/7/8, Rogers RO4350B / RO4003C / RT-duroid 5880, Isola 370HR / Astra / Tachyon / TerraGreen, AGC FastRise / Nelco / TLY, ITEQ IT-988GSE, EM-370Z / EM-528 — with Dk, Df, Tg, and z-CTE columns.</p>
+      <div class="meta">16 datasheets</div>
+    </div>
+    <div class="card">
+      <a class="card-title" href="https://otac0011.github.io/CastGuidance_PCB_Toolkit/datasheets/">Raw datasheets folder</a>
+      <p>Direct directory listing if you'd rather grep the filenames yourself. These are the exact URLs the desktop app fetches when you click "Open Datasheet".</p>
+      <div class="meta">GitHub Pages</div>
+    </div>
+  </div>
+</section>
+
+<section id="verification">
+  <h2>Verification &amp; math validation</h2>
+  <p class="section-lede">Every formula in the toolkit is sourced and cross-checked against published references or independent free third-party tools. These pages document each comparison.</p>
+  <div class="cards">
+    <div class="card">
+      <a class="card-title" href="verification_results.html">Verification results</a>
+      <p>Table of tool-vs-reference comparisons with status chips (PASS / CLOSE / MANUAL) and delta percentages. The current canonical scoreboard.</p>
+      <div class="meta">42 entries</div>
+    </div>
+    <div class="card">
+      <a class="card-title" href="verification_guide.html">Verification methodology</a>
+      <p>How each tool was verified — Chemandy JS extraction, closed-form math, source review, equation by hand. Includes step-by-step instructions to reproduce the manual checks.</p>
+      <div class="meta">Methodology + checklist</div>
+    </div>
+    <div class="card">
+      <a class="card-title" href="validation_references.html">Third-party validators</a>
+      <p>Curated list of free online tools you can cross-check the toolkit against, organised by tool category. Includes Chemandy, KiCad PCB Calculator, Polar Si9000e, pdntool.com, NW Engineering PDN, Saturn, Omni Calculator, and more.</p>
+      <div class="meta">Cross-reference table</div>
+    </div>
+  </div>
+</section>
+
+<section id="media">
+  <h2>Media &amp; community</h2>
+  <p class="section-lede">Podcasts, videos, walkthroughs, and community discussions. Empty cards are deliberately left here so this section grows as content is published.</p>
+  <div class="cards">
+    <div class="card placeholder">
+      <a class="card-title">NotebookLM podcast</a>
+      <p>~20-minute two-host audio overview of the entire toolkit, generated from the user manual.</p>
+      <div class="meta">Coming soon</div>
+    </div>
+    <div class="card placeholder">
+      <a class="card-title">YouTube channel</a>
+      <p>Long-form walkthroughs of common workflows (designing a 6-layer USB-C PCB, sizing a buck-converter inductor, tracking down a stub notch).</p>
+      <div class="meta">Coming soon</div>
+    </div>
+    <div class="card placeholder">
+      <a class="card-title">YouTube Shorts</a>
+      <p>One-feature-at-a-time 60-second explanations.</p>
+      <div class="meta">Coming soon</div>
+    </div>
+    <div class="card">
+      <a class="card-title" href="https://github.com/otac0011/CastGuidance_PCB_Toolkit/discussions">GitHub Discussions</a>
+      <p>Ask questions, request features, or share board designs that used the toolkit. (If Discussions aren't enabled yet, file an Issue instead.)</p>
+      <div class="meta">Public forum</div>
+    </div>
+    <div class="card placeholder">
+      <a class="card-title">EEVblog forum thread</a>
+      <p>Project announcement &amp; ongoing discussion on Dave Jones's EEVblog forum.</p>
+      <div class="meta">Coming soon</div>
+    </div>
+    <div class="card placeholder">
+      <a class="card-title">Hackaday post</a>
+      <p>Project feature on hackaday.com once the first round of community feedback is in.</p>
+      <div class="meta">Coming soon</div>
+    </div>
+  </div>
+</section>
+
+<section id="source">
+  <h2>Source code &amp; license</h2>
+  <p class="section-lede">The build artefacts (the <code>.exe</code>) are distributed under a permissive EULA. The Python source itself is closed-source, hosted in a private repository.</p>
+  <div class="cards">
+    <div class="card">
+      <a class="card-title" href="https://github.com/otac0011/CastGuidance_PCB_Toolkit">Public repo</a>
+      <p>Releases-only public repo. Contains the release history, the EULA file, and the README. This Pages site lives on a separate branch of the same repo.</p>
+      <div class="meta">GitHub · otac0011</div>
+    </div>
+    <div class="card">
+      <a class="card-title" href="https://github.com/otac0011/CastGuidance_PCB_Toolkit/blob/main/LICENSE">License (EULA)</a>
+      <p>Distributed under a proprietary EULA. <b>You may</b> install &amp; use on any device you own (personal, educational, or commercial); share unmodified copies free of charge. <b>You may not</b> sell, sublicense, modify, or reverse-engineer it. See LICENSE for the authoritative text.</p>
+      <div class="meta">EULA · current v1.1</div>
+    </div>
+    <div class="card placeholder">
+      <a class="card-title">Comparison vs Saturn PCB Toolkit</a>
+      <p>Head-to-head feature table comparing CastGuidance with the Saturn PCB Toolkit it draws inspiration from.</p>
+      <div class="meta">Coming soon</div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<footer class="site-foot">
+  <div class="container">
+    <p>
+      CastGuidance PCB Toolkit is a free, single-developer side-project.
+      All values, recommendations, and outputs are starting points for
+      engineering judgment — you are responsible for verifying your designs
+      against applicable safety, regulatory, and performance standards
+      before fabrication. See the <a href="https://github.com/otac0011/CastGuidance_PCB_Toolkit/blob/main/LICENSE">EULA</a> for the formal disclaimer.
+    </p>
+    <p>
+      Copyright (c) 2026 CastGuidance PCB Toolkit Developer.
+      All rights reserved.
+    </p>
+  </div>
 </footer>
 
 </body>

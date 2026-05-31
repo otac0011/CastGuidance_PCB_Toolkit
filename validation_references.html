@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CastGuidance PCB Toolkit — Third-Party Validation Reference</title>
+<style>
+  :root {
+    --amber: #E8A33D;
+    --amber-dark: #C5821F;
+    --bg: #1b1d21;
+    --panel: #25282d;
+    --panel-2: #2c2f35;
+    --row-alt: #21242a;
+    --text: #e6e6e6;
+    --muted: #9aa0a8;
+    --line: #3a3e45;
+    --green: #66BB6A;
+    --red: #FF7043;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 0 0 60px;
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+  }
+  header {
+    background: linear-gradient(135deg, #2a2d33 0%, #1b1d21 100%);
+    border-bottom: 3px solid var(--amber);
+    padding: 28px 32px 22px;
+  }
+  header h1 { margin: 0 0 6px; font-size: 26px; color: var(--amber); }
+  header p { margin: 4px 0; color: var(--muted); font-size: 14px; max-width: 900px; }
+  .wrap { padding: 0 32px; max-width: 1500px; margin: 0 auto; }
+  .controls {
+    position: sticky; top: 0; z-index: 5;
+    background: var(--bg); padding: 16px 0 12px; border-bottom: 1px solid var(--line);
+    display: flex; gap: 14px; align-items: center; flex-wrap: wrap;
+  }
+  #search {
+    flex: 1 1 320px; min-width: 240px;
+    background: var(--panel-2); border: 1px solid var(--line); border-radius: 6px;
+    color: var(--text); padding: 9px 13px; font-size: 14px;
+  }
+  #search:focus { outline: none; border-color: var(--amber); }
+  .legend { font-size: 12px; color: var(--muted); display: flex; gap: 16px; flex-wrap: wrap; }
+  .legend b { color: var(--text); }
+  .pill {
+    display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 10px;
+    font-weight: 600; vertical-align: middle;
+  }
+  .pill.partial { background: rgba(232,163,61,.18); color: var(--amber); border: 1px solid var(--amber-dark); }
+  .pill.none    { background: rgba(255,112,67,.16);  color: var(--red);   border: 1px solid var(--red); }
+  .pill.bot     { background: rgba(154,160,168,.16); color: var(--muted); border: 1px solid var(--line); }
+
+  h2.cat {
+    margin: 34px 0 0; padding: 10px 14px;
+    background: var(--panel); border-left: 4px solid var(--amber);
+    font-size: 17px; color: var(--amber); border-radius: 4px 4px 0 0;
+  }
+  table { width: 100%; border-collapse: collapse; background: var(--panel); margin-bottom: 8px; }
+  th, td { text-align: left; padding: 11px 13px; vertical-align: top; border-bottom: 1px solid var(--line); font-size: 13.5px; }
+  th { background: var(--panel-2); color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .03em; }
+  tbody tr:nth-child(even) { background: var(--row-alt); }
+  tbody tr:hover { background: #30343b; }
+  td.tool { font-weight: 600; color: #fff; width: 17%; }
+  td.party { width: 22%; }
+  td.compare { color: var(--muted); width: 28%; }
+  a { color: var(--amber); text-decoration: none; word-break: break-word; }
+  a:hover { text-decoration: underline; color: #f5c47a; }
+  .note { display: block; margin-top: 5px; font-size: 12px; color: var(--muted); }
+  .url { display: block; margin-top: 3px; font-size: 11.5px; color: #7f8893; word-break: break-all; }
+  footer { padding: 24px 32px 0; color: var(--muted); font-size: 12px; max-width: 1100px; }
+  footer code { background: var(--panel-2); padding: 1px 5px; border-radius: 3px; color: var(--amber); }
+  .hidden { display: none; }
+  .count { color: var(--muted); font-size: 12px; margin-left: auto; }
+</style>
+</head>
+<body>
+<header>
+  <h1>CastGuidance PCB Toolkit — Third-Party Validation Reference</h1>
+  <p>For each calculator in the toolkit, this lists a trusted <b>free</b> third-party tool you can use to
+  cross-check that CastGuidance is producing the right answer. Enter the same inputs in both and compare.</p>
+  <p style="font-size:12px">Generated 2026-05-26 · all URLs verified to resolve to live, free calculator pages at time of compilation.</p>
+</header>
+
+<div class="wrap">
+  <div class="controls">
+    <input id="search" type="search" placeholder="Filter by tool name, source, or keyword…" oninput="filterRows()">
+    <div class="legend">
+      <span><span class="pill partial">PARTIAL</span> validates only part of the tool</span>
+      <span><span class="pill none">NO FREE TOOL</span> reference doc / hand-check only</span>
+      <span><span class="pill bot">BOT-BLOCK</span> live in browser; blocks automated checks</span>
+    </div>
+    <span class="count" id="count"></span>
+  </div>
+
+  <!-- ============================ REFERENCE / BASIC EE ============================ -->
+  <h2 class="cat">Reference / Basic Electrical</h2>
+  <table>
+    <thead><tr><th>CastGuidance tool</th><th>Free third-party validator</th><th>What to compare</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="tool">Ohm's Law</td>
+        <td class="party">Omni Calculator — Ohm's Law
+          <a class="url" href="https://www.omnicalculator.com/physics/ohms-law" target="_blank" rel="noopener">omnicalculator.com/physics/ohms-law</a></td>
+        <td class="compare">Enter any two of V / I / R / P; confirm the other two match.</td>
+      </tr>
+      <tr>
+        <td class="tool">Conversion Calculator</td>
+        <td class="party">RapidTables — Unit Converters
+          <a class="url" href="https://www.rapidtables.com/convert/index.html" target="_blank" rel="noopener">rapidtables.com/convert</a>
+          <span class="note">For rect↔polar &amp; deg↔rad: Calculators-Math Complex Number Calculator —
+          <a href="https://www.calculators-math.com/complex-number-calculator/" target="_blank" rel="noopener">calculators-math.com/complex-number-calculator</a></span></td>
+        <td class="compare">Distance (mil/mm/inch), temperature, dB/dBm on RapidTables; complex a+bi ↔ r∠θ on the second tool.</td>
+      </tr>
+      <tr>
+        <td class="tool">SI Prefix Reference</td>
+        <td class="party">NIST — Metric (SI) Prefixes
+          <a class="url" href="https://www.nist.gov/pml/owm/metric-si-prefixes" target="_blank" rel="noopener">nist.gov/pml/owm/metric-si-prefixes</a></td>
+        <td class="compare">Authoritative table — confirm each symbol and power of ten (k, M, G, m, µ, n, p).</td>
+      </tr>
+      <tr>
+        <td class="tool">dBm Reference Chart</td>
+        <td class="party">Core Technology Group — dBm Calculator
+          <a class="url" href="https://coretechgroup.com/dbm-calculator/" target="_blank" rel="noopener">coretechgroup.com/dbm-calculator</a></td>
+        <td class="compare">Set impedance (e.g. 50 Ω); compare dBm ↔ mW/W ↔ Vrms/Vpp.</td>
+      </tr>
+      <tr>
+        <td class="tool">Mechanical Reference <span class="pill partial">PARTIAL</span></td>
+        <td class="party">Digikey — Wire AWG Size Conversion <span class="pill bot">BOT-BLOCK</span>
+          <a class="url" href="https://www.digikey.com/en/resources/conversion-calculators/conversion-calculator-wire-size" target="_blank" rel="noopener">digikey.com/…/conversion-calculator-wire-size</a></td>
+        <td class="compare">Covers <b>AWG ↔ diameter/area</b> only. No single free tool combines AWG + ANSI drill + UNC tap-drill — check the drill/screw tables by hand against PowerStream/ANSI charts.</td>
+      </tr>
+      <tr>
+        <td class="tool">Reactance &amp; LC Resonance</td>
+        <td class="party">Omni Calculator — RLC Circuit
+          <a class="url" href="https://www.omnicalculator.com/physics/rlc-circuit" target="_blank" rel="noopener">omnicalculator.com/physics/rlc-circuit</a></td>
+        <td class="compare">Compare LC resonant frequency and Q; Xc / Xl appear in the working.</td>
+      </tr>
+      <tr>
+        <td class="tool">LED Series Resistor</td>
+        <td class="party">Hobby-Hour — LED Series Resistor
+          <a class="url" href="https://www.hobby-hour.com/electronics/ledcalc.php" target="_blank" rel="noopener">hobby-hour.com/electronics/ledcalc.php</a></td>
+        <td class="compare">Enter Vsupply / Vf / I; compare R plus nearest E12 / E24 value.</td>
+      </tr>
+      <tr>
+        <td class="tool">Voltage Divider</td>
+        <td class="party">Omni Calculator — Voltage Divider
+          <a class="url" href="https://www.omnicalculator.com/physics/voltage-divider" target="_blank" rel="noopener">omnicalculator.com/physics/voltage-divider</a></td>
+        <td class="compare">Solve Vout / Vin / R1 / R2 with a two-resistor divider.</td>
+      </tr>
+      <tr>
+        <td class="tool">Series / Parallel R-L-C</td>
+        <td class="party">M0UKD — Parallel R/L or Series C Calculator
+          <a class="url" href="https://m0ukd.com/calculators/parallel-resistor-inductor-or-series-capacitor-calculator/" target="_blank" rel="noopener">m0ukd.com/calculators/parallel-resistor-inductor-or-series-capacitor-calculator</a></td>
+        <td class="compare">Combine multiple R/L in parallel or C in series (e.g. 8∥15∥22 Ω = 4.2173 Ω).</td>
+      </tr>
+      <tr>
+        <td class="tool">PPM Frequency Tolerance</td>
+        <td class="party">everythingRF — PPM to Hz <span class="pill bot">BOT-BLOCK</span>
+          <a class="url" href="https://www.everythingrf.com/rf-calculators/ppm-to-hz-calculator" target="_blank" rel="noopener">everythingrf.com/rf-calculators/ppm-to-hz-calculator</a></td>
+        <td class="compare">Enter center frequency + ppm; compare deviation in Hz.</td>
+      </tr>
+      <tr>
+        <td class="tool">XTAL Load Capacitor</td>
+        <td class="party">ECS Inc. — Crystal Load Capacitance
+          <a class="url" href="https://ecsxtal.com/crystal-load-capacitance-calculator/" target="_blank" rel="noopener">ecsxtal.com/crystal-load-capacitance-calculator</a></td>
+        <td class="compare">Enter CL + Cstray; verify C1/C2 against CL = (C1·C2)/(C1+C2) + Cstray.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ============================ RF / MICROWAVE ============================ -->
+  <h2 class="cat">RF / Microwave</h2>
+  <table>
+    <thead><tr><th>CastGuidance tool</th><th>Free third-party validator</th><th>What to compare</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="tool">Pi-Pad Attenuator</td>
+        <td class="party">Microwaves101 — Attenuator Calculator
+          <a class="url" href="https://www.microwaves101.com/calculators/858-attenuator-calculator" target="_blank" rel="noopener">microwaves101.com/calculators/858-attenuator-calculator</a></td>
+        <td class="compare">Enter dB + Z₀; compare your Pi R1/R2 against its Pi-section resistors.</td>
+      </tr>
+      <tr>
+        <td class="tool">T-Pad Attenuator</td>
+        <td class="party">Chemandy — T Attenuator Calculator
+          <a class="url" href="https://chemandy.com/calculators/t-attenuator-calculator.htm" target="_blank" rel="noopener">chemandy.com/calculators/t-attenuator-calculator.htm</a></td>
+        <td class="compare">Enter dB + Z₀; compare series/shunt T resistors (also gives VSWR / return loss).</td>
+      </tr>
+      <tr>
+        <td class="tool">L-Match (Impedance)</td>
+        <td class="party">Analog Devices — RF Impedance Matching Calculator <span class="pill bot">BOT-BLOCK</span>
+          <a class="url" href="https://www.analog.com/en/resources/interactive-design-tools/rf-impedance-matching-calculator.html" target="_blank" rel="noopener">analog.com/…/rf-impedance-matching-calculator</a>
+          <span class="note">Mirror: Qorvo — <a href="https://www.qorvo.com/design-hub/design-tools/interactive/rf-impedance-matching-calculator" target="_blank" rel="noopener">qorvo.com/…/rf-impedance-matching-calculator</a></span></td>
+        <td class="compare">Enter Z₀, complex load R<sub>L</sub>+jX<sub>L</sub>, frequency; compare both L-network solutions + Smith-chart path.</td>
+      </tr>
+      <tr>
+        <td class="tool">Quarter-Wave Match (Multi-section)</td>
+        <td class="party">everythingRF — Quarter Wave Transformer Impedance <span class="pill bot">BOT-BLOCK</span>
+          <a class="url" href="https://www.everythingrf.com/rf-calculators/quarter-wave-transformer-impedance-calculator" target="_blank" rel="noopener">everythingrf.com/rf-calculators/quarter-wave-transformer-impedance-calculator</a></td>
+        <td class="compare">Cross-check each section's Z = √(Z1·Z2) against your binomial transformer's per-section impedances.</td>
+      </tr>
+      <tr>
+        <td class="tool">Lumped LC Match (L / Pi / T)</td>
+        <td class="party">leleivre — LC Impedance Matching Network Designer
+          <a class="url" href="https://leleivre.com/rf_lcmatch.html" target="_blank" rel="noopener">leleivre.com/rf_lcmatch.html</a></td>
+        <td class="compare">Enter complex Zs/Zl + frequency; compare L and C values across its topologies (L and Pi/T variants).</td>
+      </tr>
+      <tr>
+        <td class="tool">Wavelength</td>
+        <td class="party">Microwaves101 — Wavelength Calculator
+          <a class="url" href="https://www.microwaves101.com/calculators/873-wavelength-calculator" target="_blank" rel="noopener">microwaves101.com/calculators/873-wavelength-calculator</a></td>
+        <td class="compare">Enter F and εr (feed your ε<sub>eff</sub>); compare guided λ = c/(f·√ε<sub>eff</sub>).</td>
+      </tr>
+      <tr>
+        <td class="tool">Er Effective</td>
+        <td class="party">Chemandy — Microstrip Transmission Line Calculator
+          <a class="url" href="https://chemandy.com/calculators/microstrip-transmission-line-calculator.htm" target="_blank" rel="noopener">chemandy.com/calculators/microstrip-transmission-line-calculator.htm</a></td>
+        <td class="compare">Enter εr, W, H, t; compare its ε<sub>eff</sub>. Chemandy is non-dispersive — match at <b>low</b> frequency (CastGuidance adds Kirschning-Jansen dispersion).</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ============================ CORE PCB — TRANSMISSION LINE ============================ -->
+  <h2 class="cat">Core PCB — Transmission Line &amp; Geometry</h2>
+  <table>
+    <thead><tr><th>CastGuidance tool</th><th>Free third-party validator</th><th>What to compare</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="tool">Conductor Impedance</td>
+        <td class="party">Sierra Circuits — PCB Impedance Calculator
+          <a class="url" href="https://www.protoexpress.com/tools/pcb-impedance-calculator/" target="_blank" rel="noopener">protoexpress.com/tools/pcb-impedance-calculator</a></td>
+        <td class="compare">2-D solver for microstrip, stripline, coplanar/GCPW — compare Z₀ per geometry vs CastGuidance's Hammerstad/Wadell.</td>
+      </tr>
+      <tr>
+        <td class="tool">Trace Impedance (openEMS 3D)</td>
+        <td class="party">openEMS reference example — MSL.m
+          <a class="url" href="https://github.com/thliebig/openEMS/blob/master/matlab/examples/transmission_lines/MSL.m" target="_blank" rel="noopener">github.com/thliebig/openEMS — MSL.m</a></td>
+        <td class="compare">Same free 3-D FDTD engine CastGuidance wraps — run the reference script, compare extracted Z₀. Analytic cross-check: KiCad PCB Calculator / Keysight TXLine.</td>
+      </tr>
+      <tr>
+        <td class="tool">Differential Pairs</td>
+        <td class="party">Saturn PCB Toolkit (free desktop download)
+          <a class="url" href="https://saturnpcb.com/saturn-pcb-toolkit/" target="_blank" rel="noopener">saturnpcb.com/saturn-pcb-toolkit</a></td>
+        <td class="compare">Edge- and broadside-coupled diff-pair calc — compare Zdiff, odd/even-mode, coupling. (Sierra's web tool also does broadside.)</td>
+      </tr>
+      <tr>
+        <td class="tool">Via Properties <span class="pill partial">PARTIAL</span></td>
+        <td class="party">Sierra Circuits — Via Impedance Calculator
+          <a class="url" href="https://www.protoexpress.com/tools/via-impedance-calculator/" target="_blank" rel="noopener">protoexpress.com/tools/via-impedance-calculator</a>
+          <span class="note">For R / current / thermal: Saturn PCB Toolkit via tab — <a href="https://saturnpcb.com/saturn-pcb-toolkit/" target="_blank" rel="noopener">saturnpcb.com/saturn-pcb-toolkit</a></span></td>
+        <td class="compare">Sierra covers C / L / Z₀ / delay. Use Saturn for DC resistance, current capacity, and thermal resistance — no single free tool does all six.</td>
+      </tr>
+      <tr>
+        <td class="tool">Planar Spiral Inductor</td>
+        <td class="party">CircuitsLab — Planar Inductor Calculator
+          <a class="url" href="https://circuitslab.wiki/planar-inductor/" target="_blank" rel="noopener">circuitslab.wiki/planar-inductor</a></td>
+        <td class="compare">Implements Modified Wheeler / Mohan for square/hex/oct/circular — compare inductance directly.</td>
+      </tr>
+      <tr>
+        <td class="tool">Embedded Resistor</td>
+        <td class="party">codingace — Sheet Resistance Calculator
+          <a class="url" href="https://codingace.net/eng/sheet_resistance.html" target="_blank" rel="noopener">codingace.net/eng/sheet_resistance.html</a></td>
+        <td class="compare">R = R<sub>s</sub> × (L/W) with explicit length/width — mirrors CastGuidance's squares method.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ============================ SIGNAL INTEGRITY ============================ -->
+  <h2 class="cat">Signal Integrity</h2>
+  <table>
+    <thead><tr><th>CastGuidance tool</th><th>Free third-party validator</th><th>What to compare</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="tool">Via Stub Impact (S21 + eye + budget)</td>
+        <td class="party">Sierra Circuits — Maximum Via Stub Length Calculator
+          <a class="url" href="https://www.protoexpress.com/tools/maximum-via-stub-length-calculator/" target="_blank" rel="noopener">protoexpress.com/tools/maximum-via-stub-length-calculator</a>
+          <span class="note">S21 notch shape reference (PDF): Simberian app note — <a href="https://www.simberian.com/AppNotes/HIW-Discontinuities-2022-01-10.pdf" target="_blank" rel="noopener">simberian.com/…/HIW-Discontinuities</a></span></td>
+        <td class="compare">Compare the quarter-wave stub resonance frequency vs stub length / Dk, and the back-drill threshold.</td>
+      </tr>
+      <tr>
+        <td class="tool">Differential Via Stub</td>
+        <td class="party">Sierra Circuits — Maximum Via Stub Length Calculator (reverse)
+          <a class="url" href="https://www.protoexpress.com/tools/maximum-via-stub-length-calculator/" target="_blank" rel="noopener">protoexpress.com/tools/maximum-via-stub-length-calculator</a></td>
+        <td class="compare">Feed Nyquist (= 0.5 × data rate) as max frequency content; compare returned max stub length vs CastGuidance's result.</td>
+      </tr>
+      <tr>
+        <td class="tool">Dielectric Dk/Df vs Frequency <span class="pill none">NO FREE TOOL</span></td>
+        <td class="party">Shlepnev (Simberian) — DS / wideband-Debye reference (PDF)
+          <a class="url" href="https://www.simberian.com/AppNotes/Shlepnev_PCB_DesignMagazine_Feb2014.pdf" target="_blank" rel="noopener">simberian.com/…/Shlepnev_PCB_DesignMagazine_Feb2014.pdf</a></td>
+        <td class="compare">No free online calc. Check your single-point fit + Dk/Df dispersion slope against the published Djordjevic-Sarkar equations. (openEMS has a free DS code implementation for a deeper check.)</td>
+      </tr>
+      <tr>
+        <td class="tool">Conductor Loss (Roughness)</td>
+        <td class="party">Bert Simonovich — "Cannonball-Huray Model Demystified"
+          <a class="url" href="https://blog.lamsimenterprises.com/2019/03/29/cannonball-huray-model-demystified/" target="_blank" rel="noopener">blog.lamsimenterprises.com/…/cannonball-huray-model-demystified</a></td>
+        <td class="compare">Verify sphere radius, base area, and roughness factor K<sub>sr</sub> against the canonical closed form (Hammerstad is in the same blog).</td>
+      </tr>
+      <tr>
+        <td class="tool">Channel Insertion Loss Budget <span class="pill partial">PARTIAL</span></td>
+        <td class="party">mcalc — Microstrip Analysis Calculator
+          <a class="url" href="https://mcalc.sourceforge.net/" target="_blank" rel="noopener">mcalc.sourceforge.net</a>
+          <span class="note">Second cross-check: everythingRF Microstrip calc — <a href="https://www.everythingrf.com/rf-calculators/microstrip-calculator" target="_blank" rel="noopener">everythingrf.com/rf-calculators/microstrip-calculator</a></span></td>
+        <td class="compare">Compare per-inch dielectric- and conductor-loss terms. Neither adds via-stub or connector loss — sum those by hand.</td>
+      </tr>
+      <tr>
+        <td class="tool">Jitter Budget (Tj) <span class="pill none">NO FREE TOOL</span></td>
+        <td class="party">Keysight — Dual-Dirac Model whitepaper (PDF)
+          <a class="url" href="https://www.keysight.com/us/en/assets/7018-01309/white-papers/5989-3206.pdf" target="_blank" rel="noopener">keysight.com/…/5989-3206.pdf</a></td>
+        <td class="compare">No free online calc. Confirm your Q (α) per BER (14.069 @ 1e-12) and Tj = Dj + α·Rj extrapolation against the reference.</td>
+      </tr>
+      <tr>
+        <td class="tool">Bandwidth &amp; Max Length</td>
+        <td class="party">EDN / Howard Johnson — Rule of Thumb #1
+          <a class="url" href="https://www.edn.com/rule-of-thumb-1-bandwidth-of-a-signal-from-its-rise-time/" target="_blank" rel="noopener">edn.com/rule-of-thumb-1-bandwidth-of-a-signal-from-its-rise-time</a></td>
+        <td class="compare">Verify F<sub>knee</sub> = 0.5/Tr (10–90%). For max-length, pair with everythingRF Frequency→Wavelength.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ============================ POWER INTEGRITY / ELECTRONICS / EMC ============================ -->
+  <h2 class="cat">Power Integrity / Power Electronics / EMC</h2>
+  <table>
+    <thead><tr><th>CastGuidance tool</th><th>Free third-party validator</th><th>What to compare</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="tool">PDN Target &amp; Plane Cap</td>
+        <td class="party">Northwest Engineering Solutions — PDN Impedance Calculator <span class="pill bot">BOT-BLOCK</span>
+          <a class="url" href="https://www.nwengineeringllc.com/pdn-impedance-calculator/" target="_blank" rel="noopener">nwengineeringllc.com/pdn-impedance-calculator</a></td>
+        <td class="compare">Compare Z<sub>target</sub> = (Vdd·ripple%)/I and the cap-bank Z(f). Sanity-check plane cap against the parallel-plate value (~253 pF/in² at 4 mil FR-4).</td>
+      </tr>
+      <tr>
+        <td class="tool">MLCC DC-Bias Derating</td>
+        <td class="party">Murata SimSurfing (MLCC)
+          <a class="url" href="https://ds.murata.com/simsurfing/mlcc.html?lcid=en-us" target="_blank" rel="noopener">ds.murata.com/simsurfing/mlcc.html</a></td>
+        <td class="compare">Pick a real X7R/X5R part; open "Capacitance vs DC Bias" and "vs Temperature"; compare effective C at your V/temp (C0G ≈ flat).</td>
+      </tr>
+      <tr>
+        <td class="tool">Mounting Inductance (L_mnt)</td>
+        <td class="party">LearnEMC — Estimating Connection Inductance of Decoupling Caps
+          <a class="url" href="https://learnemc.com/estimating-connection-inductance" target="_blank" rel="noopener">learnemc.com/estimating-connection-inductance</a></td>
+        <td class="compare">Compare your pad-via-plane loop inductance against their rectangular-loop formulas (worked examples ≈ 3 nH and 16 nH).</td>
+      </tr>
+      <tr>
+        <td class="tool">Cap Bank Analyzer Z(f)</td>
+        <td class="party">pdntool.com — Capacitor Impedance Plot (EE-Training.dk)
+          <a class="url" href="https://www.pdntool.com/" target="_blank" rel="noopener">pdntool.com</a>
+          <span class="note">Alternates: Northwest Engineering <a href="https://www.nwengineeringllc.com/pdn-impedance-calculator/" target="_blank" rel="noopener">PDN Impedance Calculator</a> · rftools.io <span class="pill bot">BOT-BLOCK</span></span></td>
+        <td class="compare">Compare |Z(f)|, self-resonant frequencies, and anti-resonance peaks of the parallel cap bank. Programmatic verification against closed-form textbook math (<code>Z = ESR + jωL + 1/(jωC)</code>, parallel = <code>1/Σ(1/Z<sub>i</sub>)</code>) is in <code>scripts/verify_cap_bank.py</code> — 0.00% error to floating-point precision.</td>
+      </tr>
+      <tr>
+        <td class="tool">Buck / Boost Inductor <span class="pill partial">PARTIAL</span></td>
+        <td class="party">Omni Calculator — Buck Converter
+          <a class="url" href="https://www.omnicalculator.com/physics/buck-converter" target="_blank" rel="noopener">omnicalculator.com/physics/buck-converter</a>
+          <span class="note">Full buck+boost sizing incl. output cap &amp; ΔV: TI WEBENCH Power Designer (free, login) — <a href="https://webench.ti.com/power-designer/" target="_blank" rel="noopener">webench.ti.com/power-designer</a></span></td>
+        <td class="compare">Omni covers the <b>inductor value + ripple current (buck/CCM)</b> only. Use WEBENCH for output-cap sizing and boost.</td>
+      </tr>
+      <tr>
+        <td class="tool">Radiated Emissions — Small Loop</td>
+        <td class="party">LearnEMC / Clemson — MREMC Differential-Mode Calculator
+          <a class="url" href="https://learnemc.com/ext/calculators/mremc/dmode.php" target="_blank" rel="noopener">learnemc.com/ext/calculators/mremc/dmode.php</a></td>
+        <td class="compare">Enter loop height/length, amplitude, rise time, data rate; compare max E-field vs the FCC Part 15 / CISPR 22 Class A/B overlays.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ============================ THERMAL / MECH-DFM / HIGH-SPEED ============================ -->
+  <h2 class="cat">Thermal / Mechanical-DFM / High-Speed Digital</h2>
+  <table>
+    <thead><tr><th>CastGuidance tool</th><th>Free third-party validator</th><th>What to compare</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="tool">Conductor Properties</td>
+        <td class="party">Sierra Circuits — Trace Width, Current &amp; Temp Rise
+          <a class="url" href="https://www.protoexpress.com/tools/trace-width-and-current-capacity-calculator/" target="_blank" rel="noopener">protoexpress.com/tools/trace-width-and-current-capacity-calculator</a></td>
+        <td class="compare">IPC-2152-based: compare width vs current/temp rise, plus R, V-drop, power loss. (IPC-2221 legacy mode → Saturn Toolkit.)</td>
+      </tr>
+      <tr>
+        <td class="tool">Fusing Current</td>
+        <td class="party">PCBSync — Fusing Current Estimator
+          <a class="url" href="https://pcbsync.com/fusing-current-estimator/" target="_blank" rel="noopener">pcbsync.com/fusing-current-estimator</a></td>
+        <td class="compare">Onderdonk's equation — compare fuse current for the same width / copper weight / time. (Saturn Toolkit also has an Onderdonk tab.)</td>
+      </tr>
+      <tr>
+        <td class="tool">Min Conductor Spacing <span class="pill partial">PARTIAL</span></td>
+        <td class="party">Sierra Circuits — PCB Conductor Spacing &amp; Voltage
+          <a class="url" href="https://www.protoexpress.com/tools/pcb-conductor-spacing-and-voltage-calculator/" target="_blank" rel="noopener">protoexpress.com/tools/pcb-conductor-spacing-and-voltage-calculator</a></td>
+        <td class="compare">IPC-2221B Table 6-1: compare min spacing vs voltage (coated/uncoated/internal). <b>IEC 60664-1 CTI-aware creepage not covered</b> — check that branch by hand against IEC tables.</td>
+      </tr>
+      <tr>
+        <td class="tool">Thermal Management</td>
+        <td class="party">CalcEngines — Heatsink Thermal Resistance / Junction Temp
+          <a class="url" href="https://calcengines.com/electronics-calculator/heatsink-thermal-resistance-calculator/" target="_blank" rel="noopener">calcengines.com/…/heatsink-thermal-resistance-calculator</a></td>
+        <td class="compare">Tj = Ta + Pd·(θ<sub>JC</sub>+θ<sub>CS</sub>+θ<sub>SA</sub>) — compare Tj and margin to Tj_max with/without heatsink.</td>
+      </tr>
+      <tr>
+        <td class="tool">Thermal Via Array <span class="pill partial">PARTIAL</span></td>
+        <td class="party">Sierra Circuits — Via Thermal Resistance Calculator
+          <a class="url" href="https://www.protoexpress.com/tools/via-thermal-resistance-calculator/" target="_blank" rel="noopener">protoexpress.com/tools/via-thermal-resistance-calculator</a></td>
+        <td class="compare">Compare the <b>parallel-via θ term</b> for a given via count/drill/spacing. Does not model Lee spreading resistance or solder-void penalty — compare that term only.</td>
+      </tr>
+      <tr>
+        <td class="tool">Padstack Calculator</td>
+        <td class="party">TraceWidthCalculator — Pad Size &amp; Annular Ring
+          <a class="url" href="https://tracewidthcalculator.com/pad-size-calculator" target="_blank" rel="noopener">tracewidthcalculator.com/pad-size-calculator</a></td>
+        <td class="compare">IPC-2221 pad diameter, annular ring, aspect ratio for a given drill. (BGA land per IPC-7351A → Saturn Toolkit.)</td>
+      </tr>
+      <tr>
+        <td class="tool">Stackup Symmetry &amp; Bow <span class="pill none">NO FREE TOOL</span></td>
+        <td class="party">— (hand-check)</td>
+        <td class="compare">No free calculator computes a copper-coverage symmetry score or IPC-6012E bow/twist limit. Check the 0.75% / 1.5% IPC-6012 limits by hand (guides: Eurocircuits, Sierra).</td>
+      </tr>
+      <tr>
+        <td class="tool">Paste Aperture (IPC-7525)</td>
+        <td class="party">Beam On Technology — Area Ratio Calculator
+          <a class="url" href="http://www.beamon.com/area-ratio-calculator/" target="_blank" rel="noopener">beamon.com/area-ratio-calculator</a></td>
+        <td class="compare">Compare area ratio, aspect ratio, transfer efficiency vs the 0.66 / 1.5 IPC-7525 limits for the same aperture + foil thickness.</td>
+      </tr>
+      <tr>
+        <td class="tool">BGA Escape Routing <span class="pill partial">PARTIAL</span></td>
+        <td class="party">Saturn PCB Toolkit — Conductor-to-BGA-Land
+          <a class="url" href="https://saturnpcb.com/saturn-pcb-toolkit/" target="_blank" rel="noopener">saturnpcb.com/saturn-pcb-toolkit</a></td>
+        <td class="compare">Closest free analog: max trace width for breakout between lands. Does not output routing-channel-count or signal-layer-count — compare the per-channel width only.</td>
+      </tr>
+      <tr>
+        <td class="tool">DDR Length Matching <span class="pill partial">PARTIAL</span></td>
+        <td class="party">Calculator City — PCB Trace Length Delay
+          <a class="url" href="https://cal26.calculator.city/pcb-trace-length-delay-calculator/" target="_blank" rel="noopener">cal26.calculator.city/pcb-trace-length-delay-calculator</a></td>
+        <td class="compare">Length→delay (microstrip/stripline) with a mismatch/skew input — compare per-net delay &amp; byte-lane skew. JEDEC DDR3/4/5 tolerance presets &amp; serpentine sizing not encoded — check tolerances manually.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ============================ WIZARD ============================ -->
+  <h2 class="cat">PCB Design Wizard</h2>
+  <table>
+    <thead><tr><th>CastGuidance tool</th><th>Free third-party validator</th><th>What to compare</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="tool">PCB Design Wizard <span class="pill none">COMPOSITE</span></td>
+        <td class="party">— (validate via component tools)</td>
+        <td class="compare">Not a single calculation — it orchestrates the stackup/impedance/trace/via/thermal calculators. Validate each recommendation against the matching row above (Conductor Impedance, Conductor Properties, BGA Escape, Thermal Management, etc.).</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <footer>
+    <p><b>How to read this:</b> Enter identical inputs in CastGuidance and in the linked tool, then compare outputs.
+    Small differences are expected when the two use different model families (e.g. CastGuidance's Hammerstad-Jensen +
+    Kirschning-Jansen dispersion vs a non-dispersive Wheeler/Wadell tool) — match at the same frequency and check
+    the result is within a few percent.</p>
+    <p><span class="pill bot">BOT-BLOCK</span> — these pages returned HTTP 403 to the automated link checker (anti-bot policy)
+    but are live, public, free calculators in a normal browser.
+    <span class="pill partial">PARTIAL</span> — the third-party tool validates only part of CastGuidance's tool; the noted extra terms must be checked separately.
+    <span class="pill none">NO FREE TOOL</span> — no free online calculator exists; an authoritative reference equation/document is cited for a hand-check instead.</p>
+    <p>Compiled 2026-05-26 for CastGuidance PCB Toolkit. Third-party tools and URLs are the property of their respective owners and are listed for cross-validation convenience only.</p>
+  </footer>
+</div>
+
+<script>
+  function filterRows() {
+    const q = document.getElementById('search').value.trim().toLowerCase();
+    let shown = 0, total = 0;
+    document.querySelectorAll('tbody tr').forEach(tr => {
+      total++;
+      const hit = !q || tr.textContent.toLowerCase().includes(q);
+      tr.classList.toggle('hidden', !hit);
+      if (hit) shown++;
+    });
+    // Hide a category heading + its table when nothing in it matches
+    document.querySelectorAll('h2.cat').forEach(h2 => {
+      const table = h2.nextElementSibling;
+      const anyVisible = table.querySelectorAll('tbody tr:not(.hidden)').length > 0;
+      h2.classList.toggle('hidden', !anyVisible);
+      table.classList.toggle('hidden', !anyVisible);
+    });
+    document.getElementById('count').textContent = q ? (shown + ' of ' + total + ' tools') : (total + ' tools');
+  }
+  filterRows();
+</script>
+</body>
+</html>

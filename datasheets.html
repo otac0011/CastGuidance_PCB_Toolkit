@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CastGuidance PCB Toolkit — Laminate Datasheets</title>
+  <style>
+    :root {
+      --bg: #1a1a1a;
+      --surface: #252525;
+      --border: #333;
+      --accent: #e8a020;
+      --text: #e0e0e0;
+      --muted: #888;
+      --link: #e8a020;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", system-ui, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 24px 40px;
+    }
+    header h1 {
+      font-size: 1.6rem;
+      color: var(--accent);
+      letter-spacing: 0.02em;
+    }
+    header p {
+      color: var(--muted);
+      margin-top: 4px;
+      font-size: 0.9rem;
+    }
+    main {
+      max-width: 960px;
+      margin: 40px auto;
+      padding: 0 24px;
+    }
+    h2 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin: 36px 0 12px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 6px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th {
+      text-align: left;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,0.03); }
+    .name { font-weight: 600; }
+    .mfr  { color: var(--muted); font-size: 0.85rem; }
+    .val  { font-variant-numeric: tabular-nums; }
+    a {
+      color: var(--link);
+      text-decoration: none;
+      font-size: 0.85rem;
+      padding: 4px 10px;
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    a:hover { background: var(--accent); color: #111; }
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.8rem;
+      padding: 40px 0 24px;
+    }
+    footer a { border: none; padding: 0; color: var(--muted); }
+    footer a:hover { background: none; color: var(--text); }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>CastGuidance PCB Toolkit — Laminate Datasheets</h1>
+  <p>Manufacturer datasheets for all materials bundled with the toolkit. Click a row to open the PDF.</p>
+</header>
+
+<main>
+
+  <!-- Panasonic -->
+  <h2>Panasonic</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Material</th>
+        <th>Dk (10 GHz)</th>
+        <th>Df (10 GHz)</th>
+        <th>Tg (°C)</th>
+        <th>Z-CTE (ppm/°C)</th>
+        <th>Datasheet</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="name">Megtron 6</span><br><span class="mfr">R-5775 — Panasonic</span></td>
+        <td class="val">3.45</td>
+        <td class="val">0.0020</td>
+        <td class="val">185</td>
+        <td class="val">45</td>
+        <td><a href="datasheets/Panasonic_Megtron_6.pdf" target="_blank">Open PDF</a></td>
+      </tr>
+      <tr>
+        <td><span class="name">Megtron 7</span><br><span class="mfr">R-5785 — Panasonic</span></td>
+        <td class="val">3.40</td>
+        <td class="val">0.0020</td>
+        <td class="val">200</td>
+        <td class="val">42</td>
+        <td><a href="datasheets/Panasonic_Megtron_7.pdf" target="_blank">Open PDF</a></td>
+      </tr>
+      <tr>
+        <td><span class="name">Megtron 8</span><br><span class="mfr">Panasonic</span></td>
+        <td class="val">3.10</td>
+        <td class="val">0.0012</td>
+        <td class="val">220</td>
+        <td class="val">40</td>
+        <td><a href="datasheets/Panasonic_Megtron_8.pdf" target="_blank">Open PDF</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Rogers -->
+  <h2>Rogers Corporation</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Material</th>
+        <th>Dk (10 GHz)</th>
+        <th>Df (10 GHz)</th>
+        <th>Tg (°C)</th>
+        <th>Z-CTE (ppm/°C)</th>
+        <th>Datasheet</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="name">RO4350B</span><br><span class="mfr">Rogers Corporation</span></td>
+        <td class="val">3.48</td>
+        <td class="val">0.0037</td>
+        <td class="val">&gt;280</td>
+        <td class="val">32</td>
+        <td><a href="datasheets/Rogers_RO4000_Series.pdf" target="_blank">Open PDF</a></td>
+      </tr>
+      <tr>
+        <td><span class="name">RO4003C</span><br><span class="mfr">Rogers Corporation</span></td>
+        <td class="val">3.38</td>
+        <td class="val">0.0027</td>
+        <td class="val">&gt;280</td>
+        <td class="val">46</td>
+        <td><a href="datasheets/Rogers_RO4000_Series.pdf" target="_blank">Open PDF</a></td>
+      </tr>
+      <tr>
+        <td><span class="name">RT/duroid 5880</span><br><span class="mfr">Rogers Corporation (PTFE composite)</span></td>
+        <td class="val">2.20</td>
+        <td class="val">0.0009</td>
+        <td class="val">—</td>
+        <td class="val">82</td>
+        <td><a href="datasheets/Rogers_5880.pdf" target="_blank">Open PDF</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Isola -->
+  <h2>Isola</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Material</th>
+        <th>Dk (10 GHz)</th>
+        <th>Df (10 GHz)</th>
+        <th>Tg (°C)</th>
+        <th>Z-CTE (ppm/°C)</th>
+        <th>Datasheet</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="name">370HR</span><br><span class="mfr">Isola</span></td>
+        <td class="val">4.04</td>
+        <td class="val">0.0220</td>
+        <td class="val">180</td>
+        <td class="val">49</td>
+        <td><a href="datasheets/Isola_370HR.pdf" target="_blank">Open PDF</a></td>
+      </tr>
+      <tr>
+        <td><span class="name">Astra MT77</span><br><span class="mfr">Isola</span></td>
+        <td class="val">3.00</td>
+        <td class="val">0.0017</td>
+        <td class="val">200</td>
+        <td class="val">45</td>
+        <td><a href="datasheets/Isola_Astra_MT77.pdf" target="_blank">Open PDF</a></td>
+      </tr>
+      <tr>
+        <td><span class="name">Tachyon 100G</span><br><span class="mfr">Isola</span></td>
+        <td class="val">3.02</td>
+        <td class="val">0.0021</td>
+        <td class="val">200</td>
+        <td class="val">40</td>
+        <td><a href="datasheets/Isola_Tachyon_100G.pdf" target="_blank">Open PDF</a></td>
+      </tr>
+      <tr>
+        <td><span class="name">TerraGreen 400G</span><br><span class="mfr">Isola</span></td>
+        <td class="val">3.36</td>
+        <td class="val">0.0030</td>
+        <td class="val">200</td>
+        <td class="val">40</td>
+        <td><a href="datasheets/Isola_TerraGreen_400G.pdf" target="_blank">Open PDF</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- AGC -->
+  <h2>AGC / Taconic</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Material</th>
+        <th>Dk (10 GHz)</th>
+        <th>Df (10 GHz)</th>
+        <th>Tg (°C)</th>
+        <th>Z-CTE (ppm/°C)</th>
+        <th>Datasheet</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="name">FastRise 28</span><br><span class="mfr">AGC</span></td>
+        <td class="val">2.80</td>
+        <td class="val">0.0012</td>
+        <td class="val">200</td>
+        <td class="val">35</td>
+        <td><a href="datasheets/AGC_FastRise_28.pdf" target="_blank">Open PDF</a></td>
+      </tr>
+      <tr>
+        <td><span class="name">FastRise TC</span><br><span class="mfr">AGC</span></td>
+        <td class="val">3.40</td>
+        <td class="val">0.0025</td>
+        <td class="val">225</td>
+        <td class="val">22</td>
+        <td><a href="datasheets/AGC_FastRise_TC.pdf" target="_blank">Open PDF</a></td>
+      </tr>
+      <tr>
+        <td><span class="name">N4000-13</span><br><span class="mfr">AGC Nelco</span></td>
+        <td class="val">3.70</td>
+        <td class="val">0.0090</td>
+        <td class="val">210</td>
+        <td class="val">50</td>
+        <td><a href="datasheets/AGC_Nelco_N4000_13.pdf" target="_blank">Open PDF</a></td>
+      </tr>
+      <tr>
+        <td><span class="name">TLY-5</span><br><span class="mfr">AGC (Taconic) — PTFE woven glass</span></td>
+        <td class="val">2.20</td>
+        <td class="val">0.0009</td>
+        <td class="val">—</td>
+        <td class="val">70</td>
+        <td><a href="datasheets/AGC_TLY_5.pdf" target="_blank">Open PDF</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ITEQ -->
+  <h2>ITEQ</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Material</th>
+        <th>Dk (10 GHz)</th>
+        <th>Df (10 GHz)</th>
+        <th>Tg (°C)</th>
+        <th>Z-CTE (ppm/°C)</th>
+        <th>Datasheet</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="name">IT-988GSE</span><br><span class="mfr">ITEQ</span></td>
+        <td class="val">3.28</td>
+        <td class="val">0.0016</td>
+        <td class="val">230</td>
+        <td class="val">26</td>
+        <td><a href="datasheets/ITEQ_IT_988GSE.pdf" target="_blank">Open PDF</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Elite Material Co. -->
+  <h2>Elite Material Co.</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Material</th>
+        <th>Dk (10 GHz)</th>
+        <th>Df (10 GHz)</th>
+        <th>Tg (°C)</th>
+        <th>Z-CTE (ppm/°C)</th>
+        <th>Datasheet</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="name">EM-370Z</span><br><span class="mfr">Elite Material Co.</span></td>
+        <td class="val">4.10</td>
+        <td class="val">0.0160</td>
+        <td class="val">180</td>
+        <td class="val">50</td>
+        <td><a href="datasheets/EM_370Z.pdf" target="_blank">Open PDF</a></td>
+      </tr>
+      <tr>
+        <td><span class="name">EM-528</span><br><span class="mfr">Elite Material Co.</span></td>
+        <td class="val">4.20</td>
+        <td class="val">0.0130</td>
+        <td class="val">175</td>
+        <td class="val">45</td>
+        <td><a href="datasheets/EM_528.pdf" target="_blank">Open PDF</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Generic -->
+  <h2>Generic Reference</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Material</th>
+        <th>Dk (10 GHz)</th>
+        <th>Df (10 GHz)</th>
+        <th>Tg (°C)</th>
+        <th>Z-CTE (ppm/°C)</th>
+        <th>Datasheet</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="name">FR-4 (Generic)</span><br><span class="mfr">Various — reference: Isola 370HR</span></td>
+        <td class="val">4.40</td>
+        <td class="val">0.0200</td>
+        <td class="val">140</td>
+        <td class="val">70</td>
+        <td><a href="datasheets/Isola_370HR.pdf" target="_blank">Open PDF</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+</main>
+
+<footer>
+  <p>
+    <a href="https://github.com/otac0011/Jupiter_PCB_Toolkit">CastGuidance PCB Toolkit</a> —
+    datasheets sourced from manufacturer publications; provided for reference only.
+  </p>
+</footer>
+
+</body>
+</html>
