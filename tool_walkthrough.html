@@ -69,6 +69,23 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
       color: var(--text-dim);
     }
     .footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 12px; }
+  
+    /* Tool screenshot — added by embed_screenshots_in_walkthrough.py */
+    .tool .screenshot {
+      display: block;
+      width: 100%;
+      max-width: 900px;
+      margin: 10px 0 14px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #1a1a1a;
+    }
+    .tool .screenshot-missing {
+      color: var(--text-mute);
+      font-style: italic;
+      font-size: 12px;
+      padding: 6px 0;
+    }
   </style>
 </head>
 <body>
@@ -106,6 +123,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Ohm's Law</h3>
+  <img class="screenshot" src="screenshots/ohms_law.png" alt="Ohm's Law tool screenshot" loading="lazy">
   <p class="layout-cue">No methodology dropdown — the four equations are linked, so any two known inputs give you the other two.</p>
   <p>The page has four entry fields side-by-side; type whatever you know into any two of them and the other two compute automatically.</p>
   <p>The Inputs are:</p>
@@ -121,6 +139,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Conversion Calculator</h3>
+  <img class="screenshot" src="screenshots/conversion.png" alt="Conversion Calculator tool screenshot" loading="lazy">
   <p class="layout-cue">Tabbed page — one tab per conversion domain.</p>
   <p>The page is organised into tabs (Distance, Temperature, Power / dBm, Complex / rectangular ↔ polar). Each tab has the source value on the left and the destination on the right; type into either side and the other updates.</p>
   <p>Common conversions: <code>1 mil = 0.0254 mm</code>, <code>1 inch = 25.4 mm</code>, <code>0 dBm = 1 mW = 224 mVrms @ 50 Ω</code>, <code>10 dB = 10× power = 3.16× voltage</code>.</p>
@@ -128,12 +147,14 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>SI Prefix Reference</h3>
+  <img class="screenshot" src="screenshots/si_prefix.png" alt="SI Prefix Reference tool screenshot" loading="lazy">
   <p class="layout-cue">Static reference table, no inputs.</p>
   <p>The page is a single table covering every SI prefix from quecto (10⁻³⁰) to quetta (10³⁰) — name, symbol, power of ten, and an example. Use it when you can't remember whether "P" is peta or pico.</p>
 </div>
 
 <div class="tool">
   <h3>dBm Reference Chart</h3>
+  <img class="screenshot" src="screenshots/dbm_chart.png" alt="dBm Reference Chart tool screenshot" loading="lazy">
   <p class="layout-cue">No methodology dropdown.</p>
   <p>The Inputs section asks for:</p>
   <ul>
@@ -144,12 +165,14 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Mechanical Reference</h3>
+  <img class="screenshot" src="screenshots/mechanical_tables.png" alt="Mechanical Reference tool screenshot" loading="lazy">
   <p class="layout-cue">Tabbed page with two reference tables, no calculations.</p>
   <p>Tab one is <b>Drill Sizes</b>: every ANSI numbered drill (#80 through #1) and lettered drill (A through Z) with diameter in inch and mm. Tab two is <b>Screw Threads</b>: every UNC size (#00-90 up to 1/4-20) with major diameter, threads-per-inch, and tap-drill recommendation. Each tab has a live filter box — type "30" or "M3" to narrow the list.</p>
 </div>
 
 <div class="tool">
   <h3>Wire Ampacity / Resistance / Thermal</h3>
+  <img class="screenshot" src="screenshots/wire_ampacity.png" alt="Wire Ampacity / Resistance / Thermal tool screenshot" loading="lazy">
   <p>The page is organised into three input groups followed by three output groups.</p>
   <p>Wire specification:</p>
   <ul>
@@ -171,6 +194,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Reactance &amp; LC Resonance</h3>
+  <img class="screenshot" src="screenshots/reactance.png" alt="Reactance &amp; LC Resonance tool screenshot" loading="lazy">
   <p>The Inputs are:</p>
   <ul>
     <li><b>Frequency</b> — where you want to evaluate the reactance.</li>
@@ -183,6 +207,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>LED Series Resistor</h3>
+  <img class="screenshot" src="screenshots/led_resistor.png" alt="LED Series Resistor tool screenshot" loading="lazy">
   <p>The Inputs section asks for:</p>
   <ul>
     <li><b>Supply Vs</b> — the rail you're driving from (3.3, 5, 12 V).</li>
@@ -195,6 +220,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Voltage Divider</h3>
+  <img class="screenshot" src="screenshots/divider.png" alt="Voltage Divider tool screenshot" loading="lazy">
   <p class="layout-cue">Four-corner solve mode: enter any two of Vin/Vout/R1/R2 and the other two are derived.</p>
   <p>The Inputs allow you to fix any two of:</p>
   <ul>
@@ -209,11 +235,13 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Series / Parallel R-L-C</h3>
+  <img class="screenshot" src="screenshots/series_parallel.png" alt="Series / Parallel R-L-C tool screenshot" loading="lazy">
   <p>The page is a table where each row is one element. Pick R, L, or C, then enter values one per row up to 8 elements. The Outputs are <b>Series total</b> (values add for R/L, reciprocals for C) and <b>Parallel total</b> (the opposite). Useful when you need an odd value (23.7 kΩ from your stock of standard parts) or want to parallel several resistors to spread power dissipation.</p>
 </div>
 
 <div class="tool">
   <h3>PPM Frequency Tolerance</h3>
+  <img class="screenshot" src="screenshots/ppm.png" alt="PPM Frequency Tolerance tool screenshot" loading="lazy">
   <p>Bidirectional — enter PPM or Δf, get the other.</p>
   <ul>
     <li><b>Nominal frequency</b> — what the crystal is supposed to oscillate at.</li>
@@ -226,6 +254,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>XTAL Load Capacitor</h3>
+  <img class="screenshot" src="screenshots/xtal_load.png" alt="XTAL Load Capacitor tool screenshot" loading="lazy">
   <p>Sizes the two load caps for a Pierce oscillator around a parallel-resonant crystal.</p>
   <ul>
     <li><b>Load capacitance CL</b> — from the crystal datasheet (8, 10, 12, 18, 20, 32 pF are typical).</li>
@@ -242,6 +271,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Conductor Impedance (analytic)</h3>
+  <img class="screenshot" src="screenshots/impedance.png" alt="Conductor Impedance (analytic) tool screenshot" loading="lazy">
   <p>At the top of the page is the <b>Methodology</b> dropdown for picking the topology — Standard Microstrip, Embedded Microstrip, Symmetric / Asymmetric / Dual Stripline, Coplanar Waveguide (with and without backside ground). Each option swaps which input fields are visible.</p>
   <p>Below that is the diagram, which changes based on the topology you've picked so you can confirm the geometry visually.</p>
   <p>The Inputs section asks for:</p>
@@ -262,6 +292,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Trace Impedance (openEMS 3D)</h3>
+  <img class="screenshot" src="screenshots/openems_trace.png" alt="Trace Impedance (openEMS 3D) tool screenshot" loading="lazy">
   <p>At the top of the page is the <b>Methodology</b> dropdown — currently the only entry is "3D FDTD (openEMS)" — and three large action buttons: <b>Preview 3D Geometry</b>, <b>Analytic Fast Calc</b>, and <b>Run 3D Simulation</b>.</p>
   <p>The Inputs are similar to the analytic impedance tool — material (pick from the dropdown of bundled laminates), topology, geometry — but four extra sim-quality controls live in their own group: trace length, convergence target, mesh fineness, and worker thread count.</p>
   <p>The Outputs panel shows the analytic answer side-by-side with the 3D FDTD result so you can see the discrepancy. Below the result panel is a status strip that tells you whether openEMS is installed and where.</p>
@@ -270,6 +301,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Differential Pairs</h3>
+  <img class="screenshot" src="screenshots/differential_pair.png" alt="Differential Pairs tool screenshot" loading="lazy">
   <p>At the top of the page is a <b>topology</b> selector (edge-coupled microstrip / stripline / coplanar, or broadside-coupled stripline). Below is the diagram.</p>
   <p>The Inputs cover:</p>
   <ul>
@@ -285,6 +317,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Conductor Properties</h3>
+  <img class="screenshot" src="screenshots/conductor_properties.png" alt="Conductor Properties tool screenshot" loading="lazy">
   <p>At the top of the page is the <b>Methodology</b> dropdown — "IPC-2152 (2009, modern empirical fit)" or "IPC-2221 (1998, legacy K·ΔT^0.44·A^0.725)". IPC-2152 gives ampacities about 2× higher than IPC-2221 for the same temperature rise; modern designs use IPC-2152.</p>
   <p>Below the dropdown is the diagram and then the Inputs:</p>
   <ul>
@@ -302,6 +335,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Fusing Current (Onderdonk)</h3>
+  <img class="screenshot" src="screenshots/fusing_current.png" alt="Fusing Current (Onderdonk) tool screenshot" loading="lazy">
   <p>At the top is the <b>Methodology</b> dropdown — "Onderdonk 1928 (adiabatic, conservative)" or "Onderdonk × user multiplier (advisory)" if you want to apply a derating factor.</p>
   <p>The Inputs are:</p>
   <ul>
@@ -317,6 +351,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Minimum Conductor Spacing</h3>
+  <img class="screenshot" src="screenshots/min_spacing.png" alt="Minimum Conductor Spacing tool screenshot" loading="lazy">
   <p>At the top is the <b>Methodology</b> dropdown — "IPC-2221C Table 6-1 (single 2-D lookup)" for board-level signal work, or "IEC 60664-1 Ed.3 (CTI + pollution + insulation)" for safety / mains compliance.</p>
   <p>The Inputs are:</p>
   <ul>
@@ -329,6 +364,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Wavelength</h3>
+  <img class="screenshot" src="screenshots/wavelength.png" alt="Wavelength tool screenshot" loading="lazy">
   <p>The Inputs are:</p>
   <ul>
     <li><b>Frequency</b> — what wavelength you want.</li>
@@ -339,6 +375,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>εr Effective</h3>
+  <img class="screenshot" src="screenshots/er_effective.png" alt="εr Effective tool screenshot" loading="lazy">
   <p>At the top of the page there is no methodology dropdown — only one model (Hammerstad-Jensen static plus Kirschning-Jansen dispersion) is used.</p>
   <p>Below the diagram, the Inputs are:</p>
   <ul>
@@ -353,6 +390,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Bandwidth / Max Length</h3>
+  <img class="screenshot" src="screenshots/bandwidth.png" alt="Bandwidth / Max Length tool screenshot" loading="lazy">
   <p>At the top is the <b>Methodology</b> dropdown — "IPC-2251 knee frequency (BW = 0.35 / Tr)", "Howard Johnson (BW = 0.5 / Tr, conservative)", or "Direct frequency entry" if you already know the frequency.</p>
   <p>The Inputs are:</p>
   <ul>
@@ -365,6 +403,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Via Properties</h3>
+  <img class="screenshot" src="screenshots/via_properties.png" alt="Via Properties tool screenshot" loading="lazy">
   <p>The page starts with a <b>Via type</b> dropdown (Two-layer vs Multi-layer). Microvia analysis lives in its own dedicated tool — there's a pointer to it next to the dropdown.</p>
   <p>The Inputs section asks for:</p>
   <ul>
@@ -383,6 +422,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Microvia Analyzer (HDI)</h3>
+  <img class="screenshot" src="screenshots/microvia_analyzer.png" alt="Microvia Analyzer (HDI) tool screenshot" loading="lazy">
   <p>Below the diagram (labelled with d / h / t / s and the WMI interface callout), the Inputs are split into three groups.</p>
   <p>Microvia geometry:</p>
   <ul>
@@ -405,6 +445,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Differential Via Stub</h3>
+  <img class="screenshot" src="screenshots/differential_via.png" alt="Differential Via Stub tool screenshot" loading="lazy">
   <p>A simple back-of-envelope tool for the max acceptable stub length on a high-speed differential through-via. The Inputs are:</p>
   <ul>
     <li><b>Baud rate (Gbps)</b> — protocol data rate (or symbol rate for PAM4).</li>
@@ -417,6 +458,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Planar Spiral Inductor</h3>
+  <img class="screenshot" src="screenshots/planar_inductor.png" alt="Planar Spiral Inductor tool screenshot" loading="lazy">
   <p>The page picks the shape (square, hexagonal, octagonal, circular) from a selector at the top of the inputs.</p>
   <ul>
     <li><b>Turns N</b> — total number of turns.</li>
@@ -429,6 +471,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Embedded Resistor</h3>
+  <img class="screenshot" src="screenshots/embedded_resistor.png" alt="Embedded Resistor tool screenshot" loading="lazy">
   <p>Single-screen tool with three inputs:</p>
   <ul>
     <li><b>Sheet R (Ω/□)</b> — from the embedded-resistor foil vendor (typ. 25, 50, 100, 250, 1000 Ω/sq).</li>
@@ -443,6 +486,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Via Stub Impact (S21, eye, budget)</h3>
+  <img class="screenshot" src="screenshots/via_stub_impact.png" alt="Via Stub Impact (S21, eye, budget) tool screenshot" loading="lazy">
   <p>At the top is a <b>Protocol</b> dropdown — pick PCIe Gen3/4/5/6, USB SuperSpeed, 25/50/100 GbE NRZ or PAM4, 112G PAM4, HBM, DDR5, MIPI C-PHY, CXL — and the data rate / modulation / rise time / IL-budget fields auto-populate from the spec.</p>
   <p>Below the protocol picker is a <b>Modulation</b> dropdown (NRZ / PAM4 / PAM3) and a <b>Differential</b> checkbox.</p>
   <p>The Channel inputs (auto-filled from preset but always editable):</p>
@@ -459,6 +503,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Dielectric Dk/Df vs Frequency</h3>
+  <img class="screenshot" src="screenshots/dielectric.png" alt="Dielectric Dk/Df vs Frequency tool screenshot" loading="lazy">
   <p>At the top of the page is a <b>Material</b> dropdown — pick Megtron 6/7/8, Rogers RO4350B / RO4003C / RT-duroid, Isola family, AGC family, ITEQ, FR-4 generic, etc. — or "Custom" to enter your own datasheet point. There's also an <b>Open Datasheet</b> button.</p>
   <p>The Inputs are:</p>
   <ul>
@@ -472,6 +517,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Conductor Loss &amp; Surface Roughness</h3>
+  <img class="screenshot" src="screenshots/conductor_loss.png" alt="Conductor Loss &amp; Surface Roughness tool screenshot" loading="lazy">
   <p>At the top is the <b>Methodology</b> dropdown for the roughness model — Hammerstad-Jensen / Hemispherical / Cannonball-Huray (default).</p>
   <p>The Inputs are:</p>
   <ul>
@@ -484,6 +530,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Channel Insertion Loss Budget</h3>
+  <img class="screenshot" src="screenshots/insertion_loss.png" alt="Channel Insertion Loss Budget tool screenshot" loading="lazy">
   <p>Single-page tool that tallies up dielectric, conductor, stub, and connector loss into one channel IL number.</p>
   <ul>
     <li><b>Frequency</b> — Nyquist of the link.</li>
@@ -497,6 +544,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Jitter Budget (Dual-Dirac)</h3>
+  <img class="screenshot" src="screenshots/jitter_budget.png" alt="Jitter Budget (Dual-Dirac) tool screenshot" loading="lazy">
   <ul>
     <li><b>Deterministic Dj (pp)</b> — peak-to-peak deterministic jitter from clock recovery / ISI sources, in picoseconds.</li>
     <li><b>Random Rj (rms)</b> — Gaussian jitter standard deviation, also in ps.</li>
@@ -512,6 +560,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>PDN Target &amp; Plane Cap</h3>
+  <img class="screenshot" src="screenshots/pdn.png" alt="PDN Target &amp; Plane Cap tool screenshot" loading="lazy">
   <p>Single-page tool combining target-impedance and plane-capacitance calculation.</p>
   <ul>
     <li><b>Voltage rail</b> — 0.85 V, 1.0 V (CPU core), 1.8 V, 3.3 V, 5 V, etc.</li>
@@ -525,6 +574,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>MLCC DC-Bias Derating</h3>
+  <img class="screenshot" src="screenshots/mlcc_dc_bias.png" alt="MLCC DC-Bias Derating tool screenshot" loading="lazy">
   <ul>
     <li><b>Nominal C</b> — sticker value on the part.</li>
     <li><b>Rated voltage</b> — the cap's max-rated voltage (10 V, 16 V, 25 V, etc.).</li>
@@ -537,6 +587,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Mounting Inductance (L_mnt)</h3>
+  <img class="screenshot" src="screenshots/mounting_inductance.png" alt="Mounting Inductance (L_mnt) tool screenshot" loading="lazy">
   <ul>
     <li><b>Via height (to plane)</b> — depth from cap pad down to the reference plane.</li>
     <li><b>Via diameter</b> — typical 8–12 mil.</li>
@@ -549,6 +600,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>PDN Cap Bank Analyzer (Z(f))</h3>
+  <img class="screenshot" src="screenshots/decap_bank.png" alt="PDN Cap Bank Analyzer (Z(f)) tool screenshot" loading="lazy">
   <p>The page has a cap-bank table at the top — add caps from the MLCC library or by hand — followed by the sweep controls.</p>
   <ul>
     <li><b>Sweep f_min</b> and <b>Sweep f_max</b> — frequency range (typ. 10 kHz to 1 GHz).</li>
@@ -563,6 +615,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Pi-Pad Attenuator</h3>
+  <img class="screenshot" src="screenshots/pi_pad.png" alt="Pi-Pad Attenuator tool screenshot" loading="lazy">
   <ul>
     <li><b>Attenuation</b> — in dB (typical 3, 6, 10, 20, 30 dB).</li>
     <li><b>Zin</b> and <b>Zout</b> — source and load impedances. Equal for symmetric, unequal for matching pads.</li>
@@ -572,11 +625,13 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>T-Pad Attenuator</h3>
+  <img class="screenshot" src="screenshots/t_pad.png" alt="T-Pad Attenuator tool screenshot" loading="lazy">
   <p>Same Inputs as Pi-Pad — attenuation, Zin, Zout. The Outputs are <b>R series (input, exact)</b>, <b>R series (output, exact)</b>, <b>R shunt (exact)</b> plus E24-snapped versions of each. T-pads use the dual topology (series → shunt → series) — sometimes a cleaner layout fit than Pi.</p>
 </div>
 
 <div class="tool">
   <h3>L-Match (Impedance Matching)</h3>
+  <img class="screenshot" src="screenshots/l_match.png" alt="L-Match (Impedance Matching) tool screenshot" loading="lazy">
   <ul>
     <li><b>Frequency</b> — the design frequency.</li>
     <li><b>Load R</b> — real part of the load impedance.</li>
@@ -588,6 +643,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Quarter-Wave (λ/4) Impedance Match</h3>
+  <img class="screenshot" src="screenshots/quarter_wave_match.png" alt="Quarter-Wave (λ/4) Impedance Match tool screenshot" loading="lazy">
   <p>At the top of the page is the <b>Methodology</b> dropdown — "Binomial (maximally flat, monotonic VSWR)" for clean in-band response, or "Chebyshev (equal-ripple, wider bandwidth)" for broader frequency coverage at the cost of in-band ripple.</p>
   <ul>
     <li><b>Source Z</b> and <b>Load Z</b> — must both be real.</li>
@@ -601,6 +657,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Lumped LC Match (L / Pi / T)</h3>
+  <img class="screenshot" src="screenshots/lumped_match.png" alt="Lumped LC Match (L / Pi / T) tool screenshot" loading="lazy">
   <p>At the top is the <b>Methodology</b> dropdown — "Lowpass (series L · shunt C)" or "Highpass (series C · shunt L)".</p>
   <ul>
     <li><b>Source Z</b> and <b>Load Z</b>.</li>
@@ -616,6 +673,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Padstack</h3>
+  <img class="screenshot" src="screenshots/padstack.png" alt="Padstack tool screenshot" loading="lazy">
   <p>Tabbed page with four sub-tools: thru-hole pad, BGA land, pad clearance, and corner-to-corner pitch. Each tab has its own input set:</p>
   <ul>
     <li>Thru-hole pad: <b>Hole diameter</b>, <b>Min annular (ext)</b>, <b>Min annular (int)</b>, <b>Thermal isolation</b> — gives the external/internal pad diameters and the thermal-relief geometry.</li>
@@ -627,6 +685,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Solder Paste Aperture (IPC-7525B)</h3>
+  <img class="screenshot" src="screenshots/paste_aperture.png" alt="Solder Paste Aperture (IPC-7525B) tool screenshot" loading="lazy">
   <ul>
     <li><b>Length</b> and <b>Width</b> — for rectangular apertures.</li>
     <li><b>Diameter</b> — for circular apertures.</li>
@@ -637,6 +696,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>BGA Escape Routing</h3>
+  <img class="screenshot" src="screenshots/bga_escape.png" alt="BGA Escape Routing tool screenshot" loading="lazy">
   <ul>
     <li><b>Ball pitch</b> — typical 1.27 / 1.0 / 0.8 / 0.5 / 0.4 mm.</li>
     <li><b>Pad diameter</b> — BGA land size.</li>
@@ -648,6 +708,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Stackup Symmetry &amp; Bow/Twist</h3>
+  <img class="screenshot" src="screenshots/stackup.png" alt="Stackup Symmetry &amp; Bow/Twist tool screenshot" loading="lazy">
   <p>The page is a stackup-editor table where each row is one layer with a copper-coverage percentage. The single non-table Input is:</p>
   <ul>
     <li><b>Board length</b> — for the IPC-6012E bow limit calculation.</li>
@@ -661,6 +722,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Thermal Management</h3>
+  <img class="screenshot" src="screenshots/thermal_management.png" alt="Thermal Management tool screenshot" loading="lazy">
   <ul>
     <li><b>Ambient T_a</b> — air temp around the part.</li>
     <li><b>Power P</b> — dissipation in watts.</li>
@@ -675,6 +737,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Thermal Via Array</h3>
+  <img class="screenshot" src="screenshots/thermal_via_array.png" alt="Thermal Via Array tool screenshot" loading="lazy">
   <ul>
     <li><b>Via count</b> — number of vias under the exposed pad.</li>
     <li><b>Hole diameter</b> and <b>Plating thickness</b> — barrel geometry.</li>
@@ -692,6 +755,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Buck / Boost Inductor Sizing</h3>
+  <img class="screenshot" src="screenshots/buck_boost.png" alt="Buck / Boost Inductor Sizing tool screenshot" loading="lazy">
   <ul>
     <li><b>V_in</b> and <b>V_out</b> — converter rail voltages.</li>
     <li><b>Load current</b> — steady-state output current.</li>
@@ -708,6 +772,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>Radiated Emissions — Small Loop</h3>
+  <img class="screenshot" src="screenshots/emc_loop.png" alt="Radiated Emissions — Small Loop tool screenshot" loading="lazy">
   <ul>
     <li><b>Frequency</b> — the harmonic of interest (n × switching freq).</li>
     <li><b>Loop length</b> and <b>Loop width</b> — defines the loop area.</li>
@@ -723,6 +788,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>DDR Length Matching</h3>
+  <img class="screenshot" src="screenshots/ddr_length_match.png" alt="DDR Length Matching tool screenshot" loading="lazy">
   <p>The page has a stackup / standard picker at the top (DDR3 / DDR4 / DDR5 / LPDDR4 / LPDDR5) which auto-loads the JEDEC per-byte-lane tolerance.</p>
   <p>The main Input is a per-signal length table — paste in or type the as-routed length of every DQ, DM, DQS, ADDR, CMD, and CK signal. The only standalone input is:</p>
   <ul>
@@ -737,6 +803,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 
 <div class="tool">
   <h3>PCB Design Wizard</h3>
+  <img class="screenshot" src="screenshots/design_wizard.png" alt="PCB Design Wizard tool screenshot" loading="lazy">
   <p>Multi-step questionnaire — there's no single input page. Step 1 picks a preset (e.g. "USB-C charger", "RF prototype", "DDR4 motherboard") or "Custom". Step 2 asks targeted questions about your design (board class, target speeds, manufacturer, layer-count budget, mechanical constraints, RF or pure digital, target volume, BoM-cost sensitivity).</p>
   <p>The final step is a Report page summarising the top-3 recommended stackups with rationale, recommended trace / space rules, suggested via schedule, and an export-to-HTML / Markdown button so you can save the report with the project.</p>
 </div>
