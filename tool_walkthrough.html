@@ -1,0 +1,753 @@
+<!--
+Copyright (c) 2026 CastGuidance PCB Toolkit Developer. All rights reserved.
+SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>CastGuidance PCB Toolkit — Tool Walkthroughs</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    :root {
+      --bg: #1a1a1a;
+      --panel: #232323;
+      --panel-2: #2a2a2a;
+      --border: #353535;
+      --text: #e6e6e6;
+      --text-dim: #b0b0b0;
+      --text-mute: #888;
+      --accent: #d9842a;
+      --accent-dim: rgba(217,132,42,0.6);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 0.9em; color: var(--text-dim); }
+    .container { max-width: 980px; margin: 0 auto; padding: 28px 24px 80px; }
+    h1 { font-size: 28px; margin: 0 0 6px; letter-spacing: -0.01em; }
+    h2 { font-size: 22px; margin: 40px 0 14px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+    h2 .count { color: var(--text-mute); font-weight: 400; font-size: 14px; margin-left: 8px; }
+    h3 { font-size: 16px; margin: 0 0 8px; color: var(--accent); }
+    p { margin: 8px 0; }
+    .lede { color: var(--text-dim); margin: 0 0 22px; }
+    .toc {
+      background: var(--panel);
+      border-left: 3px solid var(--accent);
+      padding: 14px 20px;
+      border-radius: 4px;
+      margin-bottom: 26px;
+    }
+    .toc h3 { color: var(--text); margin: 0 0 8px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .toc ul { list-style: none; padding: 0; margin: 0; column-count: 3; column-gap: 24px; }
+    .toc li { margin: 3px 0; font-size: 13px; break-inside: avoid; }
+    .tool {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px 20px;
+      margin: 14px 0;
+      font-size: 14px;
+    }
+    .tool ul { margin: 6px 0 8px; padding-left: 22px; }
+    .tool ul li { margin: 4px 0; color: var(--text-dim); }
+    .tool ul li b { color: var(--text); font-weight: 500; }
+    .layout-cue { color: var(--text-mute); font-style: italic; font-size: 13px; }
+    .insight {
+      background: rgba(217,132,42,0.07);
+      border-left: 3px solid var(--accent-dim);
+      padding: 6px 12px;
+      margin: 8px 0;
+      font-size: 13.5px;
+      color: var(--text-dim);
+    }
+    .footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--text-mute); font-size: 12px; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+<h1>CastGuidance PCB Toolkit — Tool Walkthroughs</h1>
+<p class="lede">
+  For each tool, this guide walks down the page top-to-bottom — methodology
+  dropdown (if any), diagram, the input fields you'll fill in (with what
+  each one means in plain English), and the output fields you'll see (with
+  what they actually tell you).  A companion to the <a href="user_manual.html">User Manual</a>
+  reference; this one is the walkthrough.
+</p>
+
+<div class="toc">
+  <h3>Contents</h3>
+  <ul>
+    <li><a href="#cat-reference">Reference (12)</a></li>
+    <li><a href="#cat-core">Core PCB (14)</a></li>
+    <li><a href="#cat-si">Signal Integrity (5)</a></li>
+    <li><a href="#cat-pi">Power Integrity (4)</a></li>
+    <li><a href="#cat-rf">RF / Microwave (5)</a></li>
+    <li><a href="#cat-mech">Mechanical &amp; DFM (4)</a></li>
+    <li><a href="#cat-thermal">Thermal (2)</a></li>
+    <li><a href="#cat-power">Power Electronics (1)</a></li>
+    <li><a href="#cat-emc">EMC / EMI (1)</a></li>
+    <li><a href="#cat-hsd">High-Speed Digital (1)</a></li>
+    <li><a href="#cat-wizard">Wizard (1)</a></li>
+  </ul>
+</div>
+
+
+<!-- ============================================================ -->
+<h2 id="cat-reference">Reference <span class="count">(12 tools)</span></h2>
+
+<div class="tool">
+  <h3>Ohm's Law</h3>
+  <p class="layout-cue">No methodology dropdown — the four equations are linked, so any two known inputs give you the other two.</p>
+  <p>The page has four entry fields side-by-side; type whatever you know into any two of them and the other two compute automatically.</p>
+  <p>The Inputs are:</p>
+  <ul>
+    <li><b>Voltage (V)</b> — the potential across the element. Type your rail voltage here (1.8, 3.3, 5, 12 V, etc.).</li>
+    <li><b>Current (I)</b> — the flow through the element. µA for signals, mA for IO, A for power.</li>
+    <li><b>Resistance (R)</b> — the limit on current for the given voltage.</li>
+    <li><b>Power (P)</b> — the heat dissipated.</li>
+  </ul>
+  <p>The Outputs are the same fields, automatically filled. The tool also rounds R to the nearest E12 / E24 standard value so the answer is something you can actually order.</p>
+  <div class="insight">If the displayed power exceeds 50 % of a typical 0603 resistor's 100 mW rating, you should jump to a 1206 or 2010 package.</div>
+</div>
+
+<div class="tool">
+  <h3>Conversion Calculator</h3>
+  <p class="layout-cue">Tabbed page — one tab per conversion domain.</p>
+  <p>The page is organised into tabs (Distance, Temperature, Power / dBm, Complex / rectangular ↔ polar). Each tab has the source value on the left and the destination on the right; type into either side and the other updates.</p>
+  <p>Common conversions: <code>1 mil = 0.0254 mm</code>, <code>1 inch = 25.4 mm</code>, <code>0 dBm = 1 mW = 224 mVrms @ 50 Ω</code>, <code>10 dB = 10× power = 3.16× voltage</code>.</p>
+</div>
+
+<div class="tool">
+  <h3>SI Prefix Reference</h3>
+  <p class="layout-cue">Static reference table, no inputs.</p>
+  <p>The page is a single table covering every SI prefix from quecto (10⁻³⁰) to quetta (10³⁰) — name, symbol, power of ten, and an example. Use it when you can't remember whether "P" is peta or pico.</p>
+</div>
+
+<div class="tool">
+  <h3>dBm Reference Chart</h3>
+  <p class="layout-cue">No methodology dropdown.</p>
+  <p>The Inputs section asks for:</p>
+  <ul>
+    <li><b>System impedance</b> — pick 50 Ω (RF lab default), 75 Ω (video / CATV), 600 Ω (legacy audio), or type a custom value.</li>
+  </ul>
+  <p>The Outputs section is a pre-computed lookup table from −50 dBm to +40 dBm mapping each dBm level to mW and Vrms across your chosen impedance.</p>
+</div>
+
+<div class="tool">
+  <h3>Mechanical Reference</h3>
+  <p class="layout-cue">Tabbed page with two reference tables, no calculations.</p>
+  <p>Tab one is <b>Drill Sizes</b>: every ANSI numbered drill (#80 through #1) and lettered drill (A through Z) with diameter in inch and mm. Tab two is <b>Screw Threads</b>: every UNC size (#00-90 up to 1/4-20) with major diameter, threads-per-inch, and tap-drill recommendation. Each tab has a live filter box — type "30" or "M3" to narrow the list.</p>
+</div>
+
+<div class="tool">
+  <h3>Wire Ampacity / Resistance / Thermal</h3>
+  <p>The page is organised into three input groups followed by three output groups.</p>
+  <p>Wire specification:</p>
+  <ul>
+    <li><b>Gauge</b> — pick from the full AWG dropdown (4/0 down to 40).</li>
+    <li><b>Conductor</b> — solid or stranded copper, aluminum 1350, copper-clad aluminum, nichrome, constantan, manganin, or tinned/silver-plated copper.</li>
+    <li><b>Insulation</b> — 20 classes from PVC 60 °C up to Kapton 260 °C, including the IEC 60317 magnet-wire enamel classes A through R.</li>
+  </ul>
+  <p>Operating conditions:</p>
+  <ul>
+    <li><b>Ambient temperature</b> — the air around the wire (inside enclosures expect 20–40 °C hotter than the room).</li>
+    <li><b>Wire length</b> — one-way; don't double for the return.</li>
+    <li><b>Current</b> — set to 0 to just see the max ampacity; enter a real current to also see voltage drop, dissipation, and predicted wire temperature.</li>
+    <li><b>Source voltage</b> — optional; enables voltage-drop-as-percentage output.</li>
+    <li><b>Frequency</b> — optional; enables skin-depth + AC-resistance bump for RF use.</li>
+  </ul>
+  <p>The Outputs include cross-section, diameter, R/m at ambient, total R at operating temp, max continuous ampacity (colour-coded against the insulation rating), Preece fusing current (catastrophic limit), wire temperature at your current, voltage drop with its % of source, power dissipated, skin depth, AC resistance, mass per metre.</p>
+  <div class="insight">Wire temperature at current is the most important number — if it's above the insulation's continuous rating you'll see an explicit "OVERHEAT" or "THERMAL RUNAWAY" diagnostic.</div>
+</div>
+
+<div class="tool">
+  <h3>Reactance &amp; LC Resonance</h3>
+  <p>The Inputs are:</p>
+  <ul>
+    <li><b>Frequency</b> — where you want to evaluate the reactance.</li>
+    <li><b>Capacitance</b> and <b>Inductance</b> — fill in either one, both, or neither depending on what you want.</li>
+    <li><b>Series R (for Q)</b> — optional series resistance, used to compute the Q factor of an LC tank.</li>
+  </ul>
+  <p>The Outputs are <b>Xc</b> (capacitive reactance), <b>Xl</b> (inductive reactance), <b>f_resonant</b> (where Xc = Xl), and the <b>Quality factor</b>.</p>
+  <div class="insight">A 100 nF cap presents only 16 mΩ at 100 MHz but 160 Ω at 10 kHz — same part, four orders of magnitude difference. The Q factor sets bandwidth: <code>BW ≈ f₀ / Q</code>.</div>
+</div>
+
+<div class="tool">
+  <h3>LED Series Resistor</h3>
+  <p>The Inputs section asks for:</p>
+  <ul>
+    <li><b>Supply Vs</b> — the rail you're driving from (3.3, 5, 12 V).</li>
+    <li><b>LED Vf</b> — from the LED's datasheet. Typical: 1.8–2.0 V red, 2.8–3.4 V blue/white, 3.0–3.5 V power LEDs.</li>
+    <li><b>Desired If</b> — typical 10–20 mA for indicators, 350 mA for 1 W power LEDs.</li>
+    <li><b>LED count (series)</b> — multiplies Vf for strings.</li>
+  </ul>
+  <p>The Outputs are the required exact R, both the nearest E12 and E24 standard values, the actual If when using the E24 part, the power dissipated in the resistor, and a recommended resistor package (0603/0805/1206/etc.) based on dissipation.</p>
+</div>
+
+<div class="tool">
+  <h3>Voltage Divider</h3>
+  <p class="layout-cue">Four-corner solve mode: enter any two of Vin/Vout/R1/R2 and the other two are derived.</p>
+  <p>The Inputs allow you to fix any two of:</p>
+  <ul>
+    <li><b>Vin</b> — source voltage being divided.</li>
+    <li><b>Vout</b> — target midpoint voltage.</li>
+    <li><b>R1</b> — top resistor (Vin to midpoint).</li>
+    <li><b>R2</b> — bottom resistor (midpoint to ground).</li>
+  </ul>
+  <p>You'll see <b>R_total</b> (loading on the source), <b>Current</b> through the divider, and the power dissipated in each resistor. R1 and R2 outputs are snapped to E12 / E24 standard values.</p>
+  <div class="insight">For an ADC input, keep R1 ∥ R2 ≤ 10 kΩ so the source impedance doesn't load the sampling cap.</div>
+</div>
+
+<div class="tool">
+  <h3>Series / Parallel R-L-C</h3>
+  <p>The page is a table where each row is one element. Pick R, L, or C, then enter values one per row up to 8 elements. The Outputs are <b>Series total</b> (values add for R/L, reciprocals for C) and <b>Parallel total</b> (the opposite). Useful when you need an odd value (23.7 kΩ from your stock of standard parts) or want to parallel several resistors to spread power dissipation.</p>
+</div>
+
+<div class="tool">
+  <h3>PPM Frequency Tolerance</h3>
+  <p>Bidirectional — enter PPM or Δf, get the other.</p>
+  <ul>
+    <li><b>Nominal frequency</b> — what the crystal is supposed to oscillate at.</li>
+    <li><b>PPM</b> — datasheet tolerance figure.</li>
+    <li><b>Frequency deviation</b> — Δf, the actual Hz spread.</li>
+  </ul>
+  <p>The Outputs include f_min and f_max (worst-case excursions), plus the reciprocal Δf/PPM number — type either side, read the other.</p>
+  <div class="insight">USB and CAN allow ±500 ppm; Ethernet 1G is ±100 ppm; GPS / disciplined OCXO is ±0.001 ppm. The datasheet "tolerance" combines initial frequency at 25 °C, temperature stability over operating range, and ageing per year — check the breakdown.</div>
+</div>
+
+<div class="tool">
+  <h3>XTAL Load Capacitor</h3>
+  <p>Sizes the two load caps for a Pierce oscillator around a parallel-resonant crystal.</p>
+  <ul>
+    <li><b>Load capacitance CL</b> — from the crystal datasheet (8, 10, 12, 18, 20, 32 pF are typical).</li>
+    <li><b>Stray capacitance</b> — pin + PCB. Typical 8–14 pF total (5–6 pF per oscillator pin × 2 + 1–3 pF PCB).</li>
+    <li><b>C1</b> — optional, lets you specify C1 asymmetrically.</li>
+  </ul>
+  <p>The Outputs are <b>C1</b> and <b>C2</b> (the two load caps, normally equal), plus a third line giving the symmetric "rule of thumb" value for reference.</p>
+  <div class="insight">Use NP0 / C0G caps for the load caps — X7R drifts several percent over temperature and detunes the crystal.</div>
+</div>
+
+
+<!-- ============================================================ -->
+<h2 id="cat-core">Core PCB <span class="count">(14 tools)</span></h2>
+
+<div class="tool">
+  <h3>Conductor Impedance (analytic)</h3>
+  <p>At the top of the page is the <b>Methodology</b> dropdown for picking the topology — Standard Microstrip, Embedded Microstrip, Symmetric / Asymmetric / Dual Stripline, Coplanar Waveguide (with and without backside ground). Each option swaps which input fields are visible.</p>
+  <p>Below that is the diagram, which changes based on the topology you've picked so you can confirm the geometry visually.</p>
+  <p>The Inputs section asks for:</p>
+  <ul>
+    <li><b>Substrate εr</b> — dielectric constant from the laminate datasheet.</li>
+    <li><b>Frequency</b> — for the Kirschning-Jansen dispersion correction.</li>
+    <li><b>Width W</b> — trace width.</li>
+    <li><b>Height H</b> — distance from trace to ground reference plane.</li>
+    <li><b>Thickness T</b> — copper thickness (0.5 oz = 0.7 mil, 1 oz = 1.4 mil, 2 oz = 2.8 mil).</li>
+    <li><b>H above / H below / Layer spacing</b> — appear only for stripline / asymmetric stripline.</li>
+    <li><b>Cover thickness / Cover εr</b> — appear for embedded microstrip.</li>
+    <li><b>Gap G</b> — appears for coplanar topologies.</li>
+    <li><b>Target Z₀</b> — optional; entering this gives you a "Match to target" go/no-go and lets you tune W to hit a number.</li>
+  </ul>
+  <p>The Outputs include <b>Z₀</b> (characteristic impedance — the answer), <b>ε_eff</b> (the effective dielectric the line "sees"), <b>Tpd</b> (propagation delay in ps/in and ps/mm), and <b>L</b> and <b>C</b> per inch.</p>
+  <div class="insight">Match-to-target shows green if the line is within ±10 % of your target (the typical fab spec), amber within ±15 %, red beyond. ε_eff is between 1 (all air) and εr (all substrate); microstrip values typically run 60–70 % of εr.</div>
+</div>
+
+<div class="tool">
+  <h3>Trace Impedance (openEMS 3D)</h3>
+  <p>At the top of the page is the <b>Methodology</b> dropdown — currently the only entry is "3D FDTD (openEMS)" — and three large action buttons: <b>Preview 3D Geometry</b>, <b>Analytic Fast Calc</b>, and <b>Run 3D Simulation</b>.</p>
+  <p>The Inputs are similar to the analytic impedance tool — material (pick from the dropdown of bundled laminates), topology, geometry — but four extra sim-quality controls live in their own group: trace length, convergence target, mesh fineness, and worker thread count.</p>
+  <p>The Outputs panel shows the analytic answer side-by-side with the 3D FDTD result so you can see the discrepancy. Below the result panel is a status strip that tells you whether openEMS is installed and where.</p>
+  <div class="insight">Click Analytic Fast Calc first — it's instant and validates your inputs. Only run the full 3D simulation (30 s to several minutes) once you've confirmed the analytic answer is in the right ballpark.</div>
+</div>
+
+<div class="tool">
+  <h3>Differential Pairs</h3>
+  <p>At the top of the page is a <b>topology</b> selector (edge-coupled microstrip / stripline / coplanar, or broadside-coupled stripline). Below is the diagram.</p>
+  <p>The Inputs cover:</p>
+  <ul>
+    <li><b>Substrate εr</b>, <b>Frequency</b>, <b>Width W</b>, <b>Thickness T</b>, <b>Height H</b> — same as the single-ended impedance tool.</li>
+    <li><b>Spacing S</b> — edge-to-edge spacing between the two traces.</li>
+    <li><b>H above / H below / Cover thickness / Cover εr</b> — visible when the topology needs them.</li>
+    <li><b>Target Z_diff</b> and <b>Tolerance</b> — drives the green/amber/red match indicator.</li>
+    <li><b>Signal Vpp</b> / <b>Rise time</b> / <b>Coupled length</b> — used for the near-end crosstalk (NEXT) calculation.</li>
+  </ul>
+  <p>The Outputs are <b>Z_diff</b>, <b>Z_common</b>, <b>Z_odd</b>, <b>Z_even</b>, <b>Coupling Kb</b> (and Coupling in dB), <b>NEXT voltage</b>, the saturation length <b>Lsat</b>, and the <b>W/H</b> / <b>S/H</b> ratios.</p>
+  <div class="insight">USB is 90 Ω, Ethernet / PCIe Gen3+ / HDMI are 100 Ω, CAN-FD is 120 Ω. Coupling above −10 dB means the traces interact strongly — good for EMC, but more sensitive to spacing tolerance.</div>
+</div>
+
+<div class="tool">
+  <h3>Conductor Properties</h3>
+  <p>At the top of the page is the <b>Methodology</b> dropdown — "IPC-2152 (2009, modern empirical fit)" or "IPC-2221 (1998, legacy K·ΔT^0.44·A^0.725)". IPC-2152 gives ampacities about 2× higher than IPC-2221 for the same temperature rise; modern designs use IPC-2152.</p>
+  <p>Below the dropdown is the diagram and then the Inputs:</p>
+  <ul>
+    <li><b>Width W</b> and <b>Thickness T</b> — trace cross-section.</li>
+    <li><b>Length L</b> — for total resistance / voltage drop.</li>
+    <li><b>Current I</b> — the steady-state current to carry.</li>
+    <li><b>ΔT</b> — temperature rise above ambient you'll tolerate (10 °C is conservative, 30 °C aggressive).</li>
+    <li><b>Ambient T_a</b> — base temperature.</li>
+    <li><b>Frequency</b> — for skin depth.</li>
+    <li><b>Plane distance</b> — distance to the nearest ground plane (IPC-2152 only).</li>
+    <li><b>Parallel count</b> — for paralleled-trace power feeds.</li>
+  </ul>
+  <p>The Outputs show <b>Cross-section</b>, the recommended <b>Width</b> for your current, <b>DC resistance</b>, <b>Voltage drop</b>, <b>Power</b> dissipated (and dBm), <b>Skin depth</b>, the ratio <b>Skin / T</b>, and <b>ΔT virtual</b> (the "virtual" temperature rise the formula was calibrated against).</p>
+</div>
+
+<div class="tool">
+  <h3>Fusing Current (Onderdonk)</h3>
+  <p>At the top is the <b>Methodology</b> dropdown — "Onderdonk 1928 (adiabatic, conservative)" or "Onderdonk × user multiplier (advisory)" if you want to apply a derating factor.</p>
+  <p>The Inputs are:</p>
+  <ul>
+    <li><b>Width W</b> and <b>Thickness T</b> — trace cross-section (or use AWG / mil dimensions).</li>
+    <li><b>Duration t</b> — fault duration: 10 ms (fast fuse), 100 ms (slow fuse), 1 s (slow-blow).</li>
+    <li><b>Ambient T_a</b> — board temp before the fault.</li>
+    <li><b>Multiplier</b> — derating factor (only when using the advisory method).</li>
+    <li><b>Steady-state I_∞</b> — optional cross-check against the ampacity tool.</li>
+  </ul>
+  <p>The Outputs are <b>Fusing current</b> at the chosen duration, the raw <b>Onderdonk (raw)</b> number for reference, and the cross-section in both mil² and circular mils.</p>
+  <div class="insight">A trace can survive 5–10× its steady-state ampacity for a few milliseconds. The fusing current is the current at which the trace reaches copper's melting point (1085 °C). Use it to size upstream fuses, or deliberately as a sacrificial fuse trace on cheap consumer boards.</div>
+</div>
+
+<div class="tool">
+  <h3>Minimum Conductor Spacing</h3>
+  <p>At the top is the <b>Methodology</b> dropdown — "IPC-2221C Table 6-1 (single 2-D lookup)" for board-level signal work, or "IEC 60664-1 Ed.3 (CTI + pollution + insulation)" for safety / mains compliance.</p>
+  <p>The Inputs are:</p>
+  <ul>
+    <li><b>Voltage (peak)</b> — DC working voltage or AC peak (230 Vac ≈ 325 V peak).</li>
+    <li>Environment class (IPC) or pollution degree + CTI grade + insulation type (IEC) — additional combos appear depending on the methodology you picked.</li>
+  </ul>
+  <p>The Outputs are <b>Minimum spacing</b> (IPC), or separately <b>Creepage</b> (along the surface) and <b>Clearance</b> (through air) for the IEC method.</p>
+  <div class="insight">Creepage ≥ Clearance always. For mains-touching boards, milling a slot between the high-voltage and low-voltage sections gives effectively infinite creepage.</div>
+</div>
+
+<div class="tool">
+  <h3>Wavelength</h3>
+  <p>The Inputs are:</p>
+  <ul>
+    <li><b>Frequency</b> — what wavelength you want.</li>
+    <li><b>ε_eff</b> — effective dielectric constant. Use 1 for vacuum / air, ≈0.65×Dk for microstrip, Dk for stripline.</li>
+  </ul>
+  <p>The Outputs are <b>Full λ</b>, a list of <b>Fractional λ</b> (λ/2, λ/4, λ/8, λ/10, λ/20), and the <b>Period</b> in nanoseconds. λ/20 is the standard "lumped vs distributed" boundary — anything longer than that on the board needs controlled-impedance treatment.</p>
+</div>
+
+<div class="tool">
+  <h3>εr Effective</h3>
+  <p>At the top of the page there is no methodology dropdown — only one model (Hammerstad-Jensen static plus Kirschning-Jansen dispersion) is used.</p>
+  <p>Below the diagram, the Inputs are:</p>
+  <ul>
+    <li><b>Width W</b> — how wide the PCB trace is.</li>
+    <li><b>Height H</b> — distance between the ground plane and the trace.</li>
+    <li><b>Substrate εr</b> — the bulk dielectric constant of the laminate as found on its datasheet.</li>
+    <li><b>Frequency</b> — the intended frequency of interest.</li>
+  </ul>
+  <p>The Outputs show <b>ε_eff (DC)</b> (the low-frequency value, no dispersion correction), <b>ε_eff (f)</b> at your chosen frequency, and the <b>W/H</b> ratio.</p>
+  <div class="insight">A low W/H means more field lines are in the air, pulling ε_eff toward 1 (air). A high W/H means more field lines are inside the substrate, pulling ε_eff toward the bulk Dk value.</div>
+</div>
+
+<div class="tool">
+  <h3>Bandwidth / Max Length</h3>
+  <p>At the top is the <b>Methodology</b> dropdown — "IPC-2251 knee frequency (BW = 0.35 / Tr)", "Howard Johnson (BW = 0.5 / Tr, conservative)", or "Direct frequency entry" if you already know the frequency.</p>
+  <p>The Inputs are:</p>
+  <ul>
+    <li><b>Rise time Tr</b> — driver rise time (20–80 %).</li>
+    <li><b>Frequency</b> — only used if you picked Direct entry.</li>
+    <li><b>ε_r_eff</b> — for propagation velocity.</li>
+  </ul>
+  <p>The Outputs are the signal's <b>Bandwidth</b> (knee frequency), the <b>Wavelength λ</b> at that frequency, and the <b>Max conductor length</b> before reflections matter (typically λ/6 of the knee).</p>
+</div>
+
+<div class="tool">
+  <h3>Via Properties</h3>
+  <p>The page starts with a <b>Via type</b> dropdown (Two-layer vs Multi-layer). Microvia analysis lives in its own dedicated tool — there's a pointer to it next to the dropdown.</p>
+  <p>The Inputs section asks for:</p>
+  <ul>
+    <li><b>Hole Ø (finished)</b> — plated drill diameter.</li>
+    <li><b>Plating thickness</b> — typical 1 mil (25 µm).</li>
+    <li><b>Pad Ø D1</b> — capture pad outer diameter.</li>
+    <li><b>Antipad Ø D2</b> — clearance hole in surrounding plane layers.</li>
+    <li><b>Board thickness</b> — top-to-bottom dielectric span.</li>
+    <li><b>Substrate εr</b> — for capacitance and barrel Z₀.</li>
+    <li><b>ΔT (current)</b> — allowed temperature rise for the ampacity calc.</li>
+    <li><b>Applied current</b> — actual DC current for voltage-drop output.</li>
+    <li><b>Via count (array)</b> — number of vias in parallel.</li>
+  </ul>
+  <p>The Outputs cover <b>Cross-section</b>, <b>DC resistance</b>, <b>Voltage drop</b>, <b>Inductance</b> (Howard Johnson), <b>Capacitance</b>, <b>Impedance</b> (Z₀ of the barrel), <b>Resonant freq</b>, <b>Step rise time</b>, <b>Aspect ratio</b>, and the <b>θ</b> (thermal resistance) for one via and for the parallel array.</p>
+</div>
+
+<div class="tool">
+  <h3>Microvia Analyzer (HDI)</h3>
+  <p>Below the diagram (labelled with d / h / t / s and the WMI interface callout), the Inputs are split into three groups.</p>
+  <p>Microvia geometry:</p>
+  <ul>
+    <li><b>Drill Ø (top of pocket)</b> — laser-drilled hole diameter at the top. Typical 75–100 µm.</li>
+    <li><b>Depth</b> — one dielectric layer, typically 50–100 µm.</li>
+    <li><b>Side-wall plating thickness</b> — typical 8–15 µm.</li>
+    <li><b>Bottom-pocket plating</b> — set to 0 for auto (70 % of side-wall, a typical conical-pocket ratio).</li>
+    <li><b>Capture pad Ø</b> and <b>Antipad Ø</b> — same as a through-via.</li>
+    <li><b>Return-via spacing (s)</b> — centre-to-centre to the nearest stitching via. Drives the inductance more than any other input.</li>
+  </ul>
+  <p>Topology:</p>
+  <ul>
+    <li><b>Connection target</b> — Plane (lands on GND/PWR) or Trace (lands on a signal stub — emits an inductance-uncertainty warning).</li>
+    <li><b>Stack height</b> — 1, 2, or higher.</li>
+    <li><b>Stack topology</b> — Single, Staggered (preferred above 2), or Stacked (risky above 2).</li>
+  </ul>
+  <p>Operating conditions: substrate εr, ambient, applied current, ΔT for ampacity, frequency (for skin effect), signal rise time (for the lumped-vs-distributed regime check).</p>
+  <p>The Outputs are split into Electrical, Regime, and Thermal/Ampacity groups, with the inductance using the return-path-aware Howard Johnson form and capacitance via the Gunston elliptic-coaxial formula. Reliability advisories (AR limit, WMI / first-reflow warning) appear in the diagnostics strip at the bottom.</p>
+</div>
+
+<div class="tool">
+  <h3>Differential Via Stub</h3>
+  <p>A simple back-of-envelope tool for the max acceptable stub length on a high-speed differential through-via. The Inputs are:</p>
+  <ul>
+    <li><b>Baud rate (Gbps)</b> — protocol data rate (or symbol rate for PAM4).</li>
+    <li><b>ε_r_eff</b> — effective dielectric the via traverses.</li>
+    <li><b>Anisotropy factor</b> — for substrates where z-axis Dk differs from x/y.</li>
+  </ul>
+  <p>The Outputs are the <b>Nyquist freq</b> (baud / 2 for NRZ) and the <b>Max stub length</b> before the quarter-wave resonance lands inside the Nyquist band.</p>
+  <p class="layout-cue">For a more detailed analysis with S21, eye-closure and budget consumption, use Via Stub Impact in the Signal Integrity category instead.</p>
+</div>
+
+<div class="tool">
+  <h3>Planar Spiral Inductor</h3>
+  <p>The page picks the shape (square, hexagonal, octagonal, circular) from a selector at the top of the inputs.</p>
+  <ul>
+    <li><b>Turns N</b> — total number of turns.</li>
+    <li><b>Conductor W</b> — trace width.</li>
+    <li><b>Spacing S</b> — gap between adjacent turns.</li>
+    <li><b>Outer Ø dout</b> — outermost coil diameter.</li>
+  </ul>
+  <p>The Outputs are <b>Inductance</b> (via Modified-Wheeler 1999), the <b>Inner diameter</b> (back-calculated), the <b>Average diameter davg</b>, the <b>Fill factor ρ</b>, and the shape constants <b>K₁, K₂</b> used in the formula.</p>
+</div>
+
+<div class="tool">
+  <h3>Embedded Resistor</h3>
+  <p>Single-screen tool with three inputs:</p>
+  <ul>
+    <li><b>Sheet R (Ω/□)</b> — from the embedded-resistor foil vendor (typ. 25, 50, 100, 250, 1000 Ω/sq).</li>
+    <li><b>Length L</b> and <b>Width W</b> — the rectangle you're patterning.</li>
+  </ul>
+  <p>The Outputs are <b># of squares (L/W)</b> and <b>Total R</b>. A 2:1 rectangle on a 50 Ω/sq foil makes a 100 Ω resistor; a 0.5:1 rectangle makes 25 Ω.</p>
+</div>
+
+
+<!-- ============================================================ -->
+<h2 id="cat-si">Signal Integrity <span class="count">(5 tools)</span></h2>
+
+<div class="tool">
+  <h3>Via Stub Impact (S21, eye, budget)</h3>
+  <p>At the top is a <b>Protocol</b> dropdown — pick PCIe Gen3/4/5/6, USB SuperSpeed, 25/50/100 GbE NRZ or PAM4, 112G PAM4, HBM, DDR5, MIPI C-PHY, CXL — and the data rate / modulation / rise time / IL-budget fields auto-populate from the spec.</p>
+  <p>Below the protocol picker is a <b>Modulation</b> dropdown (NRZ / PAM4 / PAM3) and a <b>Differential</b> checkbox.</p>
+  <p>The Channel inputs (auto-filled from preset but always editable):</p>
+  <ul>
+    <li><b>Data rate</b> — bits per second (NRZ) or symbol rate × 2 (PAM4).</li>
+    <li><b>Channel Z (per-leg)</b> — usually 50 Ω.</li>
+    <li><b>IL budget @ Nyq</b> — total channel budget per the protocol spec.</li>
+    <li><b>Rise time</b> — 20–80 % edge rate from the driver datasheet.</li>
+    <li><b>FEC margin</b> — protocol-specific forward-error-correction credit.</li>
+  </ul>
+  <p>The Via geometry inputs are stub length, used via length, drill / pad / antipad diameters, plating, and (for differential) the via spacing. A <b>Substrate</b> dropdown picks Dk and tan δ from the bundled materials library.</p>
+  <p>The Outputs include a colour-coded <b>Recommendation</b> ("OK" / "Watch" / "Back-drill recommended" / "Back-drill required"), the <b>Stub resonance</b> frequency, <b>Stub Q factor</b>, <b>Via barrel Z₀</b>, <b>Used via inductance</b>, <b>IL adder @ Nyquist</b> and <b>@ 2× Nyquist</b>, <b>Notch depth</b>, <b>Budget consumed</b> (raw and after FEC), and a plotted <b>|S21|</b> curve.</p>
+</div>
+
+<div class="tool">
+  <h3>Dielectric Dk/Df vs Frequency</h3>
+  <p>At the top of the page is a <b>Material</b> dropdown — pick Megtron 6/7/8, Rogers RO4350B / RO4003C / RT-duroid, Isola family, AGC family, ITEQ, FR-4 generic, etc. — or "Custom" to enter your own datasheet point. There's also an <b>Open Datasheet</b> button.</p>
+  <p>The Inputs are:</p>
+  <ul>
+    <li><b>Datasheet Dk</b> — auto-filled by the dropdown.</li>
+    <li><b>Datasheet Df</b> — auto-filled.</li>
+    <li><b>Datasheet frequency</b> — usually 10 GHz; ITEQ IT-988GSE is at 28 GHz.</li>
+    <li><b>Target frequency</b> — where you want to know Dk and Df.</li>
+  </ul>
+  <p>The Outputs are <b>Dk at target frequency</b>, <b>Df at target frequency</b>, <b>ΔDk vs datasheet</b>, plus the fitted <b>ε_∞</b> and <b>Δε</b> Djordjevic-Sarkar parameters that drive the wideband model.</p>
+</div>
+
+<div class="tool">
+  <h3>Conductor Loss &amp; Surface Roughness</h3>
+  <p>At the top is the <b>Methodology</b> dropdown for the roughness model — Hammerstad-Jensen / Hemispherical / Cannonball-Huray (default).</p>
+  <p>The Inputs are:</p>
+  <ul>
+    <li><b>Frequency</b> — where you want the multiplier evaluated.</li>
+    <li><b>RMS roughness Δ</b> — for Hammerstad and Hemispherical models.</li>
+    <li><b>Datasheet Rz</b> — for Cannonball-Huray. Typical: STD 5.7 µm, RTF 4.4 µm, VLP 3.5 µm, HVLP 2.0 µm.</li>
+  </ul>
+  <p>The Outputs are <b>Loss multiplier K</b> (vs smooth copper), <b>Δ vs smooth</b> in dB, and the <b>Skin depth δ</b>.</p>
+</div>
+
+<div class="tool">
+  <h3>Channel Insertion Loss Budget</h3>
+  <p>Single-page tool that tallies up dielectric, conductor, stub, and connector loss into one channel IL number.</p>
+  <ul>
+    <li><b>Frequency</b> — Nyquist of the link.</li>
+    <li><b>Trace length</b>, <b>width W</b>, <b>thickness T</b>, <b>Z₀</b>, <b>ε_eff</b>, <b>tan δ</b> — trace parameters.</li>
+    <li><b>Copper Rz</b> — foil roughness.</li>
+    <li><b>Via stub length</b> — from the via-stub tool.</li>
+    <li><b>Connector loss</b> — per-pair connector contribution in dB.</li>
+  </ul>
+  <p>The Outputs include the <b>Total IL</b> and a per-component breakdown: <b>Dielectric</b>, <b>Conductor</b>, <b>Via stub</b>, <b>Connector</b>. It also reports <b>α_d</b> and <b>α_c</b> in dB/inch and the <b>Roughness K</b> multiplier.</p>
+</div>
+
+<div class="tool">
+  <h3>Jitter Budget (Dual-Dirac)</h3>
+  <ul>
+    <li><b>Deterministic Dj (pp)</b> — peak-to-peak deterministic jitter from clock recovery / ISI sources, in picoseconds.</li>
+    <li><b>Random Rj (rms)</b> — Gaussian jitter standard deviation, also in ps.</li>
+    <li><b>Baud rate</b> — line rate.</li>
+  </ul>
+  <p>Also picks a target BER (1e-9, 1e-12, 1e-15) which sets the Q factor used in the dual-Dirac math.</p>
+  <p>The Outputs are <b>Tj (peak-to-peak)</b> — the total jitter at your target BER, <b>UI (one bit)</b>, <b>Tj as % of UI</b>, and the <b>Q factor</b> applied.</p>
+</div>
+
+
+<!-- ============================================================ -->
+<h2 id="cat-pi">Power Integrity <span class="count">(4 tools)</span></h2>
+
+<div class="tool">
+  <h3>PDN Target &amp; Plane Cap</h3>
+  <p>Single-page tool combining target-impedance and plane-capacitance calculation.</p>
+  <ul>
+    <li><b>Voltage rail</b> — 0.85 V, 1.0 V (CPU core), 1.8 V, 3.3 V, 5 V, etc.</li>
+    <li><b>Ripple</b> — allowed ripple as % of rail or as mV.</li>
+    <li><b>Max current</b> — peak transient current.</li>
+    <li><b>Transient fraction</b> — fraction of max-I that's the actual transient step.</li>
+    <li><b>Plane width</b>, <b>Plane length</b>, <b>Plane separation</b>, <b>Dielectric εr</b>, <b>Frequency</b> — for the plane-capacitance computation.</li>
+  </ul>
+  <p>The Outputs are <b>Z_target</b> (from V_ripple / I_transient), <b>Plane capacitance</b> (parallel-plate, plane area / spacing × Dk), <b>Xc at frequency</b> (plane impedance at that point), and the <b>Xc / Z_target</b> ratio — the frequency where the planes alone become insufficient and you need discrete decoupling caps.</p>
+</div>
+
+<div class="tool">
+  <h3>MLCC DC-Bias Derating</h3>
+  <ul>
+    <li><b>Nominal C</b> — sticker value on the part.</li>
+    <li><b>Rated voltage</b> — the cap's max-rated voltage (10 V, 16 V, 25 V, etc.).</li>
+    <li><b>Applied voltage</b> — the bias you'll actually run it at.</li>
+    <li><b>Operating temperature</b> — for the thermal derating curve.</li>
+  </ul>
+  <p>The Outputs are <b>Effective C</b> (what the cap actually delivers under bias), <b>V_applied / V_rated</b> (the % of rated voltage being used), and a <b>Combined retention</b> percentage broken into voltage and temperature retention factors.</p>
+  <div class="insight">A "10 µF 10 V X7R 0603" datasheet'd at 0 V often delivers 4 µF at 5 V bias — 40 % retention. The headroom matters: a 10 V part at 10 % bias keeps ~95 % of its capacitance, while a 6.3 V part at 80 % bias often drops to 20–30 %.</div>
+</div>
+
+<div class="tool">
+  <h3>Mounting Inductance (L_mnt)</h3>
+  <ul>
+    <li><b>Via height (to plane)</b> — depth from cap pad down to the reference plane.</li>
+    <li><b>Via diameter</b> — typical 8–12 mil.</li>
+    <li><b>Pad length</b> — capture pad dimension along the trace.</li>
+    <li><b>Pad-to-via separation</b> — surface routing length between pad and via.</li>
+  </ul>
+  <p>The Outputs include <b>Total L_mnt</b> (the parasitic loop inductance), broken into <b>L_vias</b> and <b>L_pad/trace</b> contributions, plus the <b>Single-via inductance</b> for reference.</p>
+  <div class="insight">Above ~100 MHz the mounting inductance dominates the cap's effective impedance — much more than the cap's own ESL. A 0.6 nH 0402 mounted with two through-board vias easily picks up 2 nH of mounting L, tripling the high-frequency impedance the rail sees.</div>
+</div>
+
+<div class="tool">
+  <h3>PDN Cap Bank Analyzer (Z(f))</h3>
+  <p>The page has a cap-bank table at the top — add caps from the MLCC library or by hand — followed by the sweep controls.</p>
+  <ul>
+    <li><b>Sweep f_min</b> and <b>Sweep f_max</b> — frequency range (typ. 10 kHz to 1 GHz).</li>
+    <li><b>Target Z</b> — the target-impedance line drawn on the plot.</li>
+  </ul>
+  <p>The Outputs are a |Z(f)| log-log plot with the target line overlaid, plus numerical readouts of the <b>Worst-case |Z|</b>, the <b>NISM flatness Z_max / Z_min</b> ratio, the count and locations of <b>Anti-resonance peaks</b>, and an overall pass/fail <b>Result</b> against the target.</p>
+</div>
+
+
+<!-- ============================================================ -->
+<h2 id="cat-rf">RF / Microwave <span class="count">(5 tools)</span></h2>
+
+<div class="tool">
+  <h3>Pi-Pad Attenuator</h3>
+  <ul>
+    <li><b>Attenuation</b> — in dB (typical 3, 6, 10, 20, 30 dB).</li>
+    <li><b>Zin</b> and <b>Zout</b> — source and load impedances. Equal for symmetric, unequal for matching pads.</li>
+  </ul>
+  <p>The Outputs are the three exact resistor values (<b>R series</b>, <b>R shunt (input)</b>, <b>R shunt (output)</b>) plus each one snapped to the nearest <b>E24 standard value</b>.</p>
+</div>
+
+<div class="tool">
+  <h3>T-Pad Attenuator</h3>
+  <p>Same Inputs as Pi-Pad — attenuation, Zin, Zout. The Outputs are <b>R series (input, exact)</b>, <b>R series (output, exact)</b>, <b>R shunt (exact)</b> plus E24-snapped versions of each. T-pads use the dual topology (series → shunt → series) — sometimes a cleaner layout fit than Pi.</p>
+</div>
+
+<div class="tool">
+  <h3>L-Match (Impedance Matching)</h3>
+  <ul>
+    <li><b>Frequency</b> — the design frequency.</li>
+    <li><b>Load R</b> — real part of the load impedance.</li>
+    <li><b>Load X (j)</b> — imaginary part (positive = inductive, negative = capacitive).</li>
+    <li><b>Source Z₀</b> — usually 50 Ω.</li>
+  </ul>
+  <p>The Outputs are the <b>Topology</b> (which of the four valid L arrangements solves your match), the specific L and C values, the <b>Loaded Q</b>, and the <b>Bandwidth (3 dB)</b>.</p>
+</div>
+
+<div class="tool">
+  <h3>Quarter-Wave (λ/4) Impedance Match</h3>
+  <p>At the top of the page is the <b>Methodology</b> dropdown — "Binomial (maximally flat, monotonic VSWR)" for clean in-band response, or "Chebyshev (equal-ripple, wider bandwidth)" for broader frequency coverage at the cost of in-band ripple.</p>
+  <ul>
+    <li><b>Source Z</b> and <b>Load Z</b> — must both be real.</li>
+    <li><b>Design frequency</b>.</li>
+    <li><b>Substrate h</b> and <b>Copper t</b> — for the microstrip width solver.</li>
+    <li><b>Sections</b> spinner — number of cascaded λ/4 sections (1–9). More sections = wider bandwidth.</li>
+    <li><b>VSWR criterion</b> — picks the bandwidth target (1.5:1, 2:1, 3:1).</li>
+  </ul>
+  <p>The Outputs are <b>Fractional bandwidth</b>, the <b>BW frequency range</b>, the <b>Total transformer length</b>, plus a per-section table showing impedance / width / length for every section, and a plot of VSWR vs frequency.</p>
+</div>
+
+<div class="tool">
+  <h3>Lumped LC Match (L / Pi / T)</h3>
+  <p>At the top is the <b>Methodology</b> dropdown — "Lowpass (series L · shunt C)" or "Highpass (series C · shunt L)".</p>
+  <ul>
+    <li><b>Source Z</b> and <b>Load Z</b>.</li>
+    <li><b>Frequency</b> — centre frequency.</li>
+    <li>Network topology (L / Pi / T) and target Q.</li>
+  </ul>
+  <p>The Outputs are the component values, <b>Loaded Q</b>, <b>3 dB bandwidth</b>, <b>S11 @ f₀ (ideal)</b>, and <b>S11 @ f₀ (snapped + parasitic)</b> showing what the real implementation hits after E-series rounding and package parasitics.</p>
+</div>
+
+
+<!-- ============================================================ -->
+<h2 id="cat-mech">Mechanical &amp; DFM <span class="count">(4 tools)</span></h2>
+
+<div class="tool">
+  <h3>Padstack</h3>
+  <p>Tabbed page with four sub-tools: thru-hole pad, BGA land, pad clearance, and corner-to-corner pitch. Each tab has its own input set:</p>
+  <ul>
+    <li>Thru-hole pad: <b>Hole diameter</b>, <b>Min annular (ext)</b>, <b>Min annular (int)</b>, <b>Thermal isolation</b> — gives the external/internal pad diameters and the thermal-relief geometry.</li>
+    <li>BGA land: <b>Ball diameter</b>, <b>Pad pitch (c-c)</b>, <b>Conductor width</b>, <b>Conductor spacing</b> — gives the nominal land Ø with min/max tolerances.</li>
+    <li>Pad clearance: <b>Hole diameter</b>, <b>Min annular ring</b> — gives the max pad Ø and the achieved annular ring.</li>
+    <li>Corner-to-corner: <b>Side a</b>, <b>Side b</b> — diagonal pitch lookup.</li>
+  </ul>
+</div>
+
+<div class="tool">
+  <h3>Solder Paste Aperture (IPC-7525B)</h3>
+  <ul>
+    <li><b>Length</b> and <b>Width</b> — for rectangular apertures.</li>
+    <li><b>Diameter</b> — for circular apertures.</li>
+    <li><b>Stencil thickness</b> — typical 4 mil (0.10 mm) for general work, 3 mil for fine-pitch.</li>
+  </ul>
+  <p>The Outputs are <b>Area ratio</b>, <b>Aspect ratio</b>, <b>Aperture area</b>, and the <b>IPC-7525B result</b> (pass/fail/marginal). Both ratios should be ≥ 0.66 / ≥ 1.5 for clean paste release.</p>
+</div>
+
+<div class="tool">
+  <h3>BGA Escape Routing</h3>
+  <ul>
+    <li><b>Ball pitch</b> — typical 1.27 / 1.0 / 0.8 / 0.5 / 0.4 mm.</li>
+    <li><b>Pad diameter</b> — BGA land size.</li>
+    <li><b>Clearance (pad → trace)</b> — fab DRC minimum.</li>
+    <li><b>Trace width</b> and <b>Trace spacing</b> — your design rules.</li>
+  </ul>
+  <p>The Outputs are <b>Channels per row</b> (how many traces fit between adjacent balls), <b>Free space between pads</b>, <b>Trace+space pitch</b>, and <b>Layers needed</b> (how many signal layers it takes to fully break out the BGA).</p>
+</div>
+
+<div class="tool">
+  <h3>Stackup Symmetry &amp; Bow/Twist</h3>
+  <p>The page is a stackup-editor table where each row is one layer with a copper-coverage percentage. The single non-table Input is:</p>
+  <ul>
+    <li><b>Board length</b> — for the IPC-6012E bow limit calculation.</li>
+  </ul>
+  <p>The Outputs are <b>Layer count</b>, <b>Symmetry score</b>, <b>Warp risk</b> (low/medium/high colour-coded), and the <b>IPC-6012E bow limit</b> for your board size.</p>
+</div>
+
+
+<!-- ============================================================ -->
+<h2 id="cat-thermal">Thermal <span class="count">(2 tools)</span></h2>
+
+<div class="tool">
+  <h3>Thermal Management</h3>
+  <ul>
+    <li><b>Ambient T_a</b> — air temp around the part.</li>
+    <li><b>Power P</b> — dissipation in watts.</li>
+    <li><b>θJA (°C/W)</b> — junction-to-ambient from the package datasheet.</li>
+    <li><b>θJC (°C/W)</b> — junction-to-case (for heatsinked use).</li>
+    <li><b>θCS (°C/W)</b> — case-to-sink (thermal interface).</li>
+    <li><b>θSA (°C/W)</b> — sink-to-ambient (heatsink datasheet).</li>
+    <li><b>Tj_max</b> — datasheet maximum (typically 105 / 125 / 150 °C).</li>
+  </ul>
+  <p>The Outputs are <b>Tj (no heatsink)</b>, <b>Tj (with heatsink)</b>, and the <b>Margin</b> to Tj_max in each case.</p>
+</div>
+
+<div class="tool">
+  <h3>Thermal Via Array</h3>
+  <ul>
+    <li><b>Via count</b> — number of vias under the exposed pad.</li>
+    <li><b>Hole diameter</b> and <b>Plating thickness</b> — barrel geometry.</li>
+    <li><b>Via height (to plane)</b> — depth from exposed pad to the conducting plane below.</li>
+    <li><b>Pad width</b> and <b>Pad length</b> — IC exposed-pad footprint.</li>
+    <li><b>Via-fill k</b> — thermal conductivity of any fill material (0 = air-filled).</li>
+    <li><b>Solder void fraction</b> — typical 5–15 % for well-designed apertures.</li>
+  </ul>
+  <p>The Outputs include the <b>Single-via θ</b>, the <b>θ array (parallel + void)</b>, the <b>θ spread (Lee plane)</b>, the <b>Spreading fraction</b>, and the <b>Total θ</b>. Total θ is what your thermal model needs.</p>
+</div>
+
+
+<!-- ============================================================ -->
+<h2 id="cat-power">Power Electronics <span class="count">(1 tool)</span></h2>
+
+<div class="tool">
+  <h3>Buck / Boost Inductor Sizing</h3>
+  <ul>
+    <li><b>V_in</b> and <b>V_out</b> — converter rail voltages.</li>
+    <li><b>Load current</b> — steady-state output current.</li>
+    <li><b>Switching freq</b> — fs (typ. 500 kHz – 2 MHz for silicon, &gt; 3 MHz for GaN).</li>
+    <li><b>Inductor ripple</b> — fraction of Iout (typ. 25–40 %).</li>
+    <li><b>Target ΔV_ripple</b> — allowed output ripple voltage peak-to-peak.</li>
+  </ul>
+  <p>The Outputs include <b>Duty cycle</b>, <b>Required L</b> (the inductor value to size), <b>Inductor ripple ΔI_L</b>, <b>Peak current</b> and <b>RMS current</b> (used to pick the saturation rating), <b>Avg input current</b>, plus the <b>C_out min</b> (output cap) and <b>ESR max</b> for the ripple-voltage budget.</p>
+</div>
+
+
+<!-- ============================================================ -->
+<h2 id="cat-emc">EMC / EMI <span class="count">(1 tool)</span></h2>
+
+<div class="tool">
+  <h3>Radiated Emissions — Small Loop</h3>
+  <ul>
+    <li><b>Frequency</b> — the harmonic of interest (n × switching freq).</li>
+    <li><b>Loop length</b> and <b>Loop width</b> — defines the loop area.</li>
+    <li><b>Peak loop current</b> — for that harmonic.</li>
+    <li><b>Reporting distance</b> — 3 m (FCC / CISPR) or 10 m for some standards.</li>
+  </ul>
+  <p>The Outputs are the computed <b>Loop area</b>, the <b>Predicted E-field</b> in both µV/m and dBµV/m, the relevant <b>Standard limit</b> (FCC Class A / B, CISPR Class A / B), and the <b>Margin</b> to that limit with a colour-coded pass/fail <b>Result</b>.</p>
+</div>
+
+
+<!-- ============================================================ -->
+<h2 id="cat-hsd">High-Speed Digital <span class="count">(1 tool)</span></h2>
+
+<div class="tool">
+  <h3>DDR Length Matching</h3>
+  <p>The page has a stackup / standard picker at the top (DDR3 / DDR4 / DDR5 / LPDDR4 / LPDDR5) which auto-loads the JEDEC per-byte-lane tolerance.</p>
+  <p>The main Input is a per-signal length table — paste in or type the as-routed length of every DQ, DM, DQS, ADDR, CMD, and CK signal. The only standalone input is:</p>
+  <ul>
+    <li><b>ε_eff (substrate)</b> — for the propagation-velocity calculation.</li>
+  </ul>
+  <p>The Outputs are the <b>JEDEC tolerance</b> for the chosen standard, the per-signal deviation from each byte's reference (DQS for DQ, CK for ADDR / CMD), the <b>Worst-case skew</b>, the <b>Shortest</b> and <b>Longest signal</b>, and the colour-coded <b>Result</b> (within / out of spec).</p>
+</div>
+
+
+<!-- ============================================================ -->
+<h2 id="cat-wizard">Wizard <span class="count">(1 tool)</span></h2>
+
+<div class="tool">
+  <h3>PCB Design Wizard</h3>
+  <p>Multi-step questionnaire — there's no single input page. Step 1 picks a preset (e.g. "USB-C charger", "RF prototype", "DDR4 motherboard") or "Custom". Step 2 asks targeted questions about your design (board class, target speeds, manufacturer, layer-count budget, mechanical constraints, RF or pure digital, target volume, BoM-cost sensitivity).</p>
+  <p>The final step is a Report page summarising the top-3 recommended stackups with rationale, recommended trace / space rules, suggested via schedule, and an export-to-HTML / Markdown button so you can save the report with the project.</p>
+</div>
+
+
+<div class="footer">
+  <p>This walkthrough complements the <a href="user_manual.html">User Manual</a> (reference-style)
+  and the <a href="verification_guide.html">Verification Guide</a> (math-validation methodology).
+  Source: <a href="https://github.com/otac0011/CastGuidance_PCB_Toolkit">github.com/otac0011/CastGuidance_PCB_Toolkit</a>.</p>
+</div>
+
+</div><!-- /container -->
+</body>
+</html>
