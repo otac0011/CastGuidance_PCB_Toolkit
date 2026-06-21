@@ -18,20 +18,26 @@
             background-color: #1E1E1E; color: #E6E6E6;
             font-family: 'Segoe UI', system-ui, sans-serif;
         }
+
+        /* Avalonia.Browser mounts its canvas here. Must stay empty in
+           the HTML — content inside #out would either be replaced or,
+           worse, stack on top of the Avalonia canvas and block input. */
         #out { position: fixed; inset: 0; }
 
-        /* Loading splash. Mirrors the desktop MainWindow's splash overlay:
-           full-screen dark background, centred D4 die image, amber title.
-           Avalonia.Browser replaces the contents of #out when the WASM
-           mounts the visual tree, which dismisses the splash automatically. */
-        .splash {
-            position: absolute; inset: 0;
+        /* Loading splash. Lives as a SIBLING of #out (not a child) so
+           Avalonia can mount cleanly without our overlay interfering.
+           main.js dismisses this after StartBrowserAppAsync resolves. */
+        #splash {
+            position: fixed; inset: 0;
+            z-index: 1000;
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
             background-color: #1E1E1E;
             user-select: none;
+            transition: opacity 0.4s ease-out;
         }
-        .splash img {
+        #splash.hidden { opacity: 0; pointer-events: none; }
+        #splash img {
             max-width: 60vw;
             max-height: 60vh;
             width: 460px; height: auto;
@@ -39,14 +45,14 @@
             opacity: 0;
             animation: splash-fade 0.45s ease-out 0.05s forwards;
         }
-        .splash .brand {
+        #splash .brand {
             margin-top: 18px;
             font-size: 22px; font-weight: 600;
             color: #D9842A; letter-spacing: 0.01em;
             opacity: 0;
             animation: splash-fade 0.45s ease-out 0.20s forwards;
         }
-        .splash .status {
+        #splash .status {
             margin-top: 6px;
             font-size: 13px; color: #888;
             opacity: 0;
@@ -59,16 +65,11 @@
     </style>
 </head>
 <body>
-    <div id="out">
-        <!-- Initial splash painted from the HTML before main.js runs.
-             Avalonia.Browser's StartBrowserAppAsync("out") replaces these
-             children with the mounted Avalonia visual tree, which serves
-             as the splash-dismissal trigger. -->
-        <div class="splash">
-            <img src="./splash_d4.png" alt="CastGuidance PCB Toolkit" />
-            <div class="brand">CastGuidance PCB Toolkit</div>
-            <div class="status">Loading the toolkit…</div>
-        </div>
+    <div id="out"></div>
+    <div id="splash">
+        <img src="./splash_d4.png" alt="CastGuidance PCB Toolkit" />
+        <div class="brand">CastGuidance PCB Toolkit</div>
+        <div class="status">Loading the toolkit…</div>
     </div>
     <script type="module" src="./main.js"></script>
 </body>
