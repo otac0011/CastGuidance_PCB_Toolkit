@@ -8,19 +8,67 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>CastGuidance PCB Toolkit</title>
+    <!-- Preload the splash image so the browser fetches it in parallel
+         with parsing the rest of the page. -->
+    <link rel="preload" as="image" href="./splash_d4.png" />
     <link rel="modulepreload" href="./main.js" />
     <style>
-        html, body { height: 100%; margin: 0; padding: 0; overflow: hidden;
-                     background-color: #1E1E1E; color: #E6E6E6;
-                     font-family: 'Segoe UI', system-ui, sans-serif; }
+        html, body {
+            height: 100%; margin: 0; padding: 0; overflow: hidden;
+            background-color: #1E1E1E; color: #E6E6E6;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
         #out { position: fixed; inset: 0; }
-        .loading { display: flex; align-items: center; justify-content: center;
-                   height: 100%; color: #A0A0A0; font-size: 14px; }
+
+        /* Loading splash. Mirrors the desktop MainWindow's splash overlay:
+           full-screen dark background, centred D4 die image, amber title.
+           Avalonia.Browser replaces the contents of #out when the WASM
+           mounts the visual tree, which dismisses the splash automatically. */
+        .splash {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            background-color: #1E1E1E;
+            user-select: none;
+        }
+        .splash img {
+            max-width: 60vw;
+            max-height: 60vh;
+            width: 460px; height: auto;
+            object-fit: contain;
+            opacity: 0;
+            animation: splash-fade 0.45s ease-out 0.05s forwards;
+        }
+        .splash .brand {
+            margin-top: 18px;
+            font-size: 22px; font-weight: 600;
+            color: #D9842A; letter-spacing: 0.01em;
+            opacity: 0;
+            animation: splash-fade 0.45s ease-out 0.20s forwards;
+        }
+        .splash .status {
+            margin-top: 6px;
+            font-size: 13px; color: #888;
+            opacity: 0;
+            animation: splash-fade 0.45s ease-out 0.35s forwards;
+        }
+        @keyframes splash-fade {
+            from { opacity: 0; transform: translateY(6px); }
+            to   { opacity: 1; transform: none; }
+        }
     </style>
 </head>
 <body>
     <div id="out">
-        <div class="loading">Loading CastGuidance PCB Toolkit…</div>
+        <!-- Initial splash painted from the HTML before main.js runs.
+             Avalonia.Browser's StartBrowserAppAsync("out") replaces these
+             children with the mounted Avalonia visual tree, which serves
+             as the splash-dismissal trigger. -->
+        <div class="splash">
+            <img src="./splash_d4.png" alt="CastGuidance PCB Toolkit" />
+            <div class="brand">CastGuidance PCB Toolkit</div>
+            <div class="status">Loading the toolkit…</div>
+        </div>
     </div>
     <script type="module" src="./main.js"></script>
 </body>

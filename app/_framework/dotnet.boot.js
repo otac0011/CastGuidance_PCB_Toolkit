@@ -1,7 +1,7 @@
 export const config = /*json-start*/{
   "mainAssemblyName": "CastGuidance.Browser.dll",
   "resources": {
-    "hash": "sha256-OaEXspZ688RvQ+c9Ch2NraN4dCKPhbVbH3C7exEui+s=",
+    "hash": "sha256-dB10k/WK+V9GAP7faY0naOkBJWox/uqZnEbyHoAjoj0=",
     "jsModuleNative": [
       {
         "name": "dotnet.native.js"
@@ -121,37 +121,37 @@ export const config = /*json-start*/{
       {
         "virtualPath": "CastGuidance.Browser.wasm",
         "name": "CastGuidance.Browser.wasm",
-        "hash": "sha256-x+/Y7Mpjry9Xg7a0j8n/yCgqRvGrKAuC22FQsmhlhTI="
+        "hash": "sha256-f0sC/VGreP54K+SO7WsHk1lDMone3U9hlEGqbJqdS3s="
       },
       {
         "virtualPath": "CastGuidance.Core.wasm",
         "name": "CastGuidance.Core.wasm",
-        "hash": "sha256-SNr6+K0wLcLV2FUS4PNjgw+1cOKvWnH4cNuFTKvJhas="
+        "hash": "sha256-iVJNqmyJIRNetnvPvBU95U/3R5WUWqPshYtfJCqP76c="
       },
       {
         "virtualPath": "CastGuidance.Data.wasm",
         "name": "CastGuidance.Data.wasm",
-        "hash": "sha256-9z5WrnT4bJiEcB/A4pJS6kjRACTyxfmBp16TrmjgWRc="
+        "hash": "sha256-ra4cwsiHmARGeWVeVb11S4TPxgFyz/UYeWc9+MNkMtE="
       },
       {
         "virtualPath": "CastGuidance.Licensing.wasm",
         "name": "CastGuidance.Licensing.wasm",
-        "hash": "sha256-WnUHnrAv+EvejiU0iwMjUZZBZtRALI6L9krOyPNs3EI="
+        "hash": "sha256-0d4yffaTUuz6bzMa53kzraJZrDRVlGVYphNWs0lximQ="
       },
       {
         "virtualPath": "CastGuidance.Tools.wasm",
         "name": "CastGuidance.Tools.wasm",
-        "hash": "sha256-DIQnP0dxV6Edcj7W35z2pGsdWkQekMNvfTSGFb/HNyw="
+        "hash": "sha256-BWxU3LRbmW/gmMtmIBisaOROheBeqoYVM6FXspAZxkU="
       },
       {
         "virtualPath": "CastGuidance.UI.Avalonia.wasm",
         "name": "CastGuidance.UI.Avalonia.wasm",
-        "hash": "sha256-BffjjZ/ws47EaaDW9SzYYzC7TD0woDPV3DMK2GIcrmU="
+        "hash": "sha256-UdElTVj3nm7sTQ4+sC698SepHjsPop3VFtfIlJOn0Yw="
       },
       {
         "virtualPath": "CastGuidance.UI.Shared.wasm",
         "name": "CastGuidance.UI.Shared.wasm",
-        "hash": "sha256-DVo5uKYg2s3D6JHpO0/qhS/R5fyzz6YR9+OVYRw+l+k="
+        "hash": "sha256-z8RNlvaRyGi5EQUd9+u6+5LGyW6eAtdHFiHcXs+qTkc="
       },
       {
         "virtualPath": "ExCSS.wasm",
