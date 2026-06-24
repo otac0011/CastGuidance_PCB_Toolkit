@@ -1,7 +1,7 @@
 export const config = /*json-start*/{
   "mainAssemblyName": "CastGuidance.Browser.dll",
   "resources": {
-    "hash": "sha256-pMOnzBT13+K6Y4BwJlHhJ+BR8o7KwmMIAwrMlER2Fwo=",
+    "hash": "sha256-lzEz3XtgKd9iWKIKNrnL4YQ+Uib38cTDtZhSn851Hnk=",
     "jsModuleNative": [
       {
         "name": "dotnet.native.js"
@@ -56,7 +56,7 @@ export const config = /*json-start*/{
       {
         "virtualPath": "Avalonia.Base.wasm",
         "name": "Avalonia.Base.wasm",
-        "hash": "sha256-kPD2Gyb//RAU6BWrjnAB9goQEqilI8U8w7I+F7kblZo="
+        "hash": "sha256-KdGMzz5x5QRPs6EUw7Pgd1DYoPMOS58iY6xQ2bXTAtg="
       },
       {
         "virtualPath": "Avalonia.Browser.wasm",
@@ -66,7 +66,7 @@ export const config = /*json-start*/{
       {
         "virtualPath": "Avalonia.Controls.wasm",
         "name": "Avalonia.Controls.wasm",
-        "hash": "sha256-8r6+zEGVPQgE/RRHOL5k54x8NfMaqqPIOJOIHW67X/Q="
+        "hash": "sha256-FKScrW6nTfPp7LBCiefVgbk23wrDXhhPevvstjZn5fU="
       },
       {
         "virtualPath": "Avalonia.Dialogs.wasm",
@@ -121,37 +121,37 @@ export const config = /*json-start*/{
       {
         "virtualPath": "CastGuidance.Browser.wasm",
         "name": "CastGuidance.Browser.wasm",
-        "hash": "sha256-ixKiL4klWG7HbnLIMgrCy9hl/AnCwxq57uqq2ss/6Ig="
+        "hash": "sha256-+gJhYmzLOtwFPoI7j53U/6SXxKM1cz8IiU91egkpKBA="
       },
       {
         "virtualPath": "CastGuidance.Core.wasm",
         "name": "CastGuidance.Core.wasm",
-        "hash": "sha256-qPQgwc3c691ZCUO4WU2w2U0lZaLHfZina6XmlswufrU="
+        "hash": "sha256-13Wkv5uiQSYRXYg307AZYtB+u+QESkyWss0mKsw9CNE="
       },
       {
         "virtualPath": "CastGuidance.Data.wasm",
         "name": "CastGuidance.Data.wasm",
-        "hash": "sha256-Ghg2P66DTFCSbAjhdqtIhc5QiDEDLwXm/qFaUxm0GZQ="
+        "hash": "sha256-bhUCstXuVvoNGmw1LALMtpYBd0tK+HKj77q1Aq6PjXc="
       },
       {
         "virtualPath": "CastGuidance.Licensing.wasm",
         "name": "CastGuidance.Licensing.wasm",
-        "hash": "sha256-KGyIWkmaUPpvdc4cKCGcJrtANya5/19/G9FX1bMfVfA="
+        "hash": "sha256-LFg5NpsAmPHMPHxIExvOhbsBaz9ci5Ym1xmPZGAls1U="
       },
       {
         "virtualPath": "CastGuidance.Tools.wasm",
         "name": "CastGuidance.Tools.wasm",
-        "hash": "sha256-wywvuQsbfEdVnslTvRGM0B7SFEPLadaYO66mteJ3b2k="
+        "hash": "sha256-Wfnu9+j7SQJAI8Q1exE+55jzuQ2Ih8uiP5tcpJ1DVTo="
       },
       {
         "virtualPath": "CastGuidance.UI.Avalonia.wasm",
         "name": "CastGuidance.UI.Avalonia.wasm",
-        "hash": "sha256-lOdSRrqKS59h2nvLzqmZnynCBfLttPtzhCpbnV+7fJA="
+        "hash": "sha256-oVxezlSyTEhtTPRPASFC+TH6/AvR3IGitDVmgUAi2OA="
       },
       {
         "virtualPath": "CastGuidance.UI.Shared.wasm",
         "name": "CastGuidance.UI.Shared.wasm",
-        "hash": "sha256-3o/qLTnSSqHJUqRmR8hSP9bN4nFLqqAtDxEac42Ww20="
+        "hash": "sha256-I8xlZy6UEANbdhgbGz9Q1pOh7HrO9S8OWx9ksh1W0iQ="
       },
       {
         "virtualPath": "ExCSS.wasm",
