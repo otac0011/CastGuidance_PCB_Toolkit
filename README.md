@@ -6,21 +6,21 @@
 
 ## Get the latest release
 
-→ **[Download the latest release](https://github.com/otac0011/CastGuidance_PCB_Toolkit/releases/latest)** (Windows .exe, ~190 MB self-contained)
+→ **[Download the latest release](https://github.com/otac0011/CastGuidance_PCB_Toolkit/releases/latest)** (Windows installer, ~320 MB, includes the openEMS 3D engine)
 
-Open `CastGuidancePCBToolkit.exe`. On first launch you'll be asked to accept the End User License Agreement. No installer step — the executable is a self-contained PyInstaller bundle.
+Run `CastGuidancePCBToolkit-Setup-<version>.exe`. On first launch you'll be asked to accept the End User License Agreement. The app is self-contained — no separate .NET install is needed. A browser version (everything except the 3D openEMS solver and the local AI helper) runs at <https://otac0011.github.io/CastGuidance_PCB_Toolkit/app/>.
 
 ## What it does
 
-A desktop tool for PCB engineering, ~48 calculators across:
+A desktop tool for PCB engineering, 50 calculators and wizards across:
 
-- **Core PCB** — trace impedance (Hammerstad-Jensen / Wadell), 3D field-solver Z₀ via openEMS, current carrying (IPC-2152 + IPC-2221), fusing current, via R/L/C and stub analysis
+- **Core PCB** — trace impedance from a built-in 2D field solver (validated to 0.2 % against exact results) plus Hammerstad-Jensen / Cohn closed forms and 3D FDTD Z₀ via openEMS, a laminate builder (glass style, resin content, 29 laminate families), current carrying (IPC-2152 + IPC-2221), fusing current, via R/L/C and stub analysis
 - **Signal Integrity** — channel insertion-loss budget, jitter budget, conductor + dielectric loss with surface-roughness models, **Via Stub Impact analyzer** with 20 SerDes protocol presets and 3D sensitivity surface
 - **RF / Microwave** — Pi-pad / T-pad attenuators, L / Pi / T lumped LC matching with parasitic-aware S11, multi-section λ/4 transformers (binomial + Chebyshev), Smith chart matching. Each has a **3D sensitivity-surface tolerance analysis**.
 - **Power Integrity** — PDN target impedance, MLCC DC-bias derating, decap-bank Z(f) analyzer, mounting inductance
 - **High-Speed Digital** — DDR length matching
 - **EMC**, **Thermal**, **Mechanical / DFM**, **Filters**, **Power Electronics**, **Reference**
-- A **PCB Design Wizard** that runs a 100+ candidate Pareto sweep to recommend three buildable stackups for your constraints
+- A **PCB Design Wizard** that runs a 100+ candidate Pareto sweep to recommend three buildable stackups for your constraints (GND planes only — power routed as wide traces), and a **Bulk Capacitance Wizard** that shows where in each datasheet to find the numbers that size a rail's capacitance
 
 ## License
 
