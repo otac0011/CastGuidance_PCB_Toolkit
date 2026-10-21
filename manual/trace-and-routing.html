@@ -1,0 +1,450 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trace and routing — CastGuidance PCB Toolkit</title>
+<style>:root{--bg:#1E1E1E;--panel:#252526;--line:#3F3F46;--fg:#E6E6E6;--dim:#A0A0A0;--accent:#D9842A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+  font:15px/1.65 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;display:flex}
+.sidebar{width:270px;min-height:100vh;background:var(--panel);
+  border-right:1px solid var(--line);padding:18px 0;position:sticky;top:0;
+  align-self:flex-start;max-height:100vh;overflow:auto;flex:0 0 270px}
+.brand{font-weight:600;color:var(--accent);padding:0 18px 14px;font-size:16px}
+.brand span{display:block;color:var(--dim);font-weight:400;font-size:13px}
+.sidebar a{display:block;padding:7px 18px;color:var(--fg);text-decoration:none;font-size:14px}
+.sidebar a:hover{background:#2D2D30}
+.sidebar a.current{color:var(--accent);border-left:3px solid var(--accent);padding-left:15px}
+main{flex:1;max-width:860px;padding:36px 44px 90px}
+h1{font-size:30px;margin:0 0 20px;color:var(--fg)}
+h2{font-size:22px;margin:38px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+h3{font-size:17px;margin:26px 0 8px;color:var(--accent)}
+h4{font-size:15px;margin:20px 0 6px;color:var(--fg)}
+p,li{color:#D2D2D2}
+a{color:var(--accent)}
+code{background:#2D2D30;padding:1px 5px;border-radius:3px;
+  font:13px/1.5 Consolas,Menlo,monospace;color:#E8C08A}
+pre{background:#2D2D30;padding:12px 14px;border-radius:4px;overflow-x:auto}
+pre code{background:none;padding:0}
+table{border-collapse:collapse;margin:16px 0;width:100%;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:7px 11px;text-align:left;font-size:14px}
+th{background:var(--panel);color:var(--accent)}
+blockquote{border-left:3px solid var(--accent);margin:16px 0;padding:2px 16px;color:var(--dim)}
+@media(max-width:820px){body{display:block}.sidebar{width:auto;position:static;
+  max-height:none;flex:none}main{padding:24px 20px 60px}}</style>
+</head>
+<body>
+<nav class="sidebar"><div class="brand">CastGuidance<span>PCB Toolkit</span></div><a href="design-wizard.html">The PCB Design Wizard</a><a href="dfm-thermal-emc.html">DFM, thermal and EMC</a><a href="faq.html">Frequently asked questions</a><a href="files-and-formats.html">Files and exports</a><a href="getting-started.html">Getting started</a><a href="index.html">CastGuidance PCB Toolkit — User Manual</a><a href="openems.html">The 3D field solver</a><a href="power-integrity.html">Power integrity and power electronics</a><a href="reference-calculators.html">Reference calculators</a><a href="rf-microwave.html">RF and microwave</a><a href="signal-integrity.html">Signal integrity</a><a href="stackup-and-materials.html">Stackup and materials</a><a href="trace-and-routing.html" class="current">Trace and routing</a><a href="units-and-conventions.html">Units and conventions</a><a href="verification-and-limits.html">Verification and limits</a><a href="vias-and-padstacks.html">Vias and padstacks</a></nav>
+<main><h1 id="trace-and-routing">Trace and routing</h1>
+<p>Sizing conductors: how wide for impedance, how wide for current, how far apart
+for voltage, and how long before the trace stops behaving like a wire.</p>
+<h2 id="bandwidth-and-max-length">Bandwidth and Max Length</h2>
+<p>Converts an edge rate into a frequency, and tells you how long a trace can be
+before you have to treat it as a transmission line.</p>
+<p><strong>Methodology dropdown.</strong> IPC-2251 knee frequency (BW = 0.35 / t_r), Howard
+Johnson (BW = 0.5 / t_r, more conservative), or direct frequency entry if you
+already know the number.</p>
+<p><strong>Inputs.</strong> Rise time t_r measured 20–80 %, the frequency if you chose direct
+entry, and ε_r_eff for the propagation velocity.</p>
+<p><strong>Outputs.</strong> Signal bandwidth (the knee frequency), the wavelength at that
+frequency, and the maximum conductor length before reflections matter —
+typically λ/6 of the knee.</p>
+<p><strong>Insight.</strong> The number that matters is the <em>edge rate</em>, not the clock rate. A
+10 MHz clock from a modern FPGA with a 200 ps edge has a knee frequency near
+1.75 GHz and needs the same care as a much faster bus. Ask what the driver's
+rise time is, not what the frequency on the schematic says.</p>
+<h2 id="trace-impedance-openems-3d">Trace Impedance (openEMS 3D)</h2>
+<p>The main impedance tool. It solves the cross-section with a fast 2D field
+solver on every change, shows the closed-form estimates beside it, and on the
+desktop build it can run a genuine 3D full-wave FDTD extraction with openEMS.</p>
+<p><strong>Topology.</strong> Pick from Standard Microstrip, Embedded Microstrip, Differential
+Microstrip, CPWG, Differential CPWG, Stripline, Edge-Coupled Differential
+Stripline, or Broadside-Coupled Differential Stripline. The dimensioned diagram
+and the visible input fields both change with the selection, so you can confirm
+you are describing the cross-section you meant.</p>
+<p><strong>Dielectric source.</strong> Where the Dk comes from. Whichever you pick, the same Dk
+drives the closed forms, the 2D field solver and the openEMS run, and the line
+under the picker says what it is and at what frequency.</p>
+<ul>
+<li><strong>Bundled material library</strong> (the default). The laminate library — Megtron,
+Rogers, Isola, AGC, ITEQ, FR-4 and others — with Dk and Df as the datasheet
+quotes them, or <strong>Custom</strong> for a manual Dk and Df. The <strong>Open datasheet ⇗</strong>
+button opens the manufacturer's PDF.</li>
+<li><strong>Laminate builder.</strong> Build the dielectric the way a fab does: pick the
+laminate <em>family</em> (29 of them, standard FR-4 to ultra-low-loss, each with the
+maker's own fitted resin), the <em>glass</em> it is sold in (only the grades that
+maker sells — Megtron 6 in low-Dk R-5775(N) or E-glass R-5775(K/G), for
+example), the <em>glass style</em> (106, 1078, 2116, 7628 … with its weight and
+usual resin range), the <strong>resin content</strong> and the number of <strong>plies</strong>. The
+resin content starts at the style's typical value. Tick <strong>Fit the resin
+content to a pressed thickness</strong> to do it the other way round: type the
+thickness you want and the tool finds the resin content that gives it. The
+card shows the thickness in mil and mm, the glass fraction, and the Dk and Df
+at the family's fit frequency, at 1 GHz and at 10 GHz. More resin makes a ply
+thicker and its Dk lower; a resin content outside the style's usual range, an
+estimated style, or a grade with no published construction table is flagged.</li>
+<li><strong>RF laminate catalog.</strong> Rogers RO4000/RO3000/RT-duroid, Taconic and a few
+datasheet-only materials, with the maker's <em>design</em> Dk (the one for
+impedance, not the process Dk) and the thicknesses each is sold in.</li>
+<li><strong>Custom Dk / Df.</strong> Type both.</li>
+</ul>
+<p><strong>Design frequency.</strong> The builder's and the catalog's Dk and Df are moved from
+the frequency they were fitted or quoted at to this one with the
+Djordjevic–Sarkar causal model (1 GHz by default). The 2D solver's dielectric
+loss is reported at it. Library and custom values are used as entered.</p>
+<p><strong>Use this dielectric's thickness as H.</strong> In the builder and catalog modes,
+tick it and H follows the built (or the sold) thickness.</p>
+<p><strong>Inputs.</strong> Trace width W, copper thickness T and substrate height H are always
+shown. The rest appear only when the topology needs them: cover height h_cover
+for embedded microstrip, top substrate h_top for any stripline (broadside
+included), edge spacing s for any differential variant, broadside spacing s_b
+for broadside-coupled, and coplanar gap g for CPWG variants. H is the laminate
+under the trace (its underside to the plane); h_top is the trace's top to the
+upper plane; a broadside pair is H, the lower trace, s_b, the upper trace and
+h_top, from the lower plane up.</p>
+<p><strong>Solder mask</strong> (open microstrips and CPWGs only, off by default). A conformal
+liquid mask of the given Dk, C1 thick on the bare laminate and C2 over the
+copper's top and walls (3.5, 0.8 mil and 0.5 mil by default). Only the 2D
+solver models it; the closed forms and the FDTD run do not. On the default
+4.2 mil microstrip it takes about 3 Ω off Z₀.</p>
+<p><strong>2D field solver — the reference.</strong> A quasi-static finite-volume solve of the
+cross-section, run in-process (in the browser too) about a quarter of a second
+after you stop typing, and again on <strong>Solve 2D now</strong>. It shows Z₀ (Zdiff for a
+pair) and εeff; for a pair also Zodd, Zeven, Zcommon, one line's Z11 and the
+odd and even εeff; the delay in ps/in and the dielectric loss in dB/in at the
+design frequency (from the energy-weighted loss tangent; for copper loss use the
+<a href="signal-integrity.html#insertion-loss-from-the-cross-section">Insertion Loss Budget</a>,
+which solves the same cross-section). Below them, every closed form is listed with its difference from the
+2D answer. Treat the 2D number as the reference for a uniform line's
+impedance: it is checked within 0.3 % against Cohn's exact stripline (see
+<a href="verification-and-limits.html#the-2d-field-solver-validation">Verification and limits</a>).
+A solve takes 17–400 ms on a desktop and about twice that in the browser; the
+status line shows the time and the grid size. Untick <strong>Solve on every change</strong>
+if a slow machine makes typing lag.</p>
+<p><strong>Analytic outputs.</strong> Four independent closed-form estimates — Cohn (1955),
+Hammerstad-Jensen, IPC-2141 and Ghione-Naldi. Only the methods that apply to
+the chosen topology produce a number; the rest show <code>—</code>. For the differential
+topologies the closed forms give Zdiff. The broadside-coupled formula is
+unreliable — see <a href="#broadside-coupled-pairs-use-the-2d-result">below</a>.</p>
+<p><strong>3D FDTD section.</strong> Pick a <strong>Sim quality</strong> and press <strong>Run 3D Simulation</strong>.
+The solver reports Z₀ extracted from the FDTD field, which extraction method it
+used, its own analytic cross-check, and the mesh resolution. A library material
+is sent by name; any other dielectric source is sent as a custom Dk. Before you
+press Run, the card shows the mesh's cell count and the expected run time at
+each quality, warns above about two minutes, and disables Run when the mesh is
+over the solver's cell limit. See <a href="openems.html">The 3D field solver</a> for what the
+quality settings do and why this section is desktop-only.</p>
+<p><strong>Insight.</strong> Converge on a geometry with the 2D solver — it answers while you
+type and is as accurate as a commercial 2D solver for a uniform line — and keep
+the 3D run for what a cross-section cannot show: launches, discontinuities,
+dispersion. Running FDTD on every trial width is a waste of minutes.</p>
+<h3 id="fab-tolerance-corners">Fab-tolerance corners</h3>
+<p>The card under the 2D result solves the cross-section twice more, at the fab's
+two impedance corners, and shows the Z₀ range (Zdiff for a pair) beside the
+nominal. <strong>High Z</strong> puts every tolerance where it raises the impedance: Dk
+low, dielectrics thick, traces narrow and thin. <strong>Low Z</strong> is the reverse. Z₀
+falls with Dk, width and copper and rises with height, so these two corners
+bound every mix of the four. Each corner's geometry is listed under the
+range.</p>
+<p><strong>Fab class.</strong> Standard order, impedance-controlled (the default) or
+RF-grade. The tolerances are typical values from a survey of US fab sheets
+and IPC-4101/4562/6012:</p>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Width outer / inner</th>
+<th>Prepreg / core</th>
+<th>Dk</th>
+<th>Inner foil</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Standard</td>
+<td>±1.0 / ±0.75 mil</td>
+<td>±15 % / ±10 %</td>
+<td>±0.20</td>
+<td>−10 / +5 %</td>
+</tr>
+<tr>
+<td>Controlled</td>
+<td>±0.5 / ±0.4 mil</td>
+<td>±10 % / ±5 %</td>
+<td>±0.10</td>
+<td>−10 / +5 %</td>
+</tr>
+<tr>
+<td>RF-grade</td>
+<td>±0.3 / ±0.25 mil</td>
+<td>±10 % / ±3 %</td>
+<td>±0.05</td>
+<td>−10 / +5 %</td>
+</tr>
+</tbody>
+</table>
+<h3 id="how-the-corners-move-the-geometry">How the corners move the geometry</h3>
+<ul>
+<li><strong>Dielectrics.</strong> Every dielectric (H, h_top, h_cover, s_b) is taken as
+prepreg, the wider tolerance, unless you tick <strong>Dielectrics are cores</strong>.
+Each has a floor: on a thin layer the floor wins. On a 2.1 mil prepreg the
+±0.5 mil floor is ±24 %.</li>
+<li><strong>Copper.</strong> Outer plated copper moves by its weight's band (½ / 1 / 2 oz).
+Inner foil moves −10 / +5 %.</li>
+<li><strong>Etch.</strong> The microstrips and CPWGs are outer, plated traces. The embedded
+microstrip and the striplines are inner foil. A pair's gap and a coplanar
+gap lose what the trace gains, because the pitch is kept.</li>
+</ul>
+<p><strong>Reading it.</strong> Every tolerance sits at its limit at once. That is a worst
+case, not a statistic: a real board lies inside it. A controlled-impedance
+fab also trims the widths toward the target, so what it delivers spreads
+less. No fab publishes its etch as a ± figure, so the width tolerance is the
+least certain number here.</p>
+<p><strong>Speed.</strong> The corners solve about 0.4 s after you stop typing, off the UI
+thread on the desktop and in a few tenths of a second in the browser. They
+reuse the nominal answer. Untick <strong>Solve the corners on every change</strong> to run
+them only when you press <strong>Solve the corners</strong>.</p>
+<h3 id="width-for-a-target-and-yield">Width for a target, and yield</h3>
+<p>A card under the corners answers two questions without you iterating by hand.</p>
+<p><strong>Find the width.</strong> Enter the target (Z₀, or Zdiff for a pair) and press
+<strong>Find the width</strong>. The tool searches the width on the impedance surrogate,
+then solves that width on the real 2D field solver. If the solver disagrees, it
+takes the difference out once and solves again. It sets W to the answer and
+shows the solver's impedance there, usually within 0.2 % of the target in one
+or two solves. Solder mask is not in the surrogate: untick it, search, then
+re-tick.</p>
+<p><strong>Yield.</strong> It simulates 2,000 builds on the fab class picked above, with each
+tolerance taken as ±3σ and independent. It reports the share within your band
+(±10 % by default) around the target, the mean, σ, and the 1st–99th
+percentile range. The corners are a worst case; the yield is how often it
+happens.</p>
+<h3 id="the-impedance-surrogate">The impedance surrogate</h3>
+<p>The surrogate is a table of pre-solved 2D answers, not a formula fitted to
+them. For each topology the generator solved about 300 to 8,000
+cross-sections. It stores Z_air (the line's impedance with the dielectric
+replaced by air), which depends only on the geometry's ratios, and the filling
+factor q = (εeff − 1)/(εr − 1). Z₀ = Z_air/√εeff exactly, so the table never
+stores the hard-to-fit part. It interpolates in ln of each ratio. Against
+real solves at random points it is within 1 % of the solver
+(<a href="verification-and-limits.html#impedance-surrogate">validation</a>). It is never the
+displayed reference: the 2D card always shows a real solve.</p>
+<h3 id="glass-weave-skew-card">Glass-weave skew card</h3>
+<p>For the differential topologies a card estimates the intra-pair skew from the
+glass weave. It takes the laminate builder's glass style when the builder is
+the dielectric source. Otherwise you pick the style on the card. See
+<a href="#glass-weave-skew">Glass-weave skew</a> under the Differential Pair Designer.
+The card is the same in both tools.</p>
+<h3 id="broadside-coupled-pairs-use-the-2d-result">Broadside-coupled pairs: use the 2D result</h3>
+<p>For <strong>Broadside-Coupled Differential Stripline</strong> the 2D card is the result, not
+just the reference: its title says so, and it solves on every edit even with
+<strong>Solve on every change</strong> unticked (a homogeneous stripline is the quickest
+solve). The Cohn-type closed form in the Cohn row is marked <strong>unreliable</strong>: it
+uses only W and s_b and never sees the planes or H and h_top, and reads about
+48 % high on the default geometry (99.2 Ω against the 2D solver's 66.9 Ω). The
+2D odd mode agrees with the exact midplane identity to 0.02 %. The closed form
+stays on the page only for comparison.</p>
+<h3 id="ipc-2141-against-the-2d-solver">IPC-2141 against the 2D solver</h3>
+<p>The IPC-2141 row is a simplified fit, and on thin modern dielectrics it reads
+low: 11.4 % on the default microstrip (44.6 Ω against 50.3 Ω), 10.9 % on the
+default embedded microstrip, 9 % on the default pair, and 4–9 % across w/h
+0.5–2 on 5 mil FR-4. Hammerstad–Jensen is within 0.1 % of the 2D solver on the
+same lines. When the IPC-2141 row is more than 5 % off the 2D answer the 2D card
+shows a red warning saying by how much. The formula is kept as it was for
+parity with the original toolkit; use the 2D or Hammerstad–Jensen value
+(<a href="verification-and-limits.html#closed-forms-against-the-2d-solver">validation</a>).</p>
+<h2 id="differential-pair-designer">Differential Pair Designer</h2>
+<p>Not just a Z_diff calculator: a <strong>manufacturability finder</strong>. You name a target
+differential impedance and it sweeps a two-dimensional grid of trace widths and
+edge-to-edge spacings, showing every combination that lands inside your
+tolerance band.</p>
+<p><strong>Inputs.</strong> Structure (edge-coupled microstrip or edge-coupled embedded
+microstrip), target Z_diff and tolerance, substrate εr, frequency, copper
+thickness T, substrate height H, cover height h_cover for the embedded variant,
+and the W and S sweep ranges that bound the search.</p>
+<p><strong>Outputs.</strong></p>
+<ul>
+<li>A 3D isometric surface of Z_diff over (W, S), with a <strong>green band</strong> filling
+every cell within ±tolerance of your target.</li>
+<li>A recommended W and S — the most manufacturable point in the band. Wider
+trace and more spacing wins ties, because both are easier to fabricate and
+both are less sensitive to etch variation.</li>
+<li>Z_diff, Z_common, Z_odd and Z_even at the recommendation, plus the W/H and
+S/H ratios.</li>
+<li>Diagnostics for &quot;no cell hits the band — widen the sweep&quot; and &quot;the
+recommendation is sitting on the edge of the swept range&quot;.</li>
+<li>A standing validation warning: this closed form reads Zdiff high (see
+below). Confirm the recommended W and S in the Trace Impedance tool's 2D
+solver before you commit a stackup.</li>
+</ul>
+<p><strong>Why a surface instead of a single answer.</strong> There is no unique (W, S) for a
+given Z_diff; there is a whole valley of them. Seeing the valley tells you
+which end of it is robust. A solution at the narrow-trace end will drift with
+etch tolerance far more than one at the wide end.</p>
+<p><strong>Insight.</strong> Common targets: 90 Ω for USB 2.0, 100 Ω for Ethernet, PCIe Gen3+
+and HDMI, 120 Ω for CAN-FD. If the green band is empty, the usual fix is a
+thinner dielectric to the reference plane, not a different trace width.</p>
+<h3 id="how-far-to-trust-the-designers-surface">How far to trust the designer's surface</h3>
+<p>For <strong>edge-coupled microstrip</strong> and <strong>symmetric edge-coupled stripline</strong> the
+surface comes from the <a href="#the-impedance-surrogate">impedance surrogate</a>, within
+1 % of the 2D field solver. The line under the recommendation says so.</p>
+<p>The other structures (embedded, asymmetric, broadside) still use the designer's
+closed form: a Hammerstad–Jensen single line and a coupling term
+0.347·e^(−2.655·s/h). Against the 2D field solver it reads Zdiff 8–15 % high on
+microstrip pairs, because that coupling term is nearly zero at ordinary spacings
+(<a href="verification-and-limits.html#closed-forms-against-the-2d-solver">validation</a>).
+For those structures, confirm the numbers in Trace Impedance.</p>
+<h3 id="fab-tolerance-corners-designer">Fab-tolerance corners (designer)</h3>
+<p>The corners card takes the recommended (W, S) to the fab's <strong>High Z</strong> and
+<strong>Low Z</strong> corners. It uses the same fab classes and tolerances as
+<a href="#fab-tolerance-corners">Trace Impedance</a>, computed with the same model as the
+sweep (the surrogate where it covers the structure). It shows:</p>
+<ul>
+<li>the Zdiff range;</li>
+<li>each tolerance alone at its limits, so you can see which one dominates (on a
+4 mil prepreg it is usually the height);</li>
+<li>whether the corners stay inside your target band.</li>
+</ul>
+<p>The open microstrip is an outer, plated trace. The embedded one is inner
+foil. For the 2D field solver's corners, use Trace Impedance.</p>
+<h3 id="glass-weave-skew">Glass-weave skew</h3>
+<p>Glass cloth is bundles of glass (Dk about 6) woven with resin (about 3)
+between them. A pair routed along the weave can put one leg over a bundle and
+the other over resin for its whole length. That skew cannot be removed by
+matching the lengths. The card multiplies the glass style's measured skew rate
+by the length that runs along the weave. It is a literature-based estimate,
+not a field solve.</p>
+<p><strong>Inputs.</strong></p>
+<ul>
+<li><strong>Pair length</strong> in inches.</li>
+<li><strong>Routing angle.</strong> 0° / 90° (the whole length counts along the weave), 10°
+or more, zig-zag at 10–13°, or artwork rotated 10° on the panel. The last
+three count no length along the weave.</li>
+<li><strong>Data rate</strong> in GT/s. For PAM4, enter the baud rate.</li>
+<li><strong>Glass style.</strong> Picked here, or taken from the laminate builder in Trace
+Impedance.</li>
+<li><strong>Rate basis.</strong> Measured per style (the default), or Intel's conservative
+16.3 ps/in.</li>
+</ul>
+<h3 id="glass-weave-rates-and-rules">Glass-weave rates and rules</h3>
+<table>
+<thead>
+<tr>
+<th>Style</th>
+<th>ps/in (measured, along the weave)</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1067, 1 ply</td>
+<td>6.5</td>
+<td>Bogatin 2017</td>
+</tr>
+<tr>
+<td>2116, 1 ply</td>
+<td>2.67</td>
+<td>Bogatin 2017</td>
+</tr>
+<tr>
+<td>1035 (pair)</td>
+<td>3.0</td>
+<td>Gore, Samtec 2020</td>
+</tr>
+<tr>
+<td>1078 (pair)</td>
+<td>6.0</td>
+<td>Gore, Samtec 2020</td>
+</tr>
+<tr>
+<td>3313 (uncoupled)</td>
+<td>4.2</td>
+<td>Ritchey 2013</td>
+</tr>
+<tr>
+<td>anything else</td>
+<td>7.0</td>
+<td>top of Bogatin's 0.8–7 range</td>
+</tr>
+</tbody>
+</table>
+<p>Intel's 2005–07 statistics, quoted second-hand, give a mean of 3.85 ps/in and
+a mean + 3σ of 16.3 ps/in.</p>
+<p><strong>The warning rules.</strong> The card warns, and never fails, when either holds:</p>
+<ul>
+<li>4 in or more runs along the weave above 5 GT/s (Kuchy &amp; Loyer 2008;
+Cadence 2016);</li>
+<li>the skew is over 20 % of a UI (Bogatin 2017).</li>
+</ul>
+<p>Mitigated routing is judged on the one measured residual, 0.2 ps/in (Gore
+2017).</p>
+<h3 id="glass-weave-mitigations">Glass-weave mitigations</h3>
+<ul>
+<li><strong>Angle routing.</strong> Route at 10° or more to the edges, or zig-zag. Zig-zag's
+benefit has no published measurement.</li>
+<li><strong>Rotated artwork.</strong> Have the fab rotate the artwork 10° (about a 10 % cost
+adder) and say so on the fab drawing.</li>
+<li><strong>Spread glass.</strong> Spread 1080 measured ΔDk 0.14 against 0.50 for standard
+1080. It is not a guarantee: spread 1067 still measured 6.5 ps/in.</li>
+<li><strong>A lower-rate style</strong>, such as 2116 or 1035.</li>
+</ul>
+<p><strong>Bundle pitch.</strong> When the style's count is published, the card also gives the
+bundle pitch next to the pair pitch W + S. The worst case is near half the
+bundle pitch.</p>
+<h2 id="conductor-properties">Conductor Properties</h2>
+<p>Trace current capacity, resistance, voltage drop and skin depth.</p>
+<p><strong>Methodology dropdown.</strong> IPC-2152 (2009, modern empirical fit) or IPC-2221
+(1998, the legacy <code>K · ΔT^0.44 · A^0.725</code> curve, from 1950s still-air data).
+They do not differ by a fixed factor. On an outer layer with no plane nearby
+IPC-2152 is the <em>more</em> conservative: 100 mil of 1 oz copper carries 3.3 A at
+ΔT 10 °C by IPC-2152 against 4.7 A by IPC-2221. On an inner layer IPC-2221
+halves the current, an assumption IPC-2152's measurements overturned, so there
+IPC-2152 gives about 1.4–1.5× as much. A nearby plane raises the IPC-2152
+figure further. Use IPC-2152 unless a customer specification names IPC-2221
+(<a href="verification-and-limits.html#current-capacity">validation</a>).</p>
+<p><strong>Inputs.</strong> Width W, thickness T, length L, current I, allowed temperature rise
+ΔT, ambient T_a, frequency (for skin depth), distance to the nearest plane
+(IPC-2152 only), and a parallel count for paralleled power feeds.</p>
+<p><strong>Outputs.</strong> Cross-section, the recommended width for your current, DC
+resistance, voltage drop, power dissipated (in W and dBm), skin depth, the
+skin-depth-to-thickness ratio, and the &quot;virtual&quot; ΔT the formula was calibrated
+against.</p>
+<p><strong>Insight.</strong> ΔT of 10 °C is conservative, 20 °C is normal, 30 °C is aggressive
+but common in power sections. The plane distance input matters a lot in
+IPC-2152 — a trace over a nearby plane runs much cooler than one in free space
+because the plane is a heatsink.</p>
+<h2 id="fusing-current">Fusing Current</h2>
+<p>The current at which a trace melts, via Onderdonk's adiabatic equation.</p>
+<p><strong>Methodology dropdown.</strong> Onderdonk 1928 (adiabatic, conservative), or
+Onderdonk × a user multiplier when you want to apply your own derating.</p>
+<p><strong>Inputs.</strong> Width W, thickness T, fault duration t, ambient T_a, the multiplier
+if you chose the advisory method, and optionally a steady-state current for
+cross-checking against the ampacity tool.</p>
+<p><strong>Outputs.</strong> Fusing current at your chosen duration, the raw Onderdonk value,
+and the cross-section in both mil² and circular mils.</p>
+<p><strong>Adiabatic means</strong> the model assumes <em>no</em> heat escapes during the fault — all
+the energy goes into raising the copper's temperature to its 1085 °C melting
+point. That is true for short faults and pessimistic for long ones, which is
+the right direction for a safety calculation.</p>
+<p><strong>Insight.</strong> A trace survives 5–10× its steady-state ampacity for a few
+milliseconds. Use this tool to size an upstream fuse so the fuse blows before
+the trace does — or deliberately, to design a sacrificial fuse trace on a
+cost-sensitive board.</p>
+<h2 id="min-conductor-spacing">Min Conductor Spacing</h2>
+<p>Minimum conductor-to-conductor spacing for a working voltage.</p>
+<p><strong>Methodology dropdown.</strong> IPC-2221C Table 6-1 — a single lookup on voltage and
+environment, appropriate for board-level signal work — or IEC 60664-1 Ed.3,
+which accounts for pollution degree, material CTI and insulation type, and is
+what you need for mains-referenced safety compliance.</p>
+<p><strong>Inputs.</strong> Peak voltage (note: 230 Vac is 325 V peak), plus either the IPC
+environment class or the IEC pollution degree, CTI grade and insulation type.</p>
+<p><strong>Outputs.</strong> A single minimum spacing for IPC. For IEC, <strong>creepage</strong> (measured
+along the surface) and <strong>clearance</strong> (measured through air) are reported
+separately because they are different requirements with different numbers.</p>
+<p><strong>Insight.</strong> Creepage is always ≥ clearance. If you cannot make the creepage
+distance fit, milling a slot in the board between the high-voltage and
+low-voltage sections gives effectively infinite creepage in a few millimetres
+of board area. This is standard practice and costs almost nothing.</p>
+</main>
+</body>
+</html>

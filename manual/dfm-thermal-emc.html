@@ -1,0 +1,169 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DFM, thermal and EMC — CastGuidance PCB Toolkit</title>
+<style>:root{--bg:#1E1E1E;--panel:#252526;--line:#3F3F46;--fg:#E6E6E6;--dim:#A0A0A0;--accent:#D9842A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+  font:15px/1.65 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;display:flex}
+.sidebar{width:270px;min-height:100vh;background:var(--panel);
+  border-right:1px solid var(--line);padding:18px 0;position:sticky;top:0;
+  align-self:flex-start;max-height:100vh;overflow:auto;flex:0 0 270px}
+.brand{font-weight:600;color:var(--accent);padding:0 18px 14px;font-size:16px}
+.brand span{display:block;color:var(--dim);font-weight:400;font-size:13px}
+.sidebar a{display:block;padding:7px 18px;color:var(--fg);text-decoration:none;font-size:14px}
+.sidebar a:hover{background:#2D2D30}
+.sidebar a.current{color:var(--accent);border-left:3px solid var(--accent);padding-left:15px}
+main{flex:1;max-width:860px;padding:36px 44px 90px}
+h1{font-size:30px;margin:0 0 20px;color:var(--fg)}
+h2{font-size:22px;margin:38px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+h3{font-size:17px;margin:26px 0 8px;color:var(--accent)}
+h4{font-size:15px;margin:20px 0 6px;color:var(--fg)}
+p,li{color:#D2D2D2}
+a{color:var(--accent)}
+code{background:#2D2D30;padding:1px 5px;border-radius:3px;
+  font:13px/1.5 Consolas,Menlo,monospace;color:#E8C08A}
+pre{background:#2D2D30;padding:12px 14px;border-radius:4px;overflow-x:auto}
+pre code{background:none;padding:0}
+table{border-collapse:collapse;margin:16px 0;width:100%;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:7px 11px;text-align:left;font-size:14px}
+th{background:var(--panel);color:var(--accent)}
+blockquote{border-left:3px solid var(--accent);margin:16px 0;padding:2px 16px;color:var(--dim)}
+@media(max-width:820px){body{display:block}.sidebar{width:auto;position:static;
+  max-height:none;flex:none}main{padding:24px 20px 60px}}</style>
+</head>
+<body>
+<nav class="sidebar"><div class="brand">CastGuidance<span>PCB Toolkit</span></div><a href="design-wizard.html">The PCB Design Wizard</a><a href="dfm-thermal-emc.html" class="current">DFM, thermal and EMC</a><a href="faq.html">Frequently asked questions</a><a href="files-and-formats.html">Files and exports</a><a href="getting-started.html">Getting started</a><a href="index.html">CastGuidance PCB Toolkit — User Manual</a><a href="openems.html">The 3D field solver</a><a href="power-integrity.html">Power integrity and power electronics</a><a href="reference-calculators.html">Reference calculators</a><a href="rf-microwave.html">RF and microwave</a><a href="signal-integrity.html">Signal integrity</a><a href="stackup-and-materials.html">Stackup and materials</a><a href="trace-and-routing.html">Trace and routing</a><a href="units-and-conventions.html">Units and conventions</a><a href="verification-and-limits.html">Verification and limits</a><a href="vias-and-padstacks.html">Vias and padstacks</a></nav>
+<main><h1 id="dfm-thermal-and-emc">DFM, thermal and EMC</h1>
+<p>Getting the board built, keeping it cool, and getting it through the chamber.</p>
+<h2 id="paste-aperture-ipc-7525">Paste Aperture (IPC-7525)</h2>
+<p>Checks whether solder paste will actually release from a stencil aperture.</p>
+<p><strong>Inputs.</strong> Aperture shape (square, rectangular, circular), the relevant
+dimensions, and the stencil thickness — 4 mil (0.10 mm) for general work, 3 mil
+for fine pitch.</p>
+<p><strong>Outputs.</strong> Area ratio, aspect ratio, aperture area, and the IPC-7525B verdict
+(pass / marginal / fail).</p>
+<p><strong>The two ratios.</strong></p>
+<ul>
+<li><strong>Area ratio</strong> = aperture floor area ÷ aperture wall area. For a circle that
+reduces to <code>D / (4T)</code>. This is the number that predicts release: paste sticks
+to the walls and releases from the floor, so the floor has to win. IPC-7525B
+sets the floor at <strong>0.66</strong>.</li>
+<li><strong>Aspect ratio</strong> = aperture width ÷ stencil thickness, minimum <strong>1.5</strong>.
+Relevant for long thin apertures where the width, not the area, is the
+constraint.</li>
+</ul>
+<p><strong>Insight.</strong> Below 0.66 area ratio you have three levers: a thinner foil, a
+larger aperture, or a nano-coated or electroformed stencil that releases better
+than laser-cut stainless. On a mixed board where fine-pitch parts need 3 mil and
+connectors need 5 mil, a <strong>step stencil</strong> — locally thinned over the fine-pitch
+area — is the standard answer.</p>
+<h2 id="pcb-cost-estimator">PCB Cost Estimator</h2>
+<p>A fabrication-cost model with regional pricing, per-feature multipliers and the
+current US tariff stack. It is for comparing options — &quot;what does six layers
+cost versus four&quot;, &quot;what does switching to Rogers do&quot; — before you go to a real
+quote.</p>
+<h3 id="the-model">The model</h3>
+<p>Each cost factor carries both a <strong>raw multiplier</strong> (what the reference data
+says, e.g. ×5.00 for a Tachyon 100G laminate) and a <strong>cost share</strong> (the
+fraction of board cost that factor actually affects — about 20 % for a
+prototype, since laminate is a small part of small-quantity board cost).</p>
+<p>The effective multiplier is <code>1 + (raw − 1) × share</code>. So Tachyon 100G on a
+4-layer 5-piece prototype multiplies the board by ×1.80, not ×5.00. The same
+laminate on a 12-layer 1000-piece order has a higher share — material amortises
+more of the total once setup is spread — giving ×2.80.</p>
+<p>The breakdown table shows all three columns (Raw, Share, Effect) so you can see
+the reasoning rather than trusting a single number.</p>
+<h3 id="input-groups">Input groups</h3>
+<p><strong>Order.</strong> Region (China DDP, JLCPCB/PCBWay class, or USA, 4PCB/Sierra/OSH Park
+class), quantity, and board size. The 5-piece prototype is the baseline anchor.
+Area scaling starts above 100 × 100 mm.</p>
+<p><strong>Stackup.</strong> Layer count, board thickness, outer and inner copper weight.</p>
+<p><strong>Fabrication.</strong> Trace/space, material (the same laminate library as the
+impedance tool, each carrying a board-cost factor), surface finish, soldermask
+colour, silkscreen.</p>
+<p><strong>Vias and drill.</strong> Via finish, via-in-pad, minimum drill, PTH aspect ratio,
+drill density.</p>
+<p><strong>HDI and microvias.</strong> HDI build (None / 1+N+1 / 2+N+2 / 3+N+3 / any-layer
+ELIC), laser microvia diameter, microvia stacking, backdrilling.</p>
+<p><strong>Signal integrity.</strong> Controlled impedance and its tolerance.</p>
+<p><strong>Mechanical.</strong> Castellated holes, edge plating.</p>
+<p><strong>Quality and turnaround.</strong> IPC class, lead time.</p>
+<p><strong>Add-ons.</strong> Stencil, construction type (rigid FR-4, aluminium MCPCB,
+copper-core, flex, rigid-flex, ceramic), and a US tariff toggle.</p>
+<h3 id="outputs">Outputs</h3>
+<p>A hero block with total order price, per-piece price and the multiplier/fee
+breakdown, followed by a table of every factor that contributed. Warnings flag
+combinations the reference data explicitly calls out — AS9100 with a Chinese
+fab, ceramic substrates being quote-only, sub-MOQ orders.</p>
+<p><strong>Insight.</strong> Several things that feel expensive are free at Chinese proto fabs
+and expensive in the US: controlled impedance, ENIG on 6+ layers, POFV/VIPPO,
+non-green soldermask, both-sides silkscreen. Several things are expensive
+everywhere: layer count, exotic laminate, tight drill, HDI. The breakdown table
+is there so you can find which knob is actually costing you.</p>
+<p><strong>Engineering-grade, not quote-grade.</strong> Typically within ±25 % of a real quote.
+Always verify on the fab's own quote page before purchasing.</p>
+<h2 id="thermal-management">Thermal Management</h2>
+<p>Junction temperature with and without a heatsink.</p>
+<p><strong>Inputs.</strong> Ambient T_a, dissipated power P, θJA from the package datasheet,
+and for the heatsinked case θJC (junction-to-case), θCS (case-to-sink, the
+thermal interface) and θSA (sink-to-ambient, from the heatsink datasheet). Plus
+Tj_max from the datasheet — typically 105, 125 or 150 °C.</p>
+<p><strong>Outputs.</strong> Tj without a heatsink, Tj with one, and the margin to Tj_max in
+each case.</p>
+<p><strong>Insight.</strong> θJA is not a property of the package — it is a property of the
+package <em>on the test board JEDEC specified</em>, usually a 2s2p board in still air.
+Your board is not that board. Treat θJA as a comparison figure between packages,
+and use θJC plus your own board's spreading path when the margin is tight.</p>
+<h2 id="thermal-via-array">Thermal Via Array</h2>
+<p>Total thermal resistance from an SMT exposed pad down to the plane below.</p>
+<p><strong>Inputs.</strong> Via count, hole diameter, plating thickness, via height to the
+plane, exposed-pad width and length, via-fill thermal conductivity (0 for
+air-filled), and solder void fraction (5–15 % for a well-designed aperture).</p>
+<p><strong>Outputs.</strong> Single-via θ, the array θ including the void penalty, the spreading
+resistance θ of the pad, the spreading fraction, and total θ — which is the
+number your thermal model needs.</p>
+<p><strong>What the spreading term is.</strong> It is Holm's exact constriction resistance
+1/(4·k·a) of a round contact of the pad's area on a <em>half-space</em> of copper — the
+limit of copper much thicker than the pad. A 1 oz plane is the opposite limit:
+heat leaving a 2 mm-radius pad through 35 µm of copper to a rim 20 mm away sees
+about 27 °C/W, against 0.3 °C/W from the half-space term. Treat the spreading
+number as a lower bound
+(<a href="verification-and-limits.html#dfm-thermal-and-reference-tools">validation</a>).</p>
+<p><strong>Insight.</strong> Adding vias has diminishing returns fast, because once the array
+resistance drops below the spreading resistance of the plane it lands on, more
+vias change nothing. The tool shows both terms so you can see which one is
+dominating. When spreading dominates, the fix is more copper area or a
+thicker plane, not more holes.</p>
+<h2 id="radiated-emissions--small-loop">Radiated Emissions — Small Loop</h2>
+<p>Predicted E-field from a small current loop, compared against FCC and CISPR
+limits.</p>
+<p><strong>Inputs.</strong> Frequency (the harmonic of interest — n × switching frequency),
+loop length and width, peak loop current at that harmonic, and the reporting
+distance (3 m for FCC/CISPR, 10 m for some standards).</p>
+<p><strong>Outputs.</strong> Loop area, predicted E-field in µV/m and dBµV/m, the applicable
+standard limit (FCC Class A/B, CISPR Class A/B), the margin, and a colour-coded
+pass/fail.</p>
+<p><strong>Insight.</strong> Emission scales with <strong>loop area</strong> and with the <strong>square of
+frequency</strong>. Halving the loop area buys 6 dB; the harmonic content of your edge
+rate is what sets the frequency. This is the quantitative argument for tight
+return paths: it is not a rule of thumb, it is a squared term.</p>
+<p><strong>A first-order screen, not a compliance prediction.</strong> The model assumes a
+simple electrically-small loop in free space. Real boards have cables,
+enclosures and ground structures that dominate real emissions, and a test
+site's ground reflection can add up to 6 dB. Use it to compare two layouts and
+to find which harmonic is your problem — not to decide you will pass.</p>
+<h3 id="emissions-limits-and-the-near-field">Emissions limits and the near field</h3>
+<p>The FCC Class B limits match 47 CFR §15.109(a), and the <strong>FCC Class A</strong> limits
+match §15.109(b): 90 / 150 / 210 / 300 µV/m (39.1 / 43.5 / 46.4 / 49.5 dBµV/m)
+at 10 m. Versions before 2026-10-20 used a Class A table about 10 dB higher (the
+3 m equivalents labelled 10 m), so their Class A margins were about 10 dB
+optimistic: re-check any Class A result from an older version. The field
+is the loop's far-field term only: close in (kr below about 2.5, e.g. 3 m at
+30 MHz) the exact field is up to 1.1 dB higher, and the tool adds a note
+(<a href="verification-and-limits.html#emc-and-signal-integrity">validation</a>).</p>
+</main>
+</body>
+</html>

@@ -1,0 +1,200 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Units and conventions — CastGuidance PCB Toolkit</title>
+<style>:root{--bg:#1E1E1E;--panel:#252526;--line:#3F3F46;--fg:#E6E6E6;--dim:#A0A0A0;--accent:#D9842A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+  font:15px/1.65 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;display:flex}
+.sidebar{width:270px;min-height:100vh;background:var(--panel);
+  border-right:1px solid var(--line);padding:18px 0;position:sticky;top:0;
+  align-self:flex-start;max-height:100vh;overflow:auto;flex:0 0 270px}
+.brand{font-weight:600;color:var(--accent);padding:0 18px 14px;font-size:16px}
+.brand span{display:block;color:var(--dim);font-weight:400;font-size:13px}
+.sidebar a{display:block;padding:7px 18px;color:var(--fg);text-decoration:none;font-size:14px}
+.sidebar a:hover{background:#2D2D30}
+.sidebar a.current{color:var(--accent);border-left:3px solid var(--accent);padding-left:15px}
+main{flex:1;max-width:860px;padding:36px 44px 90px}
+h1{font-size:30px;margin:0 0 20px;color:var(--fg)}
+h2{font-size:22px;margin:38px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+h3{font-size:17px;margin:26px 0 8px;color:var(--accent)}
+h4{font-size:15px;margin:20px 0 6px;color:var(--fg)}
+p,li{color:#D2D2D2}
+a{color:var(--accent)}
+code{background:#2D2D30;padding:1px 5px;border-radius:3px;
+  font:13px/1.5 Consolas,Menlo,monospace;color:#E8C08A}
+pre{background:#2D2D30;padding:12px 14px;border-radius:4px;overflow-x:auto}
+pre code{background:none;padding:0}
+table{border-collapse:collapse;margin:16px 0;width:100%;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:7px 11px;text-align:left;font-size:14px}
+th{background:var(--panel);color:var(--accent)}
+blockquote{border-left:3px solid var(--accent);margin:16px 0;padding:2px 16px;color:var(--dim)}
+@media(max-width:820px){body{display:block}.sidebar{width:auto;position:static;
+  max-height:none;flex:none}main{padding:24px 20px 60px}}</style>
+</head>
+<body>
+<nav class="sidebar"><div class="brand">CastGuidance<span>PCB Toolkit</span></div><a href="design-wizard.html">The PCB Design Wizard</a><a href="dfm-thermal-emc.html">DFM, thermal and EMC</a><a href="faq.html">Frequently asked questions</a><a href="files-and-formats.html">Files and exports</a><a href="getting-started.html">Getting started</a><a href="index.html">CastGuidance PCB Toolkit — User Manual</a><a href="openems.html">The 3D field solver</a><a href="power-integrity.html">Power integrity and power electronics</a><a href="reference-calculators.html">Reference calculators</a><a href="rf-microwave.html">RF and microwave</a><a href="signal-integrity.html">Signal integrity</a><a href="stackup-and-materials.html">Stackup and materials</a><a href="trace-and-routing.html">Trace and routing</a><a href="units-and-conventions.html" class="current">Units and conventions</a><a href="verification-and-limits.html">Verification and limits</a><a href="vias-and-padstacks.html">Vias and padstacks</a></nav>
+<main><h1 id="units-and-conventions">Units and conventions</h1>
+<h2 id="everything-is-si-underneath">Everything is SI underneath</h2>
+<p>Every calculation in the toolkit is done in SI base units — metres, amperes,
+volts, hertz, farads, henries. The unit you see on a field is a display
+convention applied on the way in and on the way out. This matters for one
+practical reason: <strong>switching a unit selector never changes the design</strong>, it
+only re-renders the same physical geometry in different numbers.</p>
+<h2 id="length">Length</h2>
+<table>
+<thead>
+<tr>
+<th>Unit</th>
+<th>Exact value</th>
+<th>Where you see it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mil</td>
+<td>1 mil = 0.0254 mm exactly = 25.4 µm</td>
+<td>Default for most PCB geometry fields</td>
+</tr>
+<tr>
+<td>mm</td>
+<td>—</td>
+<td>Package drawings, laminate thicknesses, drill sizes</td>
+</tr>
+<tr>
+<td>µm</td>
+<td>—</td>
+<td>Copper plating, microvia geometry, surface roughness</td>
+</tr>
+<tr>
+<td>inch</td>
+<td>1 inch = 25.4 mm exactly</td>
+<td>Trace lengths in loss budgets</td>
+</tr>
+</tbody>
+</table>
+<p>A <strong>mil is one thousandth of an inch</strong>, not a millimetre. It is the dominant
+unit in North American PCB fabrication and in IPC's older standards, so most
+fields default to it. IPC's newer standards and every package drawing you will
+get from a semiconductor vendor are metric.</p>
+<p>Most length outputs are shown in both: <code>9.45 mil  (0.240 mm)</code>.</p>
+<h3 id="tools-with-a-unit-selector">Tools with a unit selector</h3>
+<p>The <a href="vias-and-padstacks.html#bga-pad-designer-nsmd--smd">BGA Pad Designer</a> has a
+single <strong>Units</strong> dropdown at the top of the page that governs every input and
+every output at once, so you can work entirely in mm or entirely in mils.
+Switching it converts what is displayed; it does not reinterpret what you
+typed. If you enter 0.30 mm and switch to mils you get 11.81 mil, not 0.30 mil.</p>
+<h2 id="copper-weight-and-thickness">Copper weight and thickness</h2>
+<p>Copper is specified by <strong>weight per unit area</strong>, not by thickness, because that
+is how foil is made and sold.</p>
+<table>
+<thead>
+<tr>
+<th>Copper weight</th>
+<th>Thickness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.5 oz</td>
+<td>0.689 mil ≈ 17.5 µm</td>
+</tr>
+<tr>
+<td>1 oz</td>
+<td>1.378 mil ≈ 35.0 µm</td>
+</tr>
+<tr>
+<td>2 oz</td>
+<td>2.756 mil ≈ 70.0 µm</td>
+</tr>
+<tr>
+<td>3 oz</td>
+<td>4.134 mil ≈ 105 µm</td>
+</tr>
+</tbody>
+</table>
+<p>&quot;1 oz copper&quot; means a sheet whose mass is one ounce per square foot. IPC-2152
+quotes 1.378 mil; the toolkit uses that exact value everywhere rather than the
+rounded 1.4 mil you sometimes see.</p>
+<p><strong>Finished copper is thicker than base copper on outer layers.</strong> Plating adds
+roughly 1 oz to whatever base foil you started with, so a board ordered as
+&quot;1 oz outer&quot; typically finishes around 1.4–2 oz. Where a tool asks for copper
+thickness it wants the <em>finished</em> value unless the field says otherwise.</p>
+<h2 id="dielectric-constant">Dielectric constant</h2>
+<p>Three related numbers appear across the toolkit and they are not
+interchangeable.</p>
+<p><strong>Dk (or ε_r)</strong> — the bulk relative permittivity of the laminate, from the
+manufacturer's datasheet. Always quoted at a stated frequency, usually 10 GHz;
+some high-speed materials publish at 28 GHz. Dk falls slowly with frequency.</p>
+<p><strong>ε_eff (effective dielectric constant)</strong> — what a <em>microstrip</em> trace actually
+sees. Part of the field is in the laminate and part is in the air above it, so
+ε_eff lands between 1 and Dk. A rough starting point is ε_eff ≈ 0.65 × Dk for
+surface microstrip, but the real value depends on the width-to-height ratio —
+compute it with <a href="stackup-and-materials.html#er-effective">Er Effective</a>.</p>
+<p><strong>Dk for stripline</strong> — a stripline trace is buried in laminate on all sides, so
+ε_eff equals Dk. This is why stripline is slower than microstrip on the same
+material.</p>
+<p>Getting these confused is the single most common source of a wrong impedance or
+a wrong propagation delay. If a field asks for ε_eff and you give it bulk Dk,
+your trace will come out too narrow.</p>
+<h2 id="loss-tangent">Loss tangent</h2>
+<p><strong>Df</strong>, also written <strong>tan δ</strong>, is the dielectric loss tangent — the fraction of
+energy the laminate absorbs per cycle. Like Dk it is quoted at a stated
+frequency and, unlike Dk, it generally <em>rises</em> with frequency. Typical values:
+0.02 for generic FR-4, 0.005 for a mid-loss material, 0.002 for Megtron-class,
+0.0009 for PTFE.</p>
+<p>Use <a href="stackup-and-materials.html#dielectric-dkdf-vs-frequency">Dielectric Dk/Df vs
+Frequency</a> to move a
+datasheet point to your design frequency rather than assuming the datasheet
+number applies everywhere.</p>
+<h2 id="frequency-rise-time-and-bandwidth">Frequency, rise time and bandwidth</h2>
+<p>High-speed digital work needs a frequency to plug into an RF formula, and what
+you have is a rise time. The two standard conversions:</p>
+<ul>
+<li><strong>Knee frequency, IPC-2251:</strong> BW = 0.35 / t_r</li>
+<li><strong>Knee frequency, Howard Johnson:</strong> BW = 0.5 / t_r (more conservative)</li>
+</ul>
+<p>Both are in <a href="trace-and-routing.html#bandwidth-and-max-length">Bandwidth &amp; Max Length</a>.</p>
+<p><strong>Nyquist frequency</strong> for a serial link is half the baud rate — 8 GHz for a
+16 Gbps NRZ link. For PAM4 the symbol rate is half the bit rate, so a 32 Gbps
+PAM4 link has the same 8 GHz Nyquist as a 16 Gbps NRZ one. Loss budgets are
+almost always quoted at Nyquist.</p>
+<h2 id="impedance-conventions">Impedance conventions</h2>
+<ul>
+<li><strong>Z₀</strong> — single-ended characteristic impedance, one conductor against its
+reference plane. Usually 50 Ω.</li>
+<li><strong>Z_diff</strong> — differential impedance of a pair. Roughly 2 × Z_odd, and <em>less</em>
+than 2 × Z₀ because the coupling between the traces pulls it down.</li>
+<li><strong>Z_odd / Z_even</strong> — the impedance of one trace when the pair is driven
+differentially / in common mode.</li>
+<li><strong>Z_common</strong> — the pair driven as one conductor, roughly Z_even / 2.</li>
+</ul>
+<p>Common targets: 90 Ω differential for USB 2.0, 100 Ω for Ethernet, PCIe and
+HDMI, 120 Ω for CAN-FD, 85 Ω for some DDR4 implementations.</p>
+<h2 id="decibels">Decibels</h2>
+<ul>
+<li><strong>dB</strong> is a ratio. 10 dB is 10× power, 20 dB is 10× voltage.</li>
+<li><strong>dBm</strong> is an absolute power referenced to 1 mW. 0 dBm = 1 mW.</li>
+<li><strong>Insertion loss</strong> is quoted as a positive number of dB in this toolkit
+(&quot;3.2 dB of loss&quot;), not as a negative S21.</li>
+</ul>
+<p>The <a href="reference-calculators.html#dbm-reference-chart">dBm Reference Chart</a> converts
+between dBm, mW and Vrms at a chosen system impedance — remember that a dBm
+value only maps to a voltage once you fix the impedance.</p>
+<h2 id="temperature">Temperature</h2>
+<p>Ambient and rise are in °C throughout. Where a formula needs absolute
+temperature the tool converts internally. <code>ΔT</code> always means <strong>rise above
+ambient</strong>, not an absolute temperature: <code>ΔT = 10 °C</code> with <code>T_a = 25 °C</code> means
+the copper reaches 35 °C.</p>
+<h2 id="tolerances-and-the-min--typ--max-convention">Tolerances and the min / typ / max convention</h2>
+<p>Where a tool reports a min / typical / max triplet, the middle column is the
+design target and the outer columns are a <em>design window</em>, not a manufacturing
+measurement. They answer &quot;what range of values is acceptable&quot;, not &quot;what will
+the fab actually deliver&quot;. Where a geometric limit is tighter than the standard's
+window, the reported maximum is clamped to the real limit and a diagnostic says
+so.</p>
+</main>
+</body>
+</html>

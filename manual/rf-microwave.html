@@ -1,0 +1,194 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RF and microwave — CastGuidance PCB Toolkit</title>
+<style>:root{--bg:#1E1E1E;--panel:#252526;--line:#3F3F46;--fg:#E6E6E6;--dim:#A0A0A0;--accent:#D9842A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+  font:15px/1.65 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;display:flex}
+.sidebar{width:270px;min-height:100vh;background:var(--panel);
+  border-right:1px solid var(--line);padding:18px 0;position:sticky;top:0;
+  align-self:flex-start;max-height:100vh;overflow:auto;flex:0 0 270px}
+.brand{font-weight:600;color:var(--accent);padding:0 18px 14px;font-size:16px}
+.brand span{display:block;color:var(--dim);font-weight:400;font-size:13px}
+.sidebar a{display:block;padding:7px 18px;color:var(--fg);text-decoration:none;font-size:14px}
+.sidebar a:hover{background:#2D2D30}
+.sidebar a.current{color:var(--accent);border-left:3px solid var(--accent);padding-left:15px}
+main{flex:1;max-width:860px;padding:36px 44px 90px}
+h1{font-size:30px;margin:0 0 20px;color:var(--fg)}
+h2{font-size:22px;margin:38px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+h3{font-size:17px;margin:26px 0 8px;color:var(--accent)}
+h4{font-size:15px;margin:20px 0 6px;color:var(--fg)}
+p,li{color:#D2D2D2}
+a{color:var(--accent)}
+code{background:#2D2D30;padding:1px 5px;border-radius:3px;
+  font:13px/1.5 Consolas,Menlo,monospace;color:#E8C08A}
+pre{background:#2D2D30;padding:12px 14px;border-radius:4px;overflow-x:auto}
+pre code{background:none;padding:0}
+table{border-collapse:collapse;margin:16px 0;width:100%;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:7px 11px;text-align:left;font-size:14px}
+th{background:var(--panel);color:var(--accent)}
+blockquote{border-left:3px solid var(--accent);margin:16px 0;padding:2px 16px;color:var(--dim)}
+@media(max-width:820px){body{display:block}.sidebar{width:auto;position:static;
+  max-height:none;flex:none}main{padding:24px 20px 60px}}</style>
+</head>
+<body>
+<nav class="sidebar"><div class="brand">CastGuidance<span>PCB Toolkit</span></div><a href="design-wizard.html">The PCB Design Wizard</a><a href="dfm-thermal-emc.html">DFM, thermal and EMC</a><a href="faq.html">Frequently asked questions</a><a href="files-and-formats.html">Files and exports</a><a href="getting-started.html">Getting started</a><a href="index.html">CastGuidance PCB Toolkit — User Manual</a><a href="openems.html">The 3D field solver</a><a href="power-integrity.html">Power integrity and power electronics</a><a href="reference-calculators.html">Reference calculators</a><a href="rf-microwave.html" class="current">RF and microwave</a><a href="signal-integrity.html">Signal integrity</a><a href="stackup-and-materials.html">Stackup and materials</a><a href="trace-and-routing.html">Trace and routing</a><a href="units-and-conventions.html">Units and conventions</a><a href="verification-and-limits.html">Verification and limits</a><a href="vias-and-padstacks.html">Vias and padstacks</a></nav>
+<main><h1 id="rf-and-microwave">RF and microwave</h1>
+<p>Matching networks, attenuators and planar passives.</p>
+<h2 id="lc-matching-ladder-value-solver">LC Matching Ladder (value-solver)</h2>
+<p>The most capable tool in the toolkit, and the one with the most inputs. It
+solves component values for a strictly-alternating LC ladder that matches a
+complex source to a complex load. <strong>The engine solves values and reports
+feasibility — it never changes your topology.</strong> You decide the shape; it tells
+you what parts go in it and whether they will work.</p>
+<h3 id="choosing-the-topology">Choosing the topology</h3>
+<p><strong>Element scheme.</strong> Series-L / Shunt-C is a low-pass ladder (series legs are
+inductors, shunt legs are capacitors). Series-C / Shunt-L is the high-pass
+dual.</p>
+<p><strong>First element.</strong> Series-first or shunt-first, on the source side. This sets
+which end the shunt element sits on, and that flips the direction of the
+impedance transformation: <strong>series-first puts the shunt toward the load</strong> (for
+a load above the reference resistance), <strong>shunt-first puts it on the source
+side</strong> (for a load below it). The rule is that the shunt element belongs across
+the <em>higher-resistance</em> side. The tool raises an advisory if your chosen
+orientation is the opposite of what the terminations call for.</p>
+<p><strong>Number of legs.</strong> 1 to 12. One leg is an L-network. More legs buy bandwidth
+and lower node Q at the cost of parts and loss.</p>
+<h3 id="inputs">Inputs</h3>
+<p>Complex source Zs and load Zl as R + jX, a real Z₀ reference, the target centre
+frequency f₀, a sweep band for the plot, the matching objective (reflectionless
+to Z₀, or conjugate to the source), and the pass target for |S11|.</p>
+<h3 id="the-three-calculation-modes">The three calculation modes</h3>
+<ol>
+<li><strong>Raw ideal</strong> — exact mathematical values, no parasitics.</li>
+<li><strong>Ideal snapped</strong> — those values rounded to the purchasable RF grid.</li>
+<li><strong>Purchasable re-solved</strong> — the values re-solved so that the <em>real</em> network
+— including body ESL, mounting and solder inductance, pad capacitance and
+ESR — meets the target at f₀.</li>
+</ol>
+<p>Mode 3 is the one that matters. Snapping an ideal answer to stock values and
+hoping is how matching networks come back off the bench 10 % low.</p>
+<h3 id="component-bounds-and-parasitics">Component bounds and parasitics</h3>
+<p>Values are bounded to the typical RF window even for the theoretical answer —
+Coilcraft 0402DC inductors 0.8–120 nH, Murata GJM1555 C0G capacitors
+1–100 pF. Sub-picofarad capacitors are excluded because you cannot buy or
+place them reliably.</p>
+<p>Capacitor and inductor packages are chosen <strong>independently</strong> — an 0201
+capacitor with an 0402 inductor is a normal combination — and each type's
+bounds and parasitics are tracked from its own package.</p>
+<p>Parasitics are <strong>value-dependent</strong>: a larger inductor has higher DCR and a
+lower self-resonant frequency, so each candidate design is evaluated with its
+own SRF, series loss and Q, on top of the fixed pad, package and solder
+parasitics.</p>
+<h3 id="the-component-value-spread-slider">The component-value spread slider</h3>
+<p>For 3 or more legs there is a family of solutions rather than a single answer.
+The slider sweeps that family from the smallest L/C that still matches to the
+largest. <strong>Only positions that actually meet the pass |S11| target in the
+selected mode are shown</strong> — infeasible positions are dropped — so every stop on
+the slider is a valid design. A 1- or 2-element match is fully determined, so
+the slider is disabled there.</p>
+<h3 id="outputs">Outputs</h3>
+<p>Per-leg component values with node Q and the value-dependent SRF / Rs / Q at
+f₀; |S11|, return loss and VSWR at f₀; network Q and minimum Q; the
+numerically-measured matched bandwidth; an S11-versus-frequency plot with the
+target line; and for 3+ legs the smallest-to-largest component-value family.</p>
+<p>Export as a 2-port Touchstone <code>.s2p</code> (or <code>.s1p</code>), HTML, or TXT.</p>
+<p><strong>Insight.</strong> Node Q is the number that predicts how touchy the network will be.
+A high-Q node means a narrow match that moves when a component is 5 % off or a
+neighbouring copper pour changes the pad capacitance. If the solver offers you
+a low-Q solution at the same |S11|, take it.</p>
+<p><strong>S-parameter quality.</strong> The exported <code>.s2p</code> is screened before you see it:
+passivity (the largest singular value of S may not exceed 1), reciprocity
+(S12 = S21), sampling (phase step between points) and causality (sign of the
+group delay). The verdict is shown as <strong>S-param quality</strong> under Performance,
+written into every Touchstone file as a comment line, and a failing check
+appears as a diagnostic. The <code>.s2p</code> holds the network alone, Z₀ at both ports;
+the <code>.s1p</code> is the input reflection with your load attached.</p>
+<p><strong>Not yet available.</strong> The Smith chart view is planned for a future update.</p>
+<h3 id="real-part-build">Real-part build</h3>
+<p>Under the outputs, the <strong>Real-part build</strong> card answers &quot;what happens when I
+buy these parts&quot;. It starts from the ideal values of the design on screen and
+leaves the three calculation modes unchanged.</p>
+<ol>
+<li><strong>With part parasitics</strong> (on by default): each part carries its package's
+parasitics and the values are re-tuned with them. A capacitor has mounted
+ESL that falls with value, ESR rising as √f and C0G loss. An inductor is the
+package's wirewound RF part: DC resistance, k·√f loss and self-capacitance.
+Parasitics make a part look larger, so the re-tuned values come out smaller.</li>
+<li><strong>Preferred values</strong>: each value is snapped to the IEC 60063 series you pick
+(E24 by default). <em>Nearest</em> is the closest value. <em>Chosen</em> is the best
+combination of each leg's two neighbouring values.</li>
+<li><strong>Shunt ground via</strong>: the inductance from each shunt part to the plane
+(0 = ideal ground). A 0.3 nH via is +j4.6 Ω at 2.45 GHz.</li>
+</ol>
+<p>Each row shows the ideal, tuned, nearest and chosen value, and the chosen
+part's SRF, tolerance and Q at f₀. A green |S11| plot shows the chosen build.
+A part used past its self-resonance is flagged.</p>
+<h3 id="real-part-models-and-tolerance-yield">Real-part models and tolerance yield</h3>
+<p>The part models are FishLadder's package-level generic models. They were
+checked against Johanson's measured series-through library and the RF
+wirewound datasheets. They are estimates, not a vendor part, so sign-off still
+needs the vendor's S-parameters.</p>
+<p><strong>Tolerance yield.</strong> A Monte Carlo of 2000 builds, each part uniform within its
+tolerance. It uses a fixed seed (20260806), so the same design always gives the
+same yield. It is judged against the pass target at f₀, or over f₀ ± 2.5 % or
+± 5 %. Small parts use the wider absolute bin: ±0.1 pF is ±10 % of a 1 pF part.
+Tolerance moves only the value; the parasitics stay those of the nominal part.</p>
+<p>The card also shows the exact worst ± corner, and lists the parts to tighten
+first: the ones whose tolerance alone costs the most return loss.</p>
+<h2 id="quarter-wave-match-multi-section">Quarter-Wave Match (multi-section)</h2>
+<p>A cascaded λ/4 transformer for matching two <strong>real</strong> impedances, with the
+microstrip widths solved for you.</p>
+<p><strong>Methodology dropdown.</strong> Binomial (maximally flat, monotonic VSWR — clean
+in-band response) or Chebyshev (equal-ripple — wider bandwidth at the cost of
+in-band ripple).</p>
+<p><strong>Inputs.</strong> Source Z and load Z (both must be real), design frequency,
+substrate height h and copper thickness t for the width solver, the number of
+sections (1–9), and the VSWR criterion that defines the bandwidth edge (1.5:1,
+2:1 or 3:1).</p>
+<p><strong>Outputs.</strong> Fractional bandwidth, the frequency range that meets your VSWR
+criterion, total transformer length, a per-section table of impedance / width /
+length, and a VSWR-versus-frequency plot.</p>
+<p><strong>Insight.</strong> Each extra section roughly doubles the usable bandwidth but adds a
+quarter wavelength of board. At 2.4 GHz on FR-4 a section is about 17 mm, so a
+4-section transformer is nearly 70 mm of trace — often the reason a lumped LC
+match wins on a small board.</p>
+<p><strong>Real impedances only.</strong> If your load has reactance, either cancel it first
+with a series element or use the <a href="#lc-matching-ladder-value-solver">LC Matching Ladder</a>,
+which handles complex terminations directly.</p>
+<h2 id="pi-pad-attenuator">Pi-Pad Attenuator</h2>
+<p>A resistive Pi-network attenuator (shunt → series → shunt).</p>
+<p><strong>Inputs.</strong> Attenuation in dB (3, 6, 10, 20, 30 dB are the common values), and
+Zin and Zout. Equal impedances give a symmetric pad; unequal ones give a
+matching pad.</p>
+<p><strong>Outputs.</strong> The three exact resistor values — series, shunt input, shunt
+output — each snapped to the nearest E24 standard value.</p>
+<h2 id="t-pad-attenuator">T-Pad Attenuator</h2>
+<p>The dual topology (series → shunt → series). Same inputs as the Pi-pad;
+outputs are the two series resistors and the shunt resistor, exact and
+E24-snapped.</p>
+<p><strong>Choosing between them.</strong> Electrically they are equivalent. Pi tends to be a
+better layout fit when you have ground nearby on both ends; T when you do not.
+At high attenuation, the Pi's series resistor gets very large and the T's shunt
+resistor gets very small — pick whichever puts your values in a comfortable
+range.</p>
+<p><strong>Insight.</strong> Attenuators are the cheapest way to fix a marginal match. 6 dB of
+pad improves a 3:1 VSWR to about 1.3:1 at the cost of 6 dB of signal, which is
+often a trade worth making on a test port or a driver output.</p>
+<h2 id="planar-spiral-inductor">Planar Spiral Inductor</h2>
+<p>Inductance of a planar spiral, via the Modified Wheeler expression (Mohan et
+al., 1999).</p>
+<p><strong>Inputs.</strong> Shape (square, hexagonal, octagonal, circular), number of turns N,
+conductor width W, spacing S between turns, and the outer diameter d_out.</p>
+<p><strong>Outputs.</strong> Inductance, the back-calculated inner diameter, average diameter
+d_avg, fill factor ρ, and the shape constants K₁ and K₂ the formula uses.</p>
+<p><strong>Insight.</strong> Circular spirals have the best inductance-per-area and the highest
+Q; octagonal is the usual compromise when your layout tool dislikes curves.
+Fill factor ρ near 0.5 is roughly optimal — pack the turns too tightly and
+proximity effect eats the Q, spread them too far and you waste area.</p>
+</main>
+</body>
+</html>

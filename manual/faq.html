@@ -1,0 +1,920 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frequently asked questions — CastGuidance PCB Toolkit</title>
+<style>:root{--bg:#1E1E1E;--panel:#252526;--line:#3F3F46;--fg:#E6E6E6;--dim:#A0A0A0;--accent:#D9842A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+  font:15px/1.65 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;display:flex}
+.sidebar{width:270px;min-height:100vh;background:var(--panel);
+  border-right:1px solid var(--line);padding:18px 0;position:sticky;top:0;
+  align-self:flex-start;max-height:100vh;overflow:auto;flex:0 0 270px}
+.brand{font-weight:600;color:var(--accent);padding:0 18px 14px;font-size:16px}
+.brand span{display:block;color:var(--dim);font-weight:400;font-size:13px}
+.sidebar a{display:block;padding:7px 18px;color:var(--fg);text-decoration:none;font-size:14px}
+.sidebar a:hover{background:#2D2D30}
+.sidebar a.current{color:var(--accent);border-left:3px solid var(--accent);padding-left:15px}
+main{flex:1;max-width:860px;padding:36px 44px 90px}
+h1{font-size:30px;margin:0 0 20px;color:var(--fg)}
+h2{font-size:22px;margin:38px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+h3{font-size:17px;margin:26px 0 8px;color:var(--accent)}
+h4{font-size:15px;margin:20px 0 6px;color:var(--fg)}
+p,li{color:#D2D2D2}
+a{color:var(--accent)}
+code{background:#2D2D30;padding:1px 5px;border-radius:3px;
+  font:13px/1.5 Consolas,Menlo,monospace;color:#E8C08A}
+pre{background:#2D2D30;padding:12px 14px;border-radius:4px;overflow-x:auto}
+pre code{background:none;padding:0}
+table{border-collapse:collapse;margin:16px 0;width:100%;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:7px 11px;text-align:left;font-size:14px}
+th{background:var(--panel);color:var(--accent)}
+blockquote{border-left:3px solid var(--accent);margin:16px 0;padding:2px 16px;color:var(--dim)}
+@media(max-width:820px){body{display:block}.sidebar{width:auto;position:static;
+  max-height:none;flex:none}main{padding:24px 20px 60px}}</style>
+</head>
+<body>
+<nav class="sidebar"><div class="brand">CastGuidance<span>PCB Toolkit</span></div><a href="design-wizard.html">The PCB Design Wizard</a><a href="dfm-thermal-emc.html">DFM, thermal and EMC</a><a href="faq.html" class="current">Frequently asked questions</a><a href="files-and-formats.html">Files and exports</a><a href="getting-started.html">Getting started</a><a href="index.html">CastGuidance PCB Toolkit — User Manual</a><a href="openems.html">The 3D field solver</a><a href="power-integrity.html">Power integrity and power electronics</a><a href="reference-calculators.html">Reference calculators</a><a href="rf-microwave.html">RF and microwave</a><a href="signal-integrity.html">Signal integrity</a><a href="stackup-and-materials.html">Stackup and materials</a><a href="trace-and-routing.html">Trace and routing</a><a href="units-and-conventions.html">Units and conventions</a><a href="verification-and-limits.html">Verification and limits</a><a href="vias-and-padstacks.html">Vias and padstacks</a></nav>
+<main><h1 id="frequently-asked-questions">Frequently asked questions</h1>
+<p>Answers written the way people ask them. If you are looking for a complete
+description of a tool instead, the <a href="index.html#tool-reference">tool reference</a>
+walks each one field by field.</p>
+<h2 id="getting-started">Getting started</h2>
+<h3 id="what-is-this-toolkit-for">What is this toolkit for?</h3>
+<p>It is a set of 49 design-time calculators for printed circuit boards —
+impedance, signal integrity, power integrity, RF matching, thermal, EMC, DFM
+and cost. You type geometry and materials in, you get engineering answers out,
+and every formula names the standard behind it. It is a calculator set, not a
+simulator: see <a href="#what-can-this-toolkit-not-do">what it does not do</a>.</p>
+<h3 id="do-i-need-to-install-anything">Do I need to install anything?</h3>
+<p>No. The browser build runs the entire toolkit as WebAssembly in your own tab —
+nothing to install, no account, nothing uploaded. Install the Windows desktop
+build only if you want the bundled openEMS 3D field solver.</p>
+<h3 id="what-is-the-difference-between-the-browser-version-and-the-windows-app">What is the difference between the browser version and the Windows app?</h3>
+<p>One thing: the desktop build bundles the openEMS 3D FDTD solver, so the Trace
+Impedance tool can run a real full-wave extraction. Every other tool, and the
+analytic impedance estimates, behave identically in both. In the browser the 3D
+section is visible but disabled with a banner explaining why.</p>
+<h3 id="is-it-free-can-i-use-it-commercially">Is it free? Can I use it commercially?</h3>
+<p>Yes to both. The licence permits commercial use.</p>
+<h3 id="does-it-upload-my-design-or-phone-home">Does it upload my design or phone home?</h3>
+<p>No. There is no account, no telemetry and no upload of your inputs. The browser
+build computes entirely inside the WebAssembly sandbox in your tab; the only
+network traffic is fetching the application itself.</p>
+<h3 id="how-do-i-find-the-right-tool">How do I find the right tool?</h3>
+<p>Type into the search box at the top of the left menu, or press <code>Ctrl+P</code> from
+anywhere. Search matches titles, aliases and tags, so you do not need to know
+the toolkit's name for a thing — <code>Onderdonk</code> finds Fusing Current, <code>Zdiff</code>
+finds the Differential Pair Designer, <code>creepage</code> finds Min Conductor Spacing,
+<code>NSMD</code> finds the BGA Pad Designer.</p>
+<h3 id="where-is-the-calculate-button">Where is the Calculate button?</h3>
+<p>There isn't one. Every tool recalculates as you type. The single exception is
+<strong>Run 3D Simulation</strong> on the impedance tool, which is explicit because it takes
+tens of seconds to minutes.</p>
+<h3 id="what-do-the-coloured-banners-under-the-outputs-mean">What do the coloured banners under the outputs mean?</h3>
+<p><strong>INFO</strong> is context worth knowing, <strong>WARN</strong> means something is outside a normal
+range or a manufacturability limit has been crossed, and <strong>ERROR</strong> means the
+inputs describe something that cannot be built. A tool never silently clamps a
+bad input and shows you a plausible number instead.</p>
+<h3 id="can-i-save-my-work">Can I save my work?</h3>
+<p>Only from the two tools that produce a document: the Design Wizard exports its
+report as HTML or Markdown, and the LC Matching Ladder exports Touchstone, HTML
+or TXT. There is no project file and no document model — tool inputs reset to
+defaults each time you open a tool.</p>
+<h3 id="can-i-open-my-gerber-altium-or-kicad-files">Can I open my Gerber, Altium or KiCad files?</h3>
+<p>No. There is no CAD import of any kind — no Gerber, ODB++, IPC-2581, netlist,
+project file, stackup file, IBIS model or Touchstone import. Every input is
+typed. Get the number from your CAD tool and enter it.</p>
+<h3 id="why-did-my-inputs-reset-when-i-came-back-to-a-tool">Why did my inputs reset when I came back to a tool?</h3>
+<p>Because there is no document model — each tool opens at its defaults. If you
+need to keep a result, export it (Wizard, LC Ladder) or screenshot it.</p>
+<h3 id="can-i-run-it-on-macos-or-linux">Can I run it on macOS or Linux?</h3>
+<p>Use the browser build, which runs anywhere with a modern browser. The packaged
+desktop installer with the bundled solver is Windows-only.</p>
+<h3 id="what-do-i-do-if-a-number-looks-wrong">What do I do if a number looks wrong?</h3>
+<p>Check the citations in the tool first — half of apparent disagreements are two
+different standards, both correctly implemented (IPC-2152 versus IPC-2221 for
+trace current is the classic). Then check you have not given a tool bulk Dk
+where it asked for ε_eff. If it still looks wrong, report the tool, every
+input, what you got, what you expected and where your expectation came from.</p>
+<h2 id="units-and-reading-results">Units and reading results</h2>
+<h3 id="is-a-mil-a-millimetre">Is a &quot;mil&quot; a millimetre?</h3>
+<p>No — a mil is one <strong>thousandth of an inch</strong>, exactly 0.0254 mm or 25.4 µm. It
+is the dominant unit in North American PCB fabrication, so most fields default
+to it. Package drawings from semiconductor vendors are metric.</p>
+<h3 id="how-do-i-switch-between-mm-and-mils">How do I switch between mm and mils?</h3>
+<p>The BGA Pad Designer has a <strong>Units</strong> dropdown at the top that governs every
+input and output on the page at once. Other tools show most length outputs in
+both units side by side, e.g. <code>9.45 mil  (0.240 mm)</code>. Switching units converts
+the display; it never reinterprets what you typed.</p>
+<h3 id="what-is-the-difference-between-dk-εr-and-ε_eff">What is the difference between Dk, εr and ε_eff?</h3>
+<p><strong>Dk</strong> (also written εr) is the bulk permittivity of the laminate from its
+datasheet. <strong>ε_eff</strong> is what a <em>microstrip</em> trace actually sees — part of the
+field is in air, so ε_eff lands between 1 and Dk. For <strong>stripline</strong>, the trace
+is surrounded by laminate so ε_eff = Dk. Giving a tool bulk Dk where it asked
+for ε_eff is the single most common input error in the toolkit, and it produces
+a plausible-looking wrong answer.</p>
+<h3 id="how-do-i-get-ε_eff">How do I get ε_eff?</h3>
+<p>Use the <a href="stackup-and-materials.html#er-effective">Er Effective</a> tool — it takes
+width, height, bulk εr and frequency. A rough starting point is ε_eff ≈ 0.65 ×
+Dk for surface microstrip, but the real value depends heavily on the
+width-to-height ratio.</p>
+<h3 id="how-thick-is-1-oz-copper">How thick is 1 oz copper?</h3>
+<p>1.378 mil, about 35 µm. Copper is sold by weight per square foot, not by
+thickness: 0.5 oz ≈ 17.5 µm, 1 oz ≈ 35 µm, 2 oz ≈ 70 µm. The toolkit uses the
+exact IPC-2152 value of 1.378 mil rather than the rounded 1.4 mil.</p>
+<h3 id="should-i-enter-base-copper-or-finished-copper-thickness">Should I enter base copper or finished copper thickness?</h3>
+<p>Finished, unless the field says otherwise. Plating adds roughly 1 oz to outer
+layers, so a board ordered as &quot;1 oz outer&quot; typically finishes near 1.4–2 oz.
+Inner layers are not plated, so base equals finished there.</p>
+<h3 id="what-is-df-and-is-it-the-same-as-tan-δ">What is Df, and is it the same as tan δ?</h3>
+<p>Yes, they are the same thing: the dielectric loss tangent, the fraction of
+energy the laminate absorbs per cycle. Typical values are 0.02 for generic
+FR-4, 0.005 mid-loss, 0.002 for Megtron-class, 0.0009 for PTFE. Unlike Dk, Df
+generally <em>rises</em> with frequency.</p>
+<h3 id="my-driver-has-a-rise-time-but-the-tool-wants-a-frequency-what-do-i-use">My driver has a rise time but the tool wants a frequency. What do I use?</h3>
+<p>Use the knee frequency from <a href="trace-and-routing.html#bandwidth-and-max-length">Bandwidth &amp; Max
+Length</a>: BW = 0.35 / t_r per
+IPC-2251, or BW = 0.5 / t_r per Howard Johnson if you want to be conservative.
+The edge rate is what matters, not the clock rate — a 10 MHz clock with a 200 ps
+edge has a knee near 1.75 GHz.</p>
+<h3 id="what-is-the-nyquist-frequency-of-my-link">What is the Nyquist frequency of my link?</h3>
+<p>Half the <strong>symbol</strong> rate. A 16 Gbps NRZ link has an 8 GHz Nyquist. For PAM4 the
+symbol rate is half the bit rate, so a 32 Gbps PAM4 link also has an 8 GHz
+Nyquist. Insertion-loss budgets are almost always quoted at Nyquist.</p>
+<h3 id="does-δt-mean-an-absolute-temperature">Does ΔT mean an absolute temperature?</h3>
+<p>No — ΔT is always a <strong>rise above ambient</strong>. <code>ΔT = 10 °C</code> with <code>T_a = 25 °C</code>
+means the copper reaches 35 °C.</p>
+<h3 id="what-do-the-min--typical--max-columns-mean">What do the min / typical / max columns mean?</h3>
+<p>They are a <strong>design window</strong>, not a prediction of what your fab will deliver.
+The middle column is the target; the outer columns bound what is acceptable.
+Where a geometric limit is tighter than the standard's window, the reported max
+is clamped to the real limit and a diagnostic says so.</p>
+<h2 id="stackup-and-materials">Stackup and materials</h2>
+<h3 id="how-do-i-choose-a-laminate">How do I choose a laminate?</h3>
+<p>Open <a href="stackup-and-materials.html#material-comparison">Material Comparison</a>, sort
+by whichever property is driving your decision (Df for loss, Tg for assembly,
+z-CTE for via reliability), tick the candidates and switch on <strong>Compare
+selected only</strong>. Then move the Dk and Df of your shortlist to your actual
+design frequency with the <a href="stackup-and-materials.html#dielectric-dkdf-vs-frequency">Dielectric Dk/Df
+tool</a> before comparing
+them.</p>
+<h3 id="is-fr-4-good-enough-for-my-design">Is FR-4 good enough for my design?</h3>
+<p>Usually, up to a few GHz and a few gigabits. Generic FR-4 has Df around 0.02
+and poorly controlled Dk, so it starts to hurt when dielectric loss dominates
+your budget or when Dk variation moves your impedance. Run the <a href="signal-integrity.html#channel-insertion-loss-budget">Insertion Loss
+Budget</a> with FR-4 numbers
+and see whether the dielectric term alone blows your budget — that is the
+honest test.</p>
+<h3 id="why-is-dk-quoted-at-10-ghz-when-im-designing-at-2-ghz">Why is Dk quoted at 10 GHz when I'm designing at 2 GHz?</h3>
+<p>Because that is where the manufacturer measured it. Dk falls slowly with
+frequency, so a 10 GHz number is slightly low for a 2 GHz design. Use the
+<a href="stackup-and-materials.html#dielectric-dkdf-vs-frequency">Dielectric Dk/Df tool</a>
+to move it; between 1 and 10 GHz a typical FR-4 changes Dk by 2–4 %, which is
+roughly 1 Ω on a 50 Ω trace.</p>
+<h3 id="can-i-compare-two-materials-whose-datasheets-are-at-different-frequencies">Can I compare two materials whose datasheets are at different frequencies?</h3>
+<p>Not directly — you will get the wrong answer. A material specified at 28 GHz
+looks worse than one specified at 10 GHz even when it is better. Move both to a
+common frequency first. The <strong>Spec f</strong> column in Material Comparison exists
+precisely so you notice this.</p>
+<h3 id="what-is-tg-and-how-much-do-i-need">What is Tg and how much do I need?</h3>
+<p>Glass transition temperature — above it the resin softens and z-axis expansion
+accelerates sharply. Lead-free assembly wants Tg ≥ 150 °C; thick boards or
+multiple reflow cycles want 170 °C or better.</p>
+<h3 id="what-is-z-cte-and-why-should-i-care">What is z-CTE and why should I care?</h3>
+<p>Expansion through the board's thickness, in ppm/°C. It is what cracks plated
+via barrels during thermal cycling, so for via reliability it matters far more
+than in-plane CTE. Sort on it in Material Comparison when reliability is the
+driver.</p>
+<h3 id="my-board-came-back-warped-what-happened">My board came back warped. What happened?</h3>
+<p>Almost certainly copper imbalance. Boards warp because copper and resin shrink
+differently as the laminate cools from lamination temperature, so an asymmetric
+stackup curls. Put your layer coverages into <a href="stackup-and-materials.html#stackup-symmetry-and-bow">Stackup Symmetry &amp;
+Bow</a> and look at the
+symmetry score.</p>
+<h3 id="how-do-i-fix-a-bad-symmetry-score">How do I fix a bad symmetry score?</h3>
+<p>Add copper thieving — non-functional copper pours — to the sparse layers to
+balance coverage, or restack so heavy planes sit symmetrically about the
+centreline. Both are free at design time and expensive after the first article
+comes back bowed.</p>
+<h3 id="how-much-bow-is-allowed">How much bow is allowed?</h3>
+<p>IPC-6012E's limit for surface-mount boards is 0.75 % of the diagonal. On a
+200 mm board that is 1.5 mm, which sounds generous until you try to place a
+0.5 mm-pitch BGA on it. The tool computes the absolute limit for your board
+size.</p>
+<h3 id="how-many-layers-do-i-need">How many layers do I need?</h3>
+<p>Two things usually decide it: how many signal layers the BGA breakout needs,
+and whether every signal layer has an adjacent reference plane. Use <a href="stackup-and-materials.html#bga-escape-routing">BGA Escape
+Routing</a> for the first, then start
+the <a href="design-wizard.html">Design Wizard</a> for a whole-stackup recommendation.</p>
+<h2 id="impedance-and-the-3d-solver">Impedance and the 3D solver</h2>
+<h3 id="how-do-i-get-a-50-ω-trace">How do I get a 50 Ω trace?</h3>
+<p>Open <a href="trace-and-routing.html#trace-impedance-openems-3d">Trace Impedance</a>, pick
+your topology, enter the material and the dielectric height to the reference
+plane, then adjust the trace width until the analytic estimates read 50 Ω. The
+dielectric height matters more than anything else — if 50 Ω needs an
+unmanufacturably wide or narrow trace, change the layer spacing, not the width.</p>
+<h3 id="there-are-four-impedance-numbers-which-one-do-i-use">There are four impedance numbers. Which one do I use?</h3>
+<p>When they agree, any of them. Hammerstad-Jensen is the usual choice for
+microstrip and Cohn for stripline. What matters more than picking one is the
+<strong>spread between them</strong>: close agreement means your geometry is well inside
+their validated range.</p>
+<h3 id="why-do-the-four-analytic-estimates-disagree-with-each-other">Why do the four analytic estimates disagree with each other?</h3>
+<p>Because each is an empirical fit with its own validated range of W/H, T/H and
+εr, and your geometry has fallen outside one or more of them. Treat divergence
+as a warning rather than a nuisance — that is exactly when to run the 3D solver
+or change the geometry until they converge.</p>
+<h3 id="when-should-i-run-the-3d-simulation">When should I run the 3D simulation?</h3>
+<p>When the analytic estimates disagree, when your copper is unusually thick, when
+you have a tight coplanar gap, or as a final confirmation once the geometry is
+settled. Converge with the instant analytic numbers first — running FDTD on
+every trial width wastes minutes for nothing.</p>
+<h3 id="why-is-the-3d-simulation-greyed-out">Why is the 3D simulation greyed out?</h3>
+<p>You are in the browser build. The solver is a native compiled engine driven
+through a Python sidecar, and neither runs in a browser sandbox. Install the
+Windows desktop build if you need it; everything else is identical.</p>
+<h3 id="how-long-does-a-3d-simulation-take">How long does a 3D simulation take?</h3>
+<p>Tens of seconds at coarse mesh settings, up to several minutes at fine ones.
+The <strong>Sim quality</strong> dropdown is the trade-off, and the tool reports the mesh
+resolution it actually used so you can judge whether it was fine enough for
+your feature sizes.</p>
+<h3 id="which-topology-should-i-pick">Which topology should I pick?</h3>
+<p>Match your cross-section: <strong>Standard Microstrip</strong> for a surface trace over a
+plane, <strong>Embedded Microstrip</strong> if it is under soldermask or a thin dielectric,
+<strong>Stripline</strong> for a buried trace between two planes, <strong>CPWG</strong> when the trace has
+coplanar ground either side, and the differential variants for pairs. The
+diagram changes with the selection so you can confirm visually.</p>
+<h3 id="what-is-cpwg-and-when-would-i-use-it">What is CPWG and when would I use it?</h3>
+<p>Coplanar waveguide with ground — a trace with ground pours on both sides at the
+same layer, usually stitched with vias. It gives tighter field confinement and
+better isolation than plain microstrip, at the cost of board area and a lot of
+stitching vias. It is common in RF front ends and rare in digital designs.</p>
+<h3 id="my-impedance-is-too-low-what-do-i-change">My impedance is too low. What do I change?</h3>
+<p>In order of effect: increase the dielectric height to the reference plane,
+narrow the trace, or move to a lower-Dk material. Height is by far the strongest
+lever — if a 50 Ω trace on your stackup comes out at 4 mil wide, the fix is a
+thicker dielectric, not a heroic etch tolerance.</p>
+<h3 id="does-copper-thickness-affect-impedance">Does copper thickness affect impedance?</h3>
+<p>Yes, though less than width or height. Thicker copper lowers impedance slightly
+because the trace has more surface area coupling to the plane, and it matters
+more on thin dielectrics. Enter finished copper, not base.</p>
+<h3 id="why-is-my-stripline-slower-than-my-microstrip">Why is my stripline slower than my microstrip?</h3>
+<p>Because a stripline is buried in laminate on all sides, so ε_eff equals the
+bulk Dk. A microstrip has part of its field in air, which pulls ε_eff down —
+and propagation delay goes as √ε_eff. On Dk 4.2 material a stripline is roughly
+20 % slower than a surface microstrip.</p>
+<h3 id="what-is-the-difference-between-embedded-microstrip-and-stripline">What is the difference between embedded microstrip and stripline?</h3>
+<p>Embedded microstrip has a reference plane on <strong>one</strong> side and dielectric (or
+soldermask) covering the trace on the other. Stripline has planes on <strong>both</strong>
+sides. The difference is not cosmetic — embedded microstrip still has an
+asymmetric field, so ε_eff sits between the microstrip and stripline values.</p>
+<h3 id="can-openems-simulate-my-whole-board">Can openEMS simulate my whole board?</h3>
+<p>No. The bundled solver extracts characteristic impedance for the
+transmission-line cross-sections the tool offers. It does not import a layout,
+does not simulate a board, a package or a connector, and does not do
+time-domain channel simulation.</p>
+<h3 id="the-3d-solver-failed-to-start-what-now">The 3D solver failed to start. What now?</h3>
+<p>The usual causes are an antivirus product quarantining the bundled native
+engine, or an installation that was moved rather than reinstalled so relative
+paths no longer resolve. Reinstalling in place fixes both. If you only need
+impedance numbers, the analytic path needs none of this and always works.</p>
+<h2 id="differential-pairs">Differential pairs</h2>
+<h3 id="what-is-zdiff-and-why-isnt-it-just-2--z">What is Zdiff and why isn't it just 2 × Z₀?</h3>
+<p>Z_diff is the impedance seen across the pair, and it is <strong>less</strong> than 2 × Z₀
+because the two traces couple to each other. The coupling lowers each trace's
+odd-mode impedance, and Z_diff = 2 × Z_odd. The tighter the coupling, the
+further Z_diff falls below 2 × Z₀.</p>
+<h3 id="how-do-i-design-a-100-ω-differential-pair">How do I design a 100 Ω differential pair?</h3>
+<p>Open the <a href="trace-and-routing.html#differential-pair-designer">Differential Pair
+Designer</a>, set the target to
+100 Ω with your tolerance, enter your stackup, and set W and S sweep ranges
+generously. The green band on the 3D surface shows every combination that hits
+the target; take the recommended point or pick your own from inside the band.</p>
+<h3 id="the-green-band-is-empty-what-now">The green band is empty. What now?</h3>
+<p>No (W, S) combination in your swept range hits the target. Widen the sweep
+ranges first — often the answer is just outside. If it is still empty, the
+stackup is the problem: for a 100 Ω pair the usual fix is a <strong>thinner
+dielectric to the reference plane</strong>, not a different trace width.</p>
+<h3 id="should-i-use-tight-or-loose-coupling">Should I use tight or loose coupling?</h3>
+<p>Loose coupling for most digital work. Tight coupling gives better common-mode
+rejection and takes less width, but it makes Z_diff extremely sensitive to
+spacing tolerance and to anything that disturbs the gap — a via, a component
+pad, a bend. With loose coupling each trace is nearly independent, so
+manufacturing variation moves the impedance much less.</p>
+<h3 id="does-the-gap-between-the-pair-have-to-be-constant">Does the gap between the pair have to be constant?</h3>
+<p>Where it can be, yes — Z_diff depends on it. But a short discontinuity (going
+around a via, entering a connector footprint) is usually harmless if it is much
+shorter than a wavelength at your edge rate. Length-match after the
+discontinuity, and keep the disturbance short rather than gradual.</p>
+<h3 id="what-differential-impedance-does-my-interface-need">What differential impedance does my interface need?</h3>
+<p>90 Ω for USB 2.0, 100 Ω for Ethernet, PCIe Gen3+ and HDMI, 120 Ω for CAN-FD,
+and 85 Ω for some DDR4 implementations. Always check the specification you are
+actually building to — a few interfaces allow a range.</p>
+<h3 id="which-w-and-s-should-i-pick-out-of-the-green-band">Which W and S should I pick out of the green band?</h3>
+<p>Prefer the wider-trace, wider-spacing end. Both are easier to fabricate, and
+both make the impedance less sensitive to etch variation. That is exactly what
+the tool's recommendation optimises for, which is why it breaks ties toward
+wider geometry.</p>
+<h3 id="can-it-do-stripline-differential-pairs">Can it do stripline differential pairs?</h3>
+<p>The Differential Pair Designer's surface sweep covers edge-coupled microstrip
+and edge-coupled embedded microstrip. For stripline pairs use the <a href="trace-and-routing.html#trace-impedance-openems-3d">Trace
+Impedance</a> tool, which offers
+edge-coupled and broadside-coupled differential stripline — you just do not get
+the 2D manufacturability sweep there.</p>
+<h2 id="vias-and-microvias">Vias and microvias</h2>
+<h3 id="how-much-inductance-does-a-via-have">How much inductance does a via have?</h3>
+<p>Roughly 1 nH per millimetre of barrel length as an order of magnitude, but use
+<a href="vias-and-padstacks.html#via-properties">Via Properties</a> for a real number — it
+depends on the barrel length, the diameter and the return path. Length
+dominates.</p>
+<h3 id="how-do-i-reduce-via-inductance">How do I reduce via inductance?</h3>
+<p>Shorten the barrel — that is the dominant term. Then put the return via as
+close as possible, because the loop area between signal and return is what the
+inductance really measures. Increasing the drill diameter helps very little;
+doubling it buys you a small fraction of what halving the length does.</p>
+<h3 id="what-aspect-ratio-can-my-fab-drill">What aspect ratio can my fab drill?</h3>
+<p>8:1 is universally standard, 10:1 is a small adder, 12:1 costs more, and 14:1
+is about the limit of plating throwing power. Above that most fabs quote rather
+than list a price. Aspect ratio is board thickness ÷ finished hole diameter —
+check it in <a href="vias-and-padstacks.html#via-properties">Via Properties</a>.</p>
+<h3 id="what-is-a-microvia-and-when-do-i-need-one">What is a microvia and when do I need one?</h3>
+<p>A laser-drilled via that spans a single dielectric layer, typically 75–100 µm
+across. You need them when a fine-pitch BGA leaves no surface routing channel —
+below about 0.5 mm pitch, microvia or via-in-pad escape stops being an
+optimisation and becomes the only way out.</p>
+<h3 id="should-i-stack-or-stagger-microvias">Should I stack or stagger microvias?</h3>
+<p>Stagger, once you go beyond two levels. Stacked microvias concentrate thermal
+stress at exactly the interface that fails, and IPC-6012ES often requires extra
+qualification testing for 3-high stacks. Staggered is also the cheaper option.</p>
+<h3 id="what-is-a-weak-microvia-interface">What is a weak microvia interface?</h3>
+<p>WMI is an incomplete metallurgical bond between the microvia's plated copper
+and the target pad. It survives electrical test and then opens during thermal
+cycling — or even during the first reflow. It is the dominant microvia failure
+mode, which is why the <a href="vias-and-padstacks.html#microvia-analyzer-hdi">Microvia
+Analyzer</a> raises it as an advisory
+rather than burying it.</p>
+<h3 id="why-does-return-via-spacing-matter-so-much-for-a-microvia">Why does return-via spacing matter so much for a microvia?</h3>
+<p>Because inductance is set by the <strong>loop area</strong> between the signal via and
+wherever the return current gets back to the other plane. A stitching via
+0.5 mm away gives a tiny loop; one 5 mm away gives a loop big enough to throw
+away the microvia's whole advantage. It moves the answer more than any other
+input on that page.</p>
+<h3 id="what-annular-ring-do-i-need">What annular ring do I need?</h3>
+<p>5 mil external is a common design default and 2 mil is the IPC Class 2
+production minimum after drill registration. Set your target in <a href="vias-and-padstacks.html#padstack-calculator">Padstack
+Calculator</a> and check that the pad
+still fits between adjacent holes at your pitch.</p>
+<h3 id="what-is-an-antipad-and-how-big-should-it-be">What is an antipad and how big should it be?</h3>
+<p>The clearance hole in the plane layers a via passes through. Bigger antipads
+lower the via's capacitance (good for high speed) but eat plane copper and push
+return current further around (bad for inductance and for plane integrity).
+Start from the tool's default and only enlarge it if the via capacitance is
+actually a problem in your budget.</p>
+<h3 id="do-i-need-thermal-relief-on-plane-connections">Do I need thermal relief on plane connections?</h3>
+<p>For hand-soldered through-hole parts, yes — a direct connection to a plane
+sinks so much heat that a good joint is difficult. For SMT and for
+current-carrying connections, prefer a direct connection: thermal spokes add
+resistance and inductance for no benefit once a reflow oven is doing the
+heating.</p>
+<h2 id="bga-pads">BGA pads</h2>
+<h3 id="what-size-pad-should-i-use-for-a-bga-ball">What size pad should I use for a BGA ball?</h3>
+<p>Open the <a href="vias-and-padstacks.html#bga-pad-designer-nsmd--smd">BGA Pad Designer</a>,
+enter the ball diameter and pitch from the package drawing, and read the
+typical NSMD land. The IPC-7351B rule is a percentage reduction from the
+nominal ball diameter: ×0.85 for balls up to 0.20 mm, ×0.80 from there to
+0.50 mm, and ×0.75 above that.</p>
+<h3 id="nsmd-or-smd--which-should-i-use">NSMD or SMD — which should I use?</h3>
+<p>NSMD is IPC-7095's default recommendation because the solder anchors the land's
+sidewall as well as its face, giving a stronger joint. SMD becomes attractive at
+very fine pitch, when the etched land would be too small to hold registration
+reliably. In practice the decision is usually made by <strong>your fab's solder-mask
+registration</strong>, not by reliability theory — enter the number they quote you and
+see whether the SMD minimum still leaves a workable copper gap.</p>
+<h3 id="what-is-solder-mask-registration-and-where-do-i-get-the-number">What is solder-mask registration and where do I get the number?</h3>
+<p>It is how far the solder mask can shift relative to the copper, quoted per
+side. Ask your fabricator — it is a standard capability question. 1 mil is a
+reasonable modern default, 2 mil is safe for a low-cost fab, and shops using
+LDI will quote 25 µm or better.</p>
+<h3 id="what-is-the-smallest-pad-i-can-use">What is the smallest pad I can use?</h3>
+<p>For SMD, the mask opening plus twice the registration tolerance — that is the
+green headline number on the page. Below it the mask can slip off the copper
+edge and you get a partially mask-defined joint whose diameter nobody controls.
+Type your fab's registration figure in and the number recomputes immediately.</p>
+<h3 id="why-doesnt-the-pitch-change-my-pad-size">Why doesn't the pitch change my pad size?</h3>
+<p>Because IPC-7351B keys the land reduction on <strong>ball diameter alone</strong>. Pitch does
+not set the target — it sets the ceilings: how much copper fits before adjacent
+lands violate your etch spacing, and how much mask opening fits before the dam
+between openings gets too thin. The tool reports both ceilings and clamps the
+maximum to them.</p>
+<h3 id="what-is-a-solder-mask-dam-and-how-thin-can-it-be">What is a solder-mask dam and how thin can it be?</h3>
+<p>The web of mask between two adjacent openings. 3 mil is the usual fab floor;
+below roughly 75 µm the dam washes off during develop and stops doing its job,
+which is preventing solder bridging. The tool computes the dam at your chosen
+geometry so you can compare it to your fab's minimum.</p>
+<h3 id="my-vendors-recommended-footprint-differs-from-the-tool-who-is-right">My vendor's recommended footprint differs from the tool. Who is right?</h3>
+<p>Both, usually. Vendors sometimes deviate from IPC deliberately to tune
+board-level reliability for their specific package — one FPGA vendor sizes a
+land to match the package's own pad rather than to IPC, putting it slightly
+outside the IPC band. Enter the package-side pad diameter and the tool will
+compare it against the IPC target and flag the difference. <strong>When a datasheet
+gives you a recommended footprint, it usually wins.</strong></p>
+<h3 id="which-ball-diameter-do-i-enter--min-typical-or-max">Which ball diameter do I enter — min, typical or max?</h3>
+<p>Typical. The package drawing's <strong>&quot;b&quot;</strong> dimension has min/typ/max columns and
+the IPC land size is derived from the nominal, so use the middle one.</p>
+<h3 id="what-stencil-thickness-should-i-use-for-a-05-mm-pitch-bga">What stencil thickness should I use for a 0.5 mm pitch BGA?</h3>
+<p>Check the <strong>Max stencil foil</strong> output — it tells you the thickest foil that
+still clears the IPC-7525B 0.66 area ratio for your aperture. For a 0.30 mm
+ball with a 0.24 mm land that comes out near 3.6 mil, which is why a
+general-purpose 4 mil foil fails on fine-pitch BGAs.</p>
+<h3 id="why-is-my-area-ratio-failing">Why is my area ratio failing?</h3>
+<p>The aperture is too small for the foil thickness — area ratio is <code>D / (4T)</code> for
+a circle and IPC-7525B wants ≥ 0.66. Thin the foil (the tool tells you to
+what), enlarge the aperture, or use a nano-coated or electroformed stencil that
+releases better. On a mixed board a <strong>step stencil</strong> — locally thinned over the
+fine-pitch area — is the standard answer.</p>
+<h3 id="what-is-collapsed-standoff-and-should-i-trust-it">What is collapsed standoff and should I trust it?</h3>
+<p>It is the predicted joint height after reflow, from a constant-volume
+truncated-sphere model: the ball's solder volume is conserved and the joint
+becomes a sphere truncated by the two wetting planes. It is a geometry
+estimate, not a reflow simulation — it ignores surface tension, package weight
+and printed paste. Use it comparatively, to see how standoff falls as the land
+grows, not as an absolute prediction.</p>
+<h3 id="why-do-nsmd-and-smd-show-the-same-standoff">Why do NSMD and SMD show the same standoff?</h3>
+<p>Because by default they are sized to the same joint diameter, and standoff
+depends on the wetted diameter. The real difference between them is the
+<strong>wetted area</strong> — NSMD adds the land's copper sidewall to the joint, which is
+what the &quot;NSMD anchor area&quot; figure quantifies.</p>
+<h3 id="can-i-route-between-05-mm-pitch-bga-balls">Can I route between 0.5 mm pitch BGA balls?</h3>
+<p>Barely, and usually not. With a 0.24 mm land and 4 mil clearance the surface
+channel is a few mils wide — not enough for a trace at any normal design rule.
+Check the <strong>Escape channel</strong> output, and if it is at or near zero plan on
+via-in-pad or HDI microvia escape. The <a href="stackup-and-materials.html#bga-escape-routing">BGA Escape
+Routing</a> tool turns that into a
+layer count.</p>
+<h3 id="do-i-need-via-in-pad-for-my-bga">Do I need via-in-pad for my BGA?</h3>
+<p>If the escape channel is zero, yes. Via-in-pad requires the vias to be filled
+and capped (POFV/VIPPO) so solder does not wick down the barrel — which is free
+at some Chinese fabs on 6+ layers and around +40 % at US fabs. Check the
+tradeoff in the <a href="dfm-thermal-emc.html#pcb-cost-estimator">PCB Cost
+Estimator</a>.</p>
+<h3 id="does-the-bga-pad-designer-know-about-specific-parts">Does the BGA Pad Designer know about specific parts?</h3>
+<p>No, deliberately. The preset dropdown lists standard pitch and ball geometries
+only — it is a shortcut for typing two numbers, not a parts library. Read the
+&quot;b&quot; typical dimension off your own package drawing and enter it.</p>
+<h2 id="channel-loss-and-signal-integrity">Channel loss and signal integrity</h2>
+<h3 id="how-much-loss-can-my-channel-afford">How much loss can my channel afford?</h3>
+<p>The specification tells you — and if you pick a protocol preset in <a href="signal-integrity.html#via-stub-impact-s21-eye-and-budget">Via Stub
+Impact</a> the budget is
+filled in for you along with the FEC margin. Then total your actual channel
+with the <a href="signal-integrity.html#channel-insertion-loss-budget">Insertion Loss
+Budget</a> and compare.</p>
+<h3 id="where-is-my-loss-actually-coming-from">Where is my loss actually coming from?</h3>
+<p>Read the per-component breakdown in the Insertion Loss Budget: dielectric,
+conductor, via stub and connector are reported separately, along with α_d and
+α_c in dB/inch. That breakdown is the whole point of the tool — spending money
+on the wrong term is the most common channel-budget mistake.</p>
+<h3 id="will-a-better-laminate-fix-my-loss-problem">Will a better laminate fix my loss problem?</h3>
+<p>Only if the <strong>dielectric</strong> term dominates your breakdown. If conductor loss is
+the bigger number, a low-Df laminate changes almost nothing and what you
+actually need is wider traces and smoother copper foil. Look at the breakdown
+before you buy Megtron.</p>
+<h3 id="why-does-dielectric-loss-matter-more-at-higher-data-rates">Why does dielectric loss matter more at higher data rates?</h3>
+<p>Because dielectric loss scales roughly <strong>linearly</strong> with frequency while
+conductor loss scales with the <strong>square root</strong> of frequency. So as you go up in
+rate the dielectric term grows faster and eventually dominates — which is why
+the industry moved to low-Df laminates rather than just thicker copper.</p>
+<h3 id="what-copper-roughness-should-i-specify">What copper roughness should I specify?</h3>
+<p>STD foil has Rz around 5.7 µm, RTF 4.4 µm, VLP 3.5 µm and HVLP 2.0 µm. Below
+about 10 Gbps standard foil is fine; at 25 Gbps and above, VLP or HVLP is
+normal. Put your candidates into <a href="signal-integrity.html#conductor-loss-roughness">Conductor
+Loss</a> and read the multiplier —
+roughness alone can be a 30–60 % loss difference on identical resin.</p>
+<h3 id="what-is-rz-and-where-do-i-find-it">What is Rz and where do I find it?</h3>
+<p>Rz is the ten-point mean roughness of the copper foil, quoted in µm on the
+laminate or foil datasheet. The Cannonball-Huray model in the toolkit takes Rz
+directly, which is why it is the default — the older models need a surface-ratio
+parameter you have to fit rather than look up.</p>
+<h3 id="why-does-copper-roughness-matter-so-much-at-high-frequency">Why does copper roughness matter so much at high frequency?</h3>
+<p>Because skin depth shrinks with frequency until it is smaller than the tooth on
+the foil. At 10 GHz the skin depth in copper is about 0.66 µm — less than the
+roughness of standard foil — so the current is forced to follow a longer,
+bumpier path. Below a few GHz the effect is negligible.</p>
+<h3 id="what-is-a-via-stub-and-why-does-it-matter">What is a via stub and why does it matter?</h3>
+<p>The unused length of a via barrel below (or above) the layer your signal
+actually uses. It is an open-circuited transmission-line stub, and at the
+frequency where it is a quarter wavelength long it presents a short at the
+signal layer and drops a deep notch in the channel response.</p>
+<h3 id="do-i-need-to-back-drill">Do I need to back-drill?</h3>
+<p>Check the recommendation badge in <a href="signal-integrity.html#via-stub-impact-s21-eye-and-budget">Via Stub
+Impact</a> — it grades from
+<strong>OK</strong> through <strong>Watch</strong> to <strong>Back-drill recommended</strong> and <strong>required</strong>. The
+underlying question is where the quarter-wave resonance sits relative to your
+Nyquist frequency.</p>
+<h3 id="how-do-i-know-if-the-stub-resonance-will-hurt-me">How do I know if the stub resonance will hurt me?</h3>
+<p>Compare the quarter-wave resonance frequency to Nyquist. Above 2 × Nyquist the
+stub is usually harmless; as resonance approaches Nyquist the notch lands inside
+your signal band and the insertion-loss adder climbs sharply. Both numbers are
+in the outputs and both markers are on the S21 plot.</p>
+<h3 id="what-does-the-notch-in-the-s21-plot-mean">What does the notch in the S21 plot mean?</h3>
+<p>That is the quarter-wave stub resonance — the dotted-red marker. At that
+frequency the stub shorts the signal layer and energy stops getting through.
+The dashed-blue marker is your Nyquist; you want a lot of distance between the
+two.</p>
+<h3 id="what-does-back-drilling-cost">What does back-drilling cost?</h3>
+<p>Roughly +17 % at a Chinese fab and +30 % at a US fab. Model it with the rest of
+your feature set in the <a href="dfm-thermal-emc.html#pcb-cost-estimator">PCB Cost
+Estimator</a> — it is often cheaper than the
+laminate upgrade you were considering instead.</p>
+<h3 id="can-i-avoid-stubs-without-back-drilling">Can I avoid stubs without back-drilling?</h3>
+<p>Yes: route the high-speed signal on the layer pair that leaves the shortest
+unused barrel, use blind or buried vias so there is no stub at all, or use a
+thinner board. Choosing the right layer is free and is the first thing to try.</p>
+<h3 id="how-much-jitter-can-i-afford">How much jitter can I afford?</h3>
+<p>Put your Dj and Rj into <a href="signal-integrity.html#jitter-budget-tj">Jitter Budget</a>
+with your baud rate and target BER; it reports Tj peak-to-peak and Tj as a
+percentage of the unit interval. Compare that against the eye budget in your
+specification.</p>
+<h3 id="should-i-attack-dj-or-rj">Should I attack Dj or Rj?</h3>
+<p>Rj, almost always. Deterministic jitter is bounded — halving it improves Tj by
+that amount once. Random jitter is multiplied by the Q factor, so at 1e-12 each
+picosecond of Rj costs you 12.7 ps of Tj. If your budget is blown, look at the
+reference clock and the PLL before you look at the routing.</p>
+<h3 id="what-q-factor-does-my-ber-imply">What Q factor does my BER imply?</h3>
+<p>12.7 at 1e-12 and 14.07 at 1e-15 — the tool reports the exact value it used.
+That factor is the number of standard deviations of Gaussian jitter you have to
+allow for, which is why demanding a lower error rate costs you eye.</p>
+<h3 id="how-do-i-length-match-a-ddr-bus">How do I length-match a DDR bus?</h3>
+<p>Use <a href="signal-integrity.html#ddr-length-matching">DDR Length Matching</a>: pick your
+standard to load the JEDEC tolerance, then paste in the as-routed length of
+every DQ, DM, DQS, ADDR, CMD and CK signal. It reports each signal's deviation
+from its group reference and flags anything out of spec.</p>
+<h3 id="do-all-my-ddr-byte-lanes-need-to-match-each-other">Do all my DDR byte lanes need to match each other?</h3>
+<p>No — and trying to is a waste of routing area. Each byte lane is matched to
+<strong>its own DQS strobe</strong>, and the address/command group is matched to CK.
+Lane-to-lane skew is absorbed by write and read levelling during training.</p>
+<h3 id="what-about-skew-inside-the-dqs-pair">What about skew inside the DQS pair?</h3>
+<p>Match it tightly, ideally at the package pin. Intra-pair skew on the
+differential strobe is the one error training cannot compensate for, so it
+matters more than inter-signal skew within the lane.</p>
+<h3 id="can-the-toolkit-produce-an-eye-diagram">Can the toolkit produce an eye diagram?</h3>
+<p>No. The eye-closure numbers in the Via Stub tool are <strong>analytic estimates from
+the stub's frequency response</strong> — they are not a simulated eye. There is no
+time-domain or statistical channel simulation, no impulse response, no bathtub
+curve and no IBIS-AMI link training anywhere in the toolkit.</p>
+<h2 id="power-integrity">Power integrity</h2>
+<h3 id="what-target-impedance-does-my-rail-need">What target impedance does my rail need?</h3>
+<p><code>Z_target = allowed ripple ÷ transient current step</code>. Put the rail voltage,
+allowed ripple and transient into <a href="power-integrity.html#pdn-target-and-plane-cap">PDN Target &amp; Plane
+Cap</a> and it does the arithmetic —
+a 1.0 V rail allowing 3 % ripple with a 10 A step needs 3 mΩ, flat, out to the
+edge rate.</p>
+<h3 id="what-is-the-transient-fraction-and-why-does-it-matter">What is the transient fraction and why does it matter?</h3>
+<p>It is the proportion of maximum current that is the actual step, and it matters
+because the PDN only sees the step. A 20 A rail with a 20 % transient is a 4 A
+step and a five-times easier target than a full 20 A step would be. Guessing
+100 % here will make you over-design badly.</p>
+<h3 id="how-many-decoupling-capacitors-do-i-need">How many decoupling capacitors do I need?</h3>
+<p>Enough to hold the impedance below target across the whole frequency band —
+which is a curve, not a count. Build the bank in <a href="power-integrity.html#cap-bank-analyzer-zf">Cap Bank
+Analyzer</a>, overlay your target line,
+and add parts until the worst-case |Z| sits under it.</p>
+<h3 id="should-i-use-lots-of-different-capacitor-values">Should I use lots of different capacitor values?</h3>
+<p>No — that is outdated advice. Different values in parallel create
+<strong>anti-resonance</strong> peaks between their self-resonant frequencies, and a third
+value added to &quot;cover the gap&quot; often creates two peaks instead of one. The
+modern approach is fewer distinct values and more parts of each.</p>
+<h3 id="what-is-anti-resonance">What is anti-resonance?</h3>
+<p>Between two capacitors' self-resonant frequencies, one is already inductive
+while the other is still capacitive. Together they form a parallel LC tank,
+which produces an impedance <strong>peak</strong> — often higher than either capacitor alone.
+The Cap Bank Analyzer counts and locates these peaks for you.</p>
+<h3 id="what-is-the-nism-flatness-ratio">What is the NISM flatness ratio?</h3>
+<p>Z_max ÷ Z_min across the sweep — a measure of how flat the PDN impedance is. A
+flat PDN is a well-behaved PDN, because a peak at any frequency is where a
+transient with that spectral content will produce ripple. Minimising the ratio
+is usually a better goal than minimising the average impedance.</p>
+<h3 id="my-10-µf-capacitor-is-only-giving-4-µf-why">My 10 µF capacitor is only giving 4 µF. Why?</h3>
+<p>DC bias. Class II ceramics (X5R, X7R, Y5V) lose capacitance under applied
+voltage, and the datasheet value is measured at 0 V. Run the part through <a href="power-integrity.html#mlcc-dc-bias-derating">MLCC
+DC-Bias Derating</a> — a &quot;10 µF 10 V X7R
+0603&quot; commonly delivers 4 µF at 5 V bias.</p>
+<h3 id="what-voltage-rating-should-i-pick-for-an-mlcc">What voltage rating should I pick for an MLCC?</h3>
+<p>Enough headroom that you stay on the flat part of the derating curve. A 10 V
+part at 10 % bias keeps around 95 % of its value; a 6.3 V part at 80 % bias can
+drop to 20–30 %. Over-rating is cheaper than adding parts to make up the
+shortfall.</p>
+<h3 id="does-capacitor-package-size-matter">Does capacitor package size matter?</h3>
+<p>Yes, a lot. A larger case size of the same value and voltage derates less under
+bias because the dielectric is thicker. It also usually has lower ESL. The
+trade is board area — which is why the answer is rarely &quot;the smallest part that
+fits&quot;.</p>
+<h3 id="does-c0gnp0-derate-under-bias">Does C0G/NP0 derate under bias?</h3>
+<p>No — Class I ceramics are stable with both voltage and temperature. The catch
+is that they are only available at small values, so they are used for RF and
+timing rather than bulk decoupling.</p>
+<h3 id="where-should-i-put-the-decoupling-via">Where should I put the decoupling via?</h3>
+<p>As close to the capacitor pad as the fab allows, ideally in or immediately
+beside the pad. What matters is the <strong>loop area</strong> from the pad through the via
+to the plane and back, and that loop is what <a href="power-integrity.html#mounting-inductance-l_mnt">Mounting
+Inductance</a> computes.</p>
+<h3 id="does-mounting-inductance-really-matter-that-much">Does mounting inductance really matter that much?</h3>
+<p>Above roughly 100 MHz it dominates the capacitor entirely. An 0402 with 0.6 nH
+of its own ESL, mounted with two through-board vias, easily picks up 2 nH of
+mounting inductance — tripling the high-frequency impedance the rail actually
+sees. Chasing a lower-ESL part while ignoring the mounting is wasted money.</p>
+<h3 id="what-is-the-most-effective-way-to-lower-mounting-inductance">What is the most effective way to lower mounting inductance?</h3>
+<p>In order: put the plane pair closer to the surface so the vias are shorter, put
+the vias in or beside the pads so the loop is small, use more vias in parallel,
+and only then look for a lower-ESL capacitor. The first two are free.</p>
+<h3 id="how-do-i-size-a-buck-converter-inductor">How do I size a buck converter inductor?</h3>
+<p>Enter V_in, V_out, load current, switching frequency and your target ripple
+into <a href="power-integrity.html#buck--boost-inductor">Buck / Boost Inductor</a>. It
+returns duty cycle, the required inductance, ripple current, and the peak and
+RMS currents you need for part selection.</p>
+<h3 id="what-inductor-ripple-should-i-target">What inductor ripple should I target?</h3>
+<p>25–40 % of the output current is the usual compromise. Less ripple needs a
+physically bigger inductor; more ripple needs a bigger output capacitor and
+costs efficiency in core loss.</p>
+<h3 id="what-saturation-current-rating-do-i-need">What saturation current rating do I need?</h3>
+<p>Size against the <strong>peak</strong> current, not the average or the RMS. A converter that
+saturates its inductor on a load step does not degrade gracefully — the
+inductance collapses, current spikes, and the switch usually fails. The tool
+reports peak and RMS separately for exactly this reason.</p>
+<h2 id="rf-and-impedance-matching">RF and impedance matching</h2>
+<h3 id="how-do-i-match-a-complex-load">How do I match a complex load?</h3>
+<p>Use the <a href="rf-microwave.html#lc-matching-ladder-value-solver">LC Matching Ladder</a> —
+it takes complex Zs and Zl as R + jX directly. The quarter-wave transformer tool
+only handles <strong>real</strong> impedances; if you want to use it, cancel the reactance
+first with a series element.</p>
+<h3 id="series-first-or-shunt-first">Series-first or shunt-first?</h3>
+<p>The shunt element belongs across the <strong>higher-resistance</strong> side.
+Series-first puts the shunt toward the load (use it when the load is above your
+reference resistance); shunt-first puts it on the source side (when the load is
+below). The tool raises an advisory if your choice is the opposite of what the
+terminations call for.</p>
+<h3 id="how-many-legs-should-my-ladder-have">How many legs should my ladder have?</h3>
+<p>Start with the fewest that meet your |S11| target. One leg is an L-network and
+is fully determined. More legs buy bandwidth and lower node Q, at the cost of
+parts, board area and insertion loss. Add legs when a 2-leg solution is too
+narrow or too high-Q, not by default.</p>
+<h3 id="what-is-the-component-value-spread-slider-for">What is the component-value spread slider for?</h3>
+<p>For 3 or more legs there is a whole <strong>family</strong> of solutions rather than one
+answer. The slider sweeps that family from the smallest L/C values that still
+match to the largest, so you can pick the one that suits your parts inventory
+and layout.</p>
+<h3 id="why-are-some-slider-positions-missing">Why are some slider positions missing?</h3>
+<p>Because they do not meet your pass |S11| target in the selected mode, so they
+have been dropped. Every position you can select is a design that actually
+works — the slider never offers you a solution that fails.</p>
+<h3 id="why-is-the-spread-slider-disabled">Why is the spread slider disabled?</h3>
+<p>You have a 1- or 2-element match, which is fully determined — there is exactly
+one answer, so there is no family to sweep. The slider becomes active at 3 legs.</p>
+<h3 id="what-is-node-q-and-why-should-i-care">What is node Q and why should I care?</h3>
+<p>It is how sharply tuned each node of the network is, and it predicts how touchy
+the match will be. A high-Q node means a narrow match that moves when a
+component is 5 % off or a nearby copper pour changes the pad capacitance. If the
+solver offers a lower-Q solution at the same |S11|, take it.</p>
+<h3 id="which-of-the-three-calculation-modes-should-i-use">Which of the three calculation modes should I use?</h3>
+<p><strong>Purchasable re-solved</strong> for anything you are actually going to build. Raw
+ideal shows the mathematics, ideal-snapped shows what happens if you just round
+to stock values, and purchasable re-solved solves the values so the <em>real</em>
+network — with ESL, pad capacitance, solder inductance and ESR — meets the
+target at f₀.</p>
+<h3 id="why-does-the-tool-refuse-sub-picofarad-capacitors">Why does the tool refuse sub-picofarad capacitors?</h3>
+<p>Because you cannot buy or place them reliably, and at those values the pad and
+trace capacitance swamps the part. Values are bounded to a realistic RF window
+(roughly 1–100 pF for C0G capacitors and 0.8–120 nH for 0402 inductors) even in
+the theoretical mode.</p>
+<h3 id="can-i-use-different-package-sizes-for-the-capacitors-and-inductors">Can I use different package sizes for the capacitors and inductors?</h3>
+<p>Yes — they are chosen independently, and an 0201 capacitor with an 0402
+inductor is a normal combination. Each type's bounds and parasitics are tracked
+from its own package.</p>
+<h3 id="my-match-works-in-the-tool-but-not-on-the-bench-what-did-i-miss">My match works in the tool but not on the bench. What did I miss?</h3>
+<p>Three usual suspects. You used the ideal or ideal-snapped mode instead of
+purchasable re-solved, so the parasitics were never in the answer. Your node Q
+is high and a 5 % component tolerance moved the match. Or your assumed load
+impedance is not what the load actually presents at that frequency — measure it
+rather than taking it from a datasheet.</p>
+<h3 id="can-the-lc-ladder-match-to-a-measured-s2p-file">Can the LC ladder match to a measured .s2p file?</h3>
+<p>No — there is <strong>no Touchstone import</strong>. The ladder <em>writes</em> <code>.s2p</code> files but
+cannot read one. If you have a measured impedance, read R and X at your
+frequency of interest off the VNA and type them into the Zs / Zl fields.</p>
+<h3 id="is-there-a-smith-chart">Is there a Smith chart?</h3>
+<p>Not yet. The Smith chart view is planned for a future update. You do get the
+S11-versus-frequency plot with the target line. The Monte Carlo tolerance
+yield is in the current build, on the ladder's <strong>Real-part build</strong> card.</p>
+<h3 id="lc-ladder-or-quarter-wave-transformer">LC ladder or quarter-wave transformer?</h3>
+<p>At low GHz on a small board, the lumped LC ladder — a quarter-wave section at
+2.4 GHz on FR-4 is about 17 mm, so a 4-section transformer is nearly 70 mm of
+trace. Above roughly 5–10 GHz the distributed transformer wins because lumped
+components stop behaving like lumped components.</p>
+<h3 id="how-many-quarter-wave-sections-should-i-use">How many quarter-wave sections should I use?</h3>
+<p>Each extra section roughly doubles the usable bandwidth and adds a quarter
+wavelength of board. Start with the fewest that meet your VSWR criterion across
+the band you need, which the tool reports as a fractional bandwidth.</p>
+<h3 id="binomial-or-chebyshev">Binomial or Chebyshev?</h3>
+<p>Binomial for a clean, monotonic in-band response; Chebyshev when you need wider
+bandwidth and can tolerate equal-ripple inside the band. If your specification
+gives a single worst-case VSWR across a band, Chebyshev usually gets you there
+with fewer sections.</p>
+<h3 id="pi-pad-or-t-pad">Pi-pad or T-pad?</h3>
+<p>Electrically they are equivalent, so choose on layout and on component values.
+At high attenuation the Pi's series resistor becomes very large and the T's
+shunt resistor becomes very small — pick whichever puts your values in a
+comfortable range.</p>
+<h3 id="can-i-fix-a-bad-match-with-an-attenuator">Can I fix a bad match with an attenuator?</h3>
+<p>Often, yes — it is the cheapest fix available. 6 dB of pad improves a 3:1 VSWR
+to about 1.3:1, at the cost of 6 dB of signal. On a test port or a driver output
+with headroom to spare, that is usually a good trade.</p>
+<h2 id="thermal-emc-and-manufacturing">Thermal, EMC and manufacturing</h2>
+<h3 id="how-hot-will-my-part-get">How hot will my part get?</h3>
+<p>Enter ambient, dissipated power and θJA into <a href="dfm-thermal-emc.html#thermal-management">Thermal
+Management</a> for the no-heatsink case; add
+θJC, θCS and θSA for the heatsinked one. It reports junction temperature and the
+margin to Tj_max for both.</p>
+<h3 id="is-θja-from-the-datasheet-trustworthy">Is θJA from the datasheet trustworthy?</h3>
+<p>Only as a comparison between packages. θJA is measured on the JEDEC test board
+— usually 2s2p in still air — not on your board. When the margin is tight, use
+θJC plus your own board's spreading path instead.</p>
+<h3 id="how-many-thermal-vias-do-i-need-under-a-qfn">How many thermal vias do I need under a QFN?</h3>
+<p>Fewer than you think. Put your geometry into <a href="dfm-thermal-emc.html#thermal-via-array">Thermal Via
+Array</a> and watch the two terms it
+reports: once the via array's resistance drops below the plane's spreading
+resistance, adding vias changes nothing.</p>
+<h3 id="why-dont-more-thermal-vias-help">Why don't more thermal vias help?</h3>
+<p>Because heat has to leave the plane once it gets there. When spreading
+resistance dominates, the fix is more copper area or a thicker plane, not more
+holes. The tool reports the spreading fraction so you can see which term is in
+control.</p>
+<h3 id="does-solder-voiding-under-the-pad-matter">Does solder voiding under the pad matter?</h3>
+<p>Yes — a 5–15 % void fraction is typical for a well-designed paste aperture and
+the tool includes it in the array resistance. Larger voids come from a single
+big aperture; splitting the exposed-pad aperture into a window-pane pattern is
+the standard fix.</p>
+<h3 id="will-my-board-pass-radiated-emissions">Will my board pass radiated emissions?</h3>
+<p>This toolkit cannot tell you that, and no first-order calculator can. <a href="dfm-thermal-emc.html#radiated-emissions--small-loop">Radiated
+Emissions</a> models an
+electrically-small loop in free space; real boards emit mostly from cables and
+enclosure resonances. Use it to find which harmonic is your problem and to
+compare two layouts, not to predict a pass.</p>
+<h3 id="why-does-loop-area-matter-so-much-for-emi">Why does loop area matter so much for EMI?</h3>
+<p>Because emission scales with loop <strong>area</strong> and with the <strong>square</strong> of
+frequency. Halving the loop area buys 6 dB, and the frequency term means the
+harmonics of a fast edge dominate. That is the quantitative argument for tight
+return paths — it is not a rule of thumb, it is a squared term.</p>
+<h3 id="what-does-a-6-layer-board-cost">What does a 6-layer board cost?</h3>
+<p>Put the specification into the <a href="dfm-thermal-emc.html#pcb-cost-estimator">PCB Cost
+Estimator</a> and compare regions. Note that
+6 layers is often a sweet spot at Chinese proto fabs because of how their
+promotional pricing is structured — the tool models that rather than assuming a
+smooth curve.</p>
+<h3 id="why-is-my-cost-estimate-different-from-the-fabs-quote">Why is my cost estimate different from the fab's quote?</h3>
+<p>The estimator is engineering-grade, typically within ±25 %. It models published
+price structures rather than any particular fab's live pricing, and it cannot
+know about promotions, panel utilisation on your specific board outline, or
+your account's negotiated rates. Always verify on the fab's quote page before
+purchasing.</p>
+<h3 id="which-features-are-free-at-chinese-fabs-but-expensive-in-the-us">Which features are free at Chinese fabs but expensive in the US?</h3>
+<p>Controlled impedance, ENIG on 6+ layers, POFV/VIPPO via fill, non-green
+soldermask and both-sides silkscreen are all commonly free at Chinese proto
+fabs and carry real adders at US fabs. Layer count, exotic laminate, tight drill
+and HDI cost real money everywhere.</p>
+<h3 id="do-i-need-controlled-impedance">Do I need controlled impedance?</h3>
+<p>If you have any interface with a specified impedance — USB, Ethernet, PCIe,
+HDMI, DDR, RF — yes. It is free at Chinese multilayer fabs at standard
+tolerance, which makes the decision easy; tightening to ±5 % costs extra and
+±3 % is quote-only.</p>
+<h3 id="what-is-pofv--vippo">What is POFV / VIPPO?</h3>
+<p>Plated-over filled via / via-in-pad plated over: the via is filled with resin
+and plated flat so a component pad can sit directly on it. You need it for
+via-in-pad BGA escape, otherwise solder wicks down the barrel during reflow.</p>
+<h3 id="will-paste-release-from-my-stencil-aperture">Will paste release from my stencil aperture?</h3>
+<p>Check the area ratio in <a href="dfm-thermal-emc.html#paste-aperture-ipc-7525">Paste Aperture</a>
+— it must be ≥ 0.66 per IPC-7525B, with aspect ratio ≥ 1.5 for long thin
+apertures. Below that, paste sticks to the aperture walls instead of
+transferring to the board.</p>
+<h3 id="what-is-a-step-stencil">What is a step stencil?</h3>
+<p>A stencil that is locally thinner over part of the board — typically over
+fine-pitch parts — so those apertures clear the area-ratio floor while
+connectors and large passives still get enough paste from the thicker regions.
+It is the standard answer for a mixed-technology board.</p>
+<h3 id="what-is-the-difference-between-ipc-class-2-and-class-3">What is the difference between IPC Class 2 and Class 3?</h3>
+<p>Class 2 is the general commercial standard; Class 3 adds tighter annular ring,
+plating thickness and defect criteria for high-reliability products. Class 3
+costs about +20 % at US fabs and is effectively unavailable at low-cost Chinese
+proto fabs — the estimator warns you about that combination.</p>
+<h2 id="getting-started-on-a-new-board">Getting started on a new board</h2>
+<h3 id="where-do-i-even-start-on-a-brand-new-design">Where do I even start on a brand new design?</h3>
+<p>Open the <a href="design-wizard.html">Design Wizard</a>. Pick the preset closest to your
+board, answer what you know, and read the report — it gives three candidate
+stackups with the reasoning, trace rules, a via schedule and thermal guidance,
+and exports to HTML or Markdown so it can live with the project.</p>
+<h3 id="why-doesnt-the-wizard-give-me-a-power-plane">Why doesn't the wizard give me a power plane?</h3>
+<p>Because a power plane is a poor reference and a GND plane is a good one. Every
+plane layer the wizard recommends is GND — a 4-layer board is always SIG / GND /
+GND / SIG — and power is routed on the signal layers as wide traces or local
+pours. A signal referenced to a power plane has to return through a decoupling
+capacitor every time it changes layers; one referenced to GND returns through a
+stitching via. On a standard 1.6 mm build the power/ground pair's capacitance is
+only about 20 pF/in², which the decoupling capacitors dwarf. See <a href="design-wizard.html#no-power-planes">No power
+planes</a>.</p>
+<h3 id="how-much-bulk-capacitance-does-my-regulator-output-need">How much bulk capacitance does my regulator output need?</h3>
+<p>Open the <a href="design-wizard.html#bulk-capacitance-wizard">Bulk Capacitance Wizard</a>.
+It asks for the numbers from the regulator, load-IC and capacitor datasheets,
+tells you where each one is printed, and sizes the bulk from ripple, loop
+bandwidth, load-step droop, load-release overshoot and hold-up — whichever is
+largest governs — then converts the effective value to what you actually place
+after DC-bias derating.</p>
+<h3 id="where-in-a-datasheet-do-i-find-the-minimum-output-capacitance">Where in a datasheet do I find the minimum output capacitance?</h3>
+<p>In the regulator's <em>Recommended Operating Conditions</em> table (a C_OUT row), or
+in <em>Application and Implementation → Detailed Design Procedure → Output
+capacitor selection</em>, which often has a table of minimum C_OUT against output
+voltage. LDOs state it under <em>Electrical Characteristics</em> as the capacitance
+needed for stability, usually with an ESR range. It is normally an
+<strong>effective</strong> value — after DC-bias loss — so a 10 µF 0603 X5R at 3.3 V may not
+meet a 10 µF minimum.</p>
+<h3 id="why-does-my-via-stub-resonate-lower-than-the-quarter-wave-formula-says">Why does my via stub resonate lower than the quarter-wave formula says?</h3>
+<p>Because the planes the stub passes load it. The formula c/(4·L·√εr) is for a
+bare stub. In published and measured cases it read 21–47 % high, and up to 72 %
+high on dense GND-only stacks:
+a six-layer via's 1.7 mm stub at 17.35 GHz instead of 21.0, and a backplane's
+at 4.38 GHz instead of 5.75. <a href="signal-integrity.html#where-a-stub-really-resonates">Via Stub
+Impact</a> shows the lowest
+the stub may resonate (quarter wave ÷ 1.75). The <a href="vias-and-padstacks.html#the-via-network">via
+network</a> card in Via Properties solves
+the notch for your stack (full wave, within a few per cent of openEMS and a
+3-D FEM) and brackets it with the network.</p>
+<h3 id="do-i-need-ground-vias-next-to-a-signal-via">Do I need ground vias next to a signal via?</h3>
+<p>Yes, wherever the trace's reference changes from one plane to another. The
+return current then has to cross the cavity between those planes. With no
+ground via nearby, it spreads into the whole plane pair and takes signal power
+with it. The <a href="vias-and-padstacks.html#the-via-network">via network</a> shows the
+difference: set its ground-via count to 0 and to 2, and compare |S21|. One or
+two ground vias within about 1 mm is the usual fix.</p>
+<h3 id="should-i-give-the-wizards-stackup-to-my-fab-as-is">Should I give the wizard's stackup to my fab as-is?</h3>
+<p>Send it to them as a <strong>starting point</strong>, not a specification. Your fabricator
+has their own core and prepreg inventory, and the right move is to let them
+propose the nearest stackup they actually stock. Then bring their real
+dielectric heights back into the impedance tools and confirm the rules still
+hold.</p>
+<h3 id="which-tool-do-i-use-first-for-a-high-speed-design">Which tool do I use first for a high-speed design?</h3>
+<p>Roughly in this order: <a href="design-wizard.html">Design Wizard</a> for the stackup,
+<a href="trace-and-routing.html#trace-impedance-openems-3d">Trace Impedance</a> and
+<a href="trace-and-routing.html#differential-pair-designer">Differential Pair Designer</a>
+for the geometry, <a href="signal-integrity.html#channel-insertion-loss-budget">Insertion Loss
+Budget</a> to check the channel,
+<a href="signal-integrity.html#via-stub-impact-s21-eye-and-budget">Via Stub Impact</a> to
+decide on back-drilling, and <a href="dfm-thermal-emc.html#pcb-cost-estimator">PCB Cost
+Estimator</a> to price what you just
+specified.</p>
+<h2 id="trust-and-limits">Trust and limits</h2>
+<h3 id="how-do-i-know-these-numbers-are-right">How do I know these numbers are right?</h3>
+<p>Every calculator names the standard or paper it implements, and the toolkit is
+checked against a reference implementation with over fifteen thousand parity
+assertions covering every calculator's numeric output. There are also published
+verification pages comparing results against independent third-party
+calculators. See <a href="verification-and-limits.html">Verification and limits</a>.</p>
+<h3 id="what-does-engineering-grade-mean">What does &quot;engineering-grade&quot; mean?</h3>
+<p>Good enough to make a design decision with, not good enough to be a
+specification or a contract. The cost estimator is within about ±25 % of a real
+quote; the EMC tool is a screen, not a compliance prediction; the BGA standoff
+is a geometry estimate. Where a number is an estimate, the tool says so.</p>
+<h3 id="can-i-use-this-for-a-safety-critical-design">Can I use this for a safety-critical design?</h3>
+<p>Use it for exploration and sizing, then verify anything safety-related against
+the governing standard and your own qualification process. The creepage and
+clearance tool implements IEC 60664-1 correctly, but a compliance submission
+needs the standard itself and usually a test house — not a calculator's output.</p>
+<h3 id="why-do-two-tools-give-me-different-answers-for-the-same-thing">Why do two tools give me different answers for the same thing?</h3>
+<p>Usually because they implement different standards, both correctly. The classic
+is trace current: IPC-2221 (1950s still-air data) and IPC-2152 (2009) differ in
+both directions. On an outer layer with no plane IPC-2152 allows about 25 % less
+current; on an inner layer, where IPC-2221 halves the current, IPC-2152 allows
+about 1.4–1.5× more. Check which methodology each tool is set to.</p>
+<h3 id="when-should-i-distrust-a-result">When should I distrust a result?</h3>
+<p>When the four analytic impedance estimates disagree with each other; when a
+diagnostic says you are outside a standard's validated range; when you may have
+given a tool bulk Dk where it wanted ε_eff; when a datasheet number is quoted at
+a different frequency than your design; and whenever a manufacturability limit
+matters and you have not asked your actual fab.</p>
+<h3 id="what-can-this-toolkit-not-do">What can this toolkit not do?</h3>
+<p>It cannot read your design — no Gerber, ODB++, IPC-2581, netlist, CAD project,
+stackup file, IBIS model or Touchstone import. It cannot simulate a whole board
+or a channel end to end, produce a real eye diagram, or do thermal or mechanical
+FEA. It cannot check DRC or verify a layout, compare two revisions, or place an
+order with a fab. And it has no project model — inputs reset when you reopen a
+tool.</p>
+<h3 id="can-it-check-my-layout-or-run-drc">Can it check my layout or run DRC?</h3>
+<p>No. It tells you what the rules <em>should</em> be; it cannot see your board and
+cannot tell you whether the board follows them. Take the numbers into your CAD
+tool's design-rule editor.</p>
+<h3 id="can-it-compare-two-revisions-of-a-board">Can it compare two revisions of a board?</h3>
+<p>No — there is no document model, no import and no diff. Each tool opens at its
+defaults and computes from what you type.</p>
+<h3 id="can-i-import-an-ibis-or-ibis-ami-model">Can I import an IBIS or IBIS-AMI model?</h3>
+<p>No. There is no model import of any kind and no link training simulation. Driver
+and receiver behaviour enters the toolkit only as the numbers you type — rise
+time, data rate, jitter, loss budget.</p>
+</main>
+</body>
+</html>

@@ -1,0 +1,123 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CastGuidance PCB Toolkit — User Manual — CastGuidance PCB Toolkit</title>
+<style>:root{--bg:#1E1E1E;--panel:#252526;--line:#3F3F46;--fg:#E6E6E6;--dim:#A0A0A0;--accent:#D9842A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+  font:15px/1.65 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;display:flex}
+.sidebar{width:270px;min-height:100vh;background:var(--panel);
+  border-right:1px solid var(--line);padding:18px 0;position:sticky;top:0;
+  align-self:flex-start;max-height:100vh;overflow:auto;flex:0 0 270px}
+.brand{font-weight:600;color:var(--accent);padding:0 18px 14px;font-size:16px}
+.brand span{display:block;color:var(--dim);font-weight:400;font-size:13px}
+.sidebar a{display:block;padding:7px 18px;color:var(--fg);text-decoration:none;font-size:14px}
+.sidebar a:hover{background:#2D2D30}
+.sidebar a.current{color:var(--accent);border-left:3px solid var(--accent);padding-left:15px}
+main{flex:1;max-width:860px;padding:36px 44px 90px}
+h1{font-size:30px;margin:0 0 20px;color:var(--fg)}
+h2{font-size:22px;margin:38px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+h3{font-size:17px;margin:26px 0 8px;color:var(--accent)}
+h4{font-size:15px;margin:20px 0 6px;color:var(--fg)}
+p,li{color:#D2D2D2}
+a{color:var(--accent)}
+code{background:#2D2D30;padding:1px 5px;border-radius:3px;
+  font:13px/1.5 Consolas,Menlo,monospace;color:#E8C08A}
+pre{background:#2D2D30;padding:12px 14px;border-radius:4px;overflow-x:auto}
+pre code{background:none;padding:0}
+table{border-collapse:collapse;margin:16px 0;width:100%;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:7px 11px;text-align:left;font-size:14px}
+th{background:var(--panel);color:var(--accent)}
+blockquote{border-left:3px solid var(--accent);margin:16px 0;padding:2px 16px;color:var(--dim)}
+@media(max-width:820px){body{display:block}.sidebar{width:auto;position:static;
+  max-height:none;flex:none}main{padding:24px 20px 60px}}</style>
+</head>
+<body>
+<nav class="sidebar"><div class="brand">CastGuidance<span>PCB Toolkit</span></div><a href="design-wizard.html">The PCB Design Wizard</a><a href="dfm-thermal-emc.html">DFM, thermal and EMC</a><a href="faq.html">Frequently asked questions</a><a href="files-and-formats.html">Files and exports</a><a href="getting-started.html">Getting started</a><a href="index.html" class="current">CastGuidance PCB Toolkit — User Manual</a><a href="openems.html">The 3D field solver</a><a href="power-integrity.html">Power integrity and power electronics</a><a href="reference-calculators.html">Reference calculators</a><a href="rf-microwave.html">RF and microwave</a><a href="signal-integrity.html">Signal integrity</a><a href="stackup-and-materials.html">Stackup and materials</a><a href="trace-and-routing.html">Trace and routing</a><a href="units-and-conventions.html">Units and conventions</a><a href="verification-and-limits.html">Verification and limits</a><a href="vias-and-padstacks.html">Vias and padstacks</a></nav>
+<main><h1 id="castguidance-pcb-toolkit--user-manual">CastGuidance PCB Toolkit — User Manual</h1>
+<p>Fifty PCB engineering calculators and wizards in one window: impedance, signal
+integrity, power integrity, RF matching, thermal, EMC, DFM and cost. Every
+formula is sourced to a published standard or paper, and every calculator is
+checked against a reference implementation before it ships.</p>
+<p>This manual is the complete reference. If you have a specific question, start
+with the <a href="faq.html">FAQ</a> — it is written as questions, in the words people
+actually use.</p>
+<h2 id="start-here">Start here</h2>
+<ul>
+<li><strong><a href="getting-started.html">Getting started</a></strong> — the two ways to run the toolkit,
+how the window is laid out, and how to find a tool.</li>
+<li><strong><a href="units-and-conventions.html">Units and conventions</a></strong> — what the toolkit
+means by mil, oz, Dk, ε_eff, and why the numbers are all SI underneath.</li>
+<li><strong><a href="faq.html">FAQ</a></strong> — over a hundred answers, grouped by what you are trying
+to do.</li>
+</ul>
+<h2 id="tool-reference">Tool reference</h2>
+<p>The reference is organised the same way the left-hand menu is, and the menu
+reads top-to-bottom like a design flow.</p>
+<table>
+<thead>
+<tr>
+<th>Page</th>
+<th>Tools</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="stackup-and-materials.html">Stackup and materials</a></td>
+<td>Material Comparison, Dielectric Dk/Df vs Frequency, Er Effective, Stackup Symmetry &amp; Bow, BGA Escape Routing</td>
+</tr>
+<tr>
+<td><a href="trace-and-routing.html">Trace and routing</a></td>
+<td>Bandwidth &amp; Max Length, Trace Impedance (openEMS 3D), Differential Pair Designer, Conductor Properties, Fusing Current, Min Conductor Spacing</td>
+</tr>
+<tr>
+<td><a href="vias-and-padstacks.html">Vias and padstacks</a></td>
+<td>Via Properties, Microvia Analyzer (HDI), Padstack Calculator, BGA Pad Designer</td>
+</tr>
+<tr>
+<td><a href="signal-integrity.html">Signal integrity</a></td>
+<td>Via Stub Impact, Conductor Loss (Roughness), Channel Insertion Loss Budget, Jitter Budget, DDR Length Matching</td>
+</tr>
+<tr>
+<td><a href="power-integrity.html">Power integrity</a></td>
+<td>PDN Target &amp; Plane Cap, MLCC DC-Bias Derating, Mounting Inductance, Cap Bank Analyzer, Buck / Boost Inductor</td>
+</tr>
+<tr>
+<td><a href="rf-microwave.html">RF and microwave</a></td>
+<td>Pi-Pad, T-Pad, Quarter-Wave Match, LC Matching Ladder, Planar Spiral Inductor</td>
+</tr>
+<tr>
+<td><a href="dfm-thermal-emc.html">DFM, thermal and EMC</a></td>
+<td>Paste Aperture, PCB Cost Estimator, Thermal Management, Thermal Via Array, Radiated Emissions</td>
+</tr>
+<tr>
+<td><a href="reference-calculators.html">Reference calculators</a></td>
+<td>Ohm's Law, Conversions, SI Prefixes, dBm Chart, Mechanical Reference, Wire Ampacity, Reactance, LED Resistor, Voltage Divider, Series/Parallel, PPM, XTAL Load, Wavelength</td>
+</tr>
+</tbody>
+</table>
+<h2 id="deeper-topics">Deeper topics</h2>
+<ul>
+<li><strong><a href="openems.html">The 3D field solver</a></strong> — what openEMS does, when the analytic
+answer is enough, and why the solver is desktop-only.</li>
+<li><strong><a href="design-wizard.html">The PCB Design Wizard</a></strong> — the guided path for a new
+board, and the Bulk Capacitance Wizard that walks a rail's datasheets.</li>
+<li><strong><a href="files-and-formats.html">Files and exports</a></strong> — Touchstone, HTML, Markdown,
+and where the toolkit keeps its settings.</li>
+<li><strong><a href="verification-and-limits.html">Verification and limits</a></strong> — how the numbers
+are checked, and the honest list of what this toolkit will not do for you.</li>
+</ul>
+<h2 id="what-this-toolkit-is-for">What this toolkit is for</h2>
+<p>It is a <strong>design-time calculator set</strong>, not a simulator and not a quoting
+engine. It answers &quot;what width should this trace be&quot;, &quot;how much loss will this
+channel have&quot;, &quot;is this pad buildable at my fab&quot;, &quot;roughly what will this
+board cost&quot; — quickly, with the standard behind each answer named, so you can
+make a decision and move on.</p>
+<p>Where a number is an estimate rather than a derivation, the tool says so. Where
+the toolkit cannot answer a question at all, <a href="verification-and-limits.html">Verification and
+limits</a> says that too.</p>
+</main>
+</body>
+</html>

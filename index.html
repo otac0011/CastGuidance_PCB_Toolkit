@@ -229,9 +229,9 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
     Altium-style dark UI, every formula sourced and verified, and a friendly
     EULA that lets you use it commercially. Try it instantly in your browser
     or install the Windows desktop build for full 3D openEMS FDTD simulation.
-    New: a built-in 2D field solver for trace impedance that runs right in the
-    browser, a laminate builder (glass style + resin content), and a Bulk
-    Capacitance Wizard that shows where to look in each datasheet.
+    New: 3D-checked via models, real-part power-integrity and matching models,
+    fab-tolerance corners and yield, instant width search from 25,000 pre-solved
+    field solutions, and a published validation scoreboard.
   </p>
   <div class="cta-row">
     <a class="btn btn-primary" href="app/">
@@ -240,7 +240,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
     <a class="btn btn-primary" href="https://github.com/otac0011/CastGuidance_PCB_Toolkit/releases/latest">
       Download for Windows (~320 MB)
     </a>
-    <a class="btn btn-ghost" href="user_manual.html">Read the user manual</a>
+    <a class="btn btn-ghost" href="manual/index.html">Read the user manual</a>
     <a class="btn btn-ghost" href="https://github.com/otac0011/CastGuidance_PCB_Toolkit" target="_blank">Source &amp; releases on GitHub</a>
   </div>
   <div class="stats">
@@ -280,19 +280,19 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
   <p class="section-lede">Plain-English explanations of every tool, plus the formal verification work behind the numbers.</p>
   <div class="cards">
     <div class="card">
-      <a class="card-title" href="user_manual.html">User manual</a>
-      <p>The complete guide to all 49 tools — when to use each, why it matters, what it does in plain English, and typical values for common board designs. Has a live search filter and category TOC.</p>
-      <div class="meta">~60 KB · single HTML page</div>
+      <a class="card-title" href="manual/index.html">User manual</a>
+      <p>The complete guide to all 50 tools and wizards — inputs, outputs, how far to trust each number, and the validation behind it. The same manual the desktop app's AI helper answers from.</p>
+      <div class="meta">16 pages · updated with each release</div>
     </div>
     <div class="card placeholder">
       <a class="card-title">Quick-start tutorials</a>
       <p>Step-by-step walkthroughs of common workflows (designing a USB-C charger, controlled-impedance stackup, RF matching).</p>
       <div class="meta">Coming soon</div>
     </div>
-    <div class="card placeholder">
-      <a class="card-title">FAQ</a>
-      <p>Common gotchas, units questions, "what number do I put here?".</p>
-      <div class="meta">Coming soon</div>
+    <div class="card">
+      <a class="card-title" href="manual/faq.html">FAQ</a>
+      <p>About 170 answers written as the questions people actually ask: units, "what number do I put here?", stubs, bulk capacitance, stackups.</p>
+      <div class="meta">Part of the manual</div>
     </div>
   </div>
 </section>
@@ -319,8 +319,13 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
   <p class="section-lede">Every formula in the toolkit is sourced and cross-checked against published references or independent free third-party tools. These pages document each comparison.</p>
   <div class="cards">
     <div class="card">
-      <a class="card-title" href="verification_results.html">Verification results</a>
-      <p>Table of tool-vs-reference comparisons with status chips (PASS / CLOSE / MANUAL) and delta percentages. The current canonical scoreboard.</p>
+      <a class="card-title" href="validation.html">Validation scoreboard</a>
+      <p>Every tool against exact results, published papers and standards, commercial-solver results and measured data — PASS, FAIL or GAP per tool, with each benchmark's reference, tolerance and worst error, and the known failures stated.</p>
+      <div class="meta">61 benchmarks · 513 checks · updated each release</div>
+    </div>
+    <div class="card">
+      <a class="card-title" href="verification_results.html">Earlier verification results</a>
+      <p>The original tool-vs-reference table (2026-06) with status chips and delta percentages, kept for history; the validation scoreboard supersedes it.</p>
       <div class="meta">42 entries</div>
     </div>
     <div class="card">

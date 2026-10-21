@@ -1,0 +1,144 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference calculators — CastGuidance PCB Toolkit</title>
+<style>:root{--bg:#1E1E1E;--panel:#252526;--line:#3F3F46;--fg:#E6E6E6;--dim:#A0A0A0;--accent:#D9842A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+  font:15px/1.65 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;display:flex}
+.sidebar{width:270px;min-height:100vh;background:var(--panel);
+  border-right:1px solid var(--line);padding:18px 0;position:sticky;top:0;
+  align-self:flex-start;max-height:100vh;overflow:auto;flex:0 0 270px}
+.brand{font-weight:600;color:var(--accent);padding:0 18px 14px;font-size:16px}
+.brand span{display:block;color:var(--dim);font-weight:400;font-size:13px}
+.sidebar a{display:block;padding:7px 18px;color:var(--fg);text-decoration:none;font-size:14px}
+.sidebar a:hover{background:#2D2D30}
+.sidebar a.current{color:var(--accent);border-left:3px solid var(--accent);padding-left:15px}
+main{flex:1;max-width:860px;padding:36px 44px 90px}
+h1{font-size:30px;margin:0 0 20px;color:var(--fg)}
+h2{font-size:22px;margin:38px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+h3{font-size:17px;margin:26px 0 8px;color:var(--accent)}
+h4{font-size:15px;margin:20px 0 6px;color:var(--fg)}
+p,li{color:#D2D2D2}
+a{color:var(--accent)}
+code{background:#2D2D30;padding:1px 5px;border-radius:3px;
+  font:13px/1.5 Consolas,Menlo,monospace;color:#E8C08A}
+pre{background:#2D2D30;padding:12px 14px;border-radius:4px;overflow-x:auto}
+pre code{background:none;padding:0}
+table{border-collapse:collapse;margin:16px 0;width:100%;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:7px 11px;text-align:left;font-size:14px}
+th{background:var(--panel);color:var(--accent)}
+blockquote{border-left:3px solid var(--accent);margin:16px 0;padding:2px 16px;color:var(--dim)}
+@media(max-width:820px){body{display:block}.sidebar{width:auto;position:static;
+  max-height:none;flex:none}main{padding:24px 20px 60px}}</style>
+</head>
+<body>
+<nav class="sidebar"><div class="brand">CastGuidance<span>PCB Toolkit</span></div><a href="design-wizard.html">The PCB Design Wizard</a><a href="dfm-thermal-emc.html">DFM, thermal and EMC</a><a href="faq.html">Frequently asked questions</a><a href="files-and-formats.html">Files and exports</a><a href="getting-started.html">Getting started</a><a href="index.html">CastGuidance PCB Toolkit — User Manual</a><a href="openems.html">The 3D field solver</a><a href="power-integrity.html">Power integrity and power electronics</a><a href="reference-calculators.html" class="current">Reference calculators</a><a href="rf-microwave.html">RF and microwave</a><a href="signal-integrity.html">Signal integrity</a><a href="stackup-and-materials.html">Stackup and materials</a><a href="trace-and-routing.html">Trace and routing</a><a href="units-and-conventions.html">Units and conventions</a><a href="verification-and-limits.html">Verification and limits</a><a href="vias-and-padstacks.html">Vias and padstacks</a></nav>
+<main><h1 id="reference-calculators">Reference calculators</h1>
+<p>Thirteen small tools for the arithmetic you do constantly. No methodology
+choices, no diagnostics worth arguing about — just fast answers.</p>
+<h2 id="ohms-law">Ohm's Law</h2>
+<p>Enter any two of voltage, current, resistance and power; the other two appear.
+The four quantities are linked, so there is no solve-mode dropdown. Resistance
+is also snapped to the nearest E12 and E24 standard value.</p>
+<p><strong>Insight.</strong> Watch the power figure. If it exceeds 50 % of a typical 0603
+resistor's 100 mW rating, move to 1206 or 2010.</p>
+<h2 id="conversion-calculator">Conversion Calculator</h2>
+<p>Tabbed converter: distance (mil / mm / inch / µm), temperature, power and dBm,
+rectangular ↔ polar, and degrees ↔ radians. Type into either side of a tab and
+the other updates.</p>
+<p>Handy exact values: 1 mil = 0.0254 mm, 1 inch = 25.4 mm, 0 dBm = 1 mW =
+224 mVrms at 50 Ω, 10 dB = 10× power = 3.16× voltage.</p>
+<h2 id="si-prefix-reference">SI Prefix Reference</h2>
+<p>A static table of every SI prefix from quecto (10⁻³⁰) to quetta (10³⁰) with
+symbol, power of ten and an example. For when you cannot remember whether P is
+peta or pico.</p>
+<h2 id="dbm-reference-chart">dBm Reference Chart</h2>
+<p>A lookup table from −50 dBm to +40 dBm mapping each level to milliwatts and to
+Vrms, at a system impedance you choose: 50 Ω (RF default), 75 Ω (video/CATV),
+600 Ω (legacy audio), or a custom value.</p>
+<p><strong>Insight.</strong> dBm is an absolute power, so it only maps to a voltage once you
+fix the impedance. The same 0 dBm is 224 mV at 50 Ω and 774 mV at 600 Ω.</p>
+<h2 id="mechanical-reference">Mechanical Reference</h2>
+<p>Two static tables with a live filter box.</p>
+<p><strong>Drill sizes</strong> — every ANSI numbered drill (#80 to #1) and lettered drill (A
+to Z) with diameter in inch and mm.</p>
+<p><strong>Screw threads</strong> — every UNC size (#00-90 up to 1/4-20) with major diameter,
+threads per inch and the recommended tap drill.</p>
+<h2 id="wire-ampacity--resistance--thermal">Wire Ampacity / Resistance / Thermal</h2>
+<p>The most substantial of the reference tools — a full wire analyzer.</p>
+<p><strong>Wire specification.</strong> AWG gauge (4/0 down to 40); conductor material (solid
+or stranded copper, aluminium 1350, copper-clad aluminium, nichrome,
+constantan, manganin, tinned or silver-plated copper); insulation class (20
+options from PVC 60 °C up to Kapton 260 °C, including the IEC 60317 magnet-wire
+enamel classes A to R).</p>
+<p><strong>Operating conditions.</strong> Ambient temperature (inside an enclosure expect
+20–40 °C above room), wire length (one-way — do not double it for the return),
+current (set to 0 to see only the maximum ampacity), source voltage (enables
+voltage drop as a percentage), and frequency (enables skin depth and the AC
+resistance bump).</p>
+<p><strong>Outputs.</strong> Cross-section, diameter, resistance per metre at ambient, total
+resistance at operating temperature, maximum continuous ampacity colour-coded
+against the insulation rating, Preece fusing current, the wire's temperature at
+your current, voltage drop with its percentage of source, power dissipated,
+skin depth, AC resistance, and mass per metre.</p>
+<p><strong>Insight.</strong> Wire temperature at your actual current is the number that
+matters. If it exceeds the insulation's continuous rating the tool raises an
+explicit <strong>OVERHEAT</strong> or <strong>THERMAL RUNAWAY</strong> diagnostic.</p>
+<h2 id="reactance-and-lc-resonance">Reactance and LC Resonance</h2>
+<p><strong>Inputs.</strong> Frequency, capacitance and/or inductance, and an optional series
+resistance for the Q calculation.</p>
+<p><strong>Outputs.</strong> Xc, Xl, the resonant frequency where they are equal, and Q.</p>
+<p><strong>Insight.</strong> A 100 nF capacitor presents 16 mΩ at 100 MHz and 160 Ω at 10 kHz —
+the same part, four orders of magnitude apart. Q sets bandwidth: BW ≈ f₀ / Q.</p>
+<h2 id="led-series-resistor">LED Series Resistor</h2>
+<p><strong>Inputs.</strong> Supply voltage, LED forward voltage (1.8–2.0 V red, 2.8–3.4 V
+blue/white, 3.0–3.5 V power LEDs), desired forward current (10–20 mA for
+indicators, 350 mA for a 1 W part), and the number of LEDs in series.</p>
+<p><strong>Outputs.</strong> The exact resistance, the nearest E12 and E24 values, the actual
+current with the E24 part, the power dissipated, and a recommended resistor
+package.</p>
+<h2 id="voltage-divider">Voltage Divider</h2>
+<p>Four-corner solve: enter any two of Vin, Vout, R1, R2 and the other two follow.
+Outputs also include total resistance, divider current, and the power in each
+resistor, with R1 and R2 snapped to E12/E24.</p>
+<p><strong>Insight.</strong> For an ADC input keep R1 ∥ R2 at or below 10 kΩ so the source
+impedance does not fight the sampling capacitor.</p>
+<h2 id="series--parallel-r-l-c">Series / Parallel R-L-C</h2>
+<p>A table of up to eight elements. Pick R, L or C, enter the values, and get the
+series and parallel totals. Values add in series for R and L and in parallel
+for C; the reciprocals apply the other way round.</p>
+<p>Useful for making an odd value out of stock parts, or for paralleling resistors
+to spread dissipation.</p>
+<h2 id="ppm-frequency-tolerance">PPM Frequency Tolerance</h2>
+<p>Bidirectional: enter ppm or Δf and get the other, along with f_min and f_max.</p>
+<p><strong>Insight.</strong> USB and CAN allow ±500 ppm; 1G Ethernet is ±100 ppm; a disciplined
+OCXO is ±0.001 ppm. A crystal datasheet's headline &quot;tolerance&quot; usually combines
+initial accuracy at 25 °C, stability over the operating temperature range, and
+ageing per year — check the breakdown before assuming one number covers all
+three.</p>
+<h2 id="xtal-load-capacitor">XTAL Load Capacitor</h2>
+<p>Sizes the two load capacitors for a Pierce oscillator around a parallel-resonant
+crystal.</p>
+<p><strong>Inputs.</strong> The crystal's specified load capacitance CL (8, 10, 12, 18, 20 and
+32 pF are common), the stray capacitance (pin plus PCB — typically 8–14 pF
+total, from 5–6 pF per oscillator pin plus 1–3 pF of board), and optionally C1
+if you want an asymmetric pair.</p>
+<p><strong>Outputs.</strong> C1 and C2, plus the symmetric rule-of-thumb value for reference.</p>
+<p><strong>Insight.</strong> Use C0G/NP0 for load capacitors. X7R drifts several percent over
+temperature and will detune the oscillator; on a part with a ±10 ppm crystal
+that is a self-inflicted wound.</p>
+<h2 id="wavelength">Wavelength</h2>
+<p>λ = c / (f · √ε_eff), with a list of useful fractions.</p>
+<p><strong>Inputs.</strong> Frequency and ε_eff — use 1 for vacuum or air, roughly 0.65 × Dk
+for microstrip, and Dk itself for stripline.</p>
+<p><strong>Outputs.</strong> Full λ, the fractional wavelengths (λ/2, λ/4, λ/8, λ/10, λ/20),
+and the period in nanoseconds.</p>
+<p><strong>Insight.</strong> λ/20 is the conventional boundary between lumped and distributed
+behaviour. Anything longer than λ/20 at your highest frequency of interest
+needs controlled-impedance treatment.</p>
+</main>
+</body>
+</html>

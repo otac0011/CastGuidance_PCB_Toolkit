@@ -1,0 +1,286 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vias and padstacks — CastGuidance PCB Toolkit</title>
+<style>:root{--bg:#1E1E1E;--panel:#252526;--line:#3F3F46;--fg:#E6E6E6;--dim:#A0A0A0;--accent:#D9842A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+  font:15px/1.65 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;display:flex}
+.sidebar{width:270px;min-height:100vh;background:var(--panel);
+  border-right:1px solid var(--line);padding:18px 0;position:sticky;top:0;
+  align-self:flex-start;max-height:100vh;overflow:auto;flex:0 0 270px}
+.brand{font-weight:600;color:var(--accent);padding:0 18px 14px;font-size:16px}
+.brand span{display:block;color:var(--dim);font-weight:400;font-size:13px}
+.sidebar a{display:block;padding:7px 18px;color:var(--fg);text-decoration:none;font-size:14px}
+.sidebar a:hover{background:#2D2D30}
+.sidebar a.current{color:var(--accent);border-left:3px solid var(--accent);padding-left:15px}
+main{flex:1;max-width:860px;padding:36px 44px 90px}
+h1{font-size:30px;margin:0 0 20px;color:var(--fg)}
+h2{font-size:22px;margin:38px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+h3{font-size:17px;margin:26px 0 8px;color:var(--accent)}
+h4{font-size:15px;margin:20px 0 6px;color:var(--fg)}
+p,li{color:#D2D2D2}
+a{color:var(--accent)}
+code{background:#2D2D30;padding:1px 5px;border-radius:3px;
+  font:13px/1.5 Consolas,Menlo,monospace;color:#E8C08A}
+pre{background:#2D2D30;padding:12px 14px;border-radius:4px;overflow-x:auto}
+pre code{background:none;padding:0}
+table{border-collapse:collapse;margin:16px 0;width:100%;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:7px 11px;text-align:left;font-size:14px}
+th{background:var(--panel);color:var(--accent)}
+blockquote{border-left:3px solid var(--accent);margin:16px 0;padding:2px 16px;color:var(--dim)}
+@media(max-width:820px){body{display:block}.sidebar{width:auto;position:static;
+  max-height:none;flex:none}main{padding:24px 20px 60px}}</style>
+</head>
+<body>
+<nav class="sidebar"><div class="brand">CastGuidance<span>PCB Toolkit</span></div><a href="design-wizard.html">The PCB Design Wizard</a><a href="dfm-thermal-emc.html">DFM, thermal and EMC</a><a href="faq.html">Frequently asked questions</a><a href="files-and-formats.html">Files and exports</a><a href="getting-started.html">Getting started</a><a href="index.html">CastGuidance PCB Toolkit — User Manual</a><a href="openems.html">The 3D field solver</a><a href="power-integrity.html">Power integrity and power electronics</a><a href="reference-calculators.html">Reference calculators</a><a href="rf-microwave.html">RF and microwave</a><a href="signal-integrity.html">Signal integrity</a><a href="stackup-and-materials.html">Stackup and materials</a><a href="trace-and-routing.html">Trace and routing</a><a href="units-and-conventions.html">Units and conventions</a><a href="verification-and-limits.html">Verification and limits</a><a href="vias-and-padstacks.html" class="current">Vias and padstacks</a></nav>
+<main><h1 id="vias-and-padstacks">Vias and padstacks</h1>
+<p>Holes and the copper around them: electrical behaviour, reliability limits, and
+land geometry that the fab can actually build.</p>
+<h2 id="via-properties">Via Properties</h2>
+<p>Everything electrical and thermal about a plated through-hole.</p>
+<p><strong>Via type dropdown.</strong> Two-layer or multi-layer. Microvias have their own tool —
+see <a href="#microvia-analyzer-hdi">Microvia Analyzer</a>.</p>
+<p><strong>Inputs.</strong> Finished hole diameter, plating thickness (1 mil / 25 µm is
+typical), capture pad diameter D1, antipad diameter D2, board thickness,
+substrate εr, allowed ΔT for the ampacity calculation, the applied DC current,
+and a via count for parallel arrays.</p>
+<p><strong>Outputs.</strong> Barrel cross-section, DC resistance, voltage drop, inductance
+(Howard Johnson form), capacitance, barrel Z₀, resonant frequency, the step
+rise time the via can pass, aspect ratio, and thermal resistance θ for one via
+and for the array.</p>
+<p><strong>Insight.</strong> Via inductance is dominated by <em>length</em>, not diameter — doubling
+the drill diameter buys you very little, while halving the barrel length halves
+the inductance. This is why the fix for an inductive via is a shorter stack,
+not a bigger hole. Aspect ratio (board thickness ÷ drill diameter) above about
+10:1 starts to strain plating throwing power; above 14:1 most fabs will quote
+rather than list a price.</p>
+<h3 id="the-via-network">The via network</h3>
+<p>Under the closed-form outputs, a card runs EyeOpener Lite's <strong>via models</strong> on
+the same drill, pad, antipad, board thickness and εr. It answers what the
+closed forms cannot:</p>
+<ul>
+<li>what the via looks like to a signal crossing it;</li>
+<li>how much it loses;</li>
+<li>whether its stub resonates in your band.</li>
+</ul>
+<p>Its own inputs are the copper layer count, the exit layer, Df, the trace
+impedance, the trace widths, the number of ground vias round the signal via and
+their distance, and an optional back-drill. Every other copper layer is taken as
+a GND plane, and only the entry and exit layers have pads (non-functional pads
+removed).</p>
+<p>It reports:</p>
+<ul>
+<li>the via's L and C;</li>
+<li>its impedance √(L/C) and delay √(LC);</li>
+<li>|S21| and |S11| at your frequency;</li>
+<li>an |S21| plot to 40 GHz;</li>
+<li>for a stub, its solved notch, the frequency it may resonate from, and where
+the network brackets the notch;</li>
+<li><strong>S-param quality</strong>: the swept 2-port through the passivity, reciprocity,
+sampling and causality screen. A failing check is listed as a message.</li>
+</ul>
+<h3 id="two-cores-full-wave-and-network">Two cores: full wave and network</h3>
+<ul>
+<li><strong>Full wave</strong> (the default on a desktop). The barrel, pads, antipads, planes
+and stub are one field, solved round the via's axis (an axisymmetric finite
+element solve). It catches what the parts miss: neighbouring plane pairs
+coupling through the antipads, and the stub's own wave.</li>
+<li><strong>The network.</strong> The barrel's static capacitance to every plane, each plane
+pair as a cavity with the evanescent modes the barrel excites (Li et al.
+2023). About a hundred times faster. Its notch with and without those modes is
+the bracket shown beside the full wave.</li>
+</ul>
+<p>Both close each plane pair with the ground vias that tie it.</p>
+<h3 id="the-legs-and-the-trace-widths">The legs and the trace widths</h3>
+<p>Over its plane's antipad a trace has no plane under it, and it then crosses the
+pad to the barrel. <strong>Include the legs</strong> adds both, each solved by the 2-D field
+solver. Without them a via lacks about 100 pH.</p>
+<p>The trace widths default to the ones that give the trace impedance on their
+layers: a microstrip on the top dielectric for the entry, a stripline or
+microstrip for the exit. Untick the box to enter your own; the card shows each
+trace's impedance.</p>
+<h3 id="speed">Speed</h3>
+<p>A new geometry takes a few seconds on a desktop, then it is cached: changing
+the frequency of interest is instant. A progress line shows each stage.</p>
+<p>In the browser the card solves the network without the legs, once and then on
+<strong>Solve</strong>. <strong>Solve full wave</strong> runs the full wave with the legs; allow a minute
+or more there.</p>
+<h3 id="how-far-to-trust-the-via-models">How far to trust the via models</h3>
+<ul>
+<li><strong>Against openEMS</strong>, on a six-layer via with its traces: the full wave puts
+the stub notch at 16.85 GHz against 17.35 (−2.9 %), with |S| within 0.05 to
+8 GHz, with and without ground vias.</li>
+<li><strong>Against a 3-D FEM</strong>, five six-layer stubs: the full wave reads the notch
+1–7 % low; the network 8–17 % high, and without its evanescent modes 0.6–10 %
+low.</li>
+<li><strong>Against HFSS</strong>, on Li et al.'s published via through a plate pair (7, 10 and
+15 mil antipads): the network within 0.15 dB to 40 GHz.</li>
+</ul>
+<h3 id="stitching-dense-stacks-and-the-limits">Stitching, dense stacks and the limits</h3>
+<ul>
+<li><strong>Stitching matters.</strong> With no ground via near the signal via, a via whose
+return changes plane pours power into the unstitched pair. The card warns
+and shows the loss. Add a ground via within about 1 mm.</li>
+<li><strong>Many closely spaced planes</strong> can load a stub more than the quick bound
+(quarter wave ÷ 1.75) allows. When the solved notch falls below the bound, the
+card says so: trust the solved notch.</li>
+<li><strong>Above 40 GHz</strong> the results are shown but not validated. Plating, pad size
+and layer shift move a real via more than the model's error does.</li>
+</ul>
+<p>The models are EyeOpener Lite's, ported with their tests; see
+<a href="verification-and-limits.html">Verification and limits</a>.</p>
+<h2 id="microvia-analyzer-hdi">Microvia Analyzer (HDI)</h2>
+<p>A dedicated analyzer for laser-drilled microvias, with return-path-aware
+inductance and the HDI reliability advisories that through-hole tools miss.</p>
+<p><strong>Microvia geometry.</strong> Drill diameter at the top of the pocket (75–100 µm
+typical), depth (one dielectric layer, 50–100 µm), side-wall plating thickness
+(8–15 µm), bottom-pocket plating (leave at 0 for auto — 70 % of the side-wall,
+a typical conical-pocket ratio), capture pad and antipad diameters, and the
+<strong>return-via spacing s</strong>, centre-to-centre to the nearest stitching via.</p>
+<p><strong>Return-via spacing drives the inductance more than any other input.</strong> A
+microvia's loop inductance is set by the area enclosed between the signal via
+and wherever the return current gets back — put a stitching via 0.5 mm away and
+the loop is tiny; leave it 5 mm away and the microvia's advantage evaporates.</p>
+<p><strong>Topology.</strong> Connection target (Plane, or Trace — landing on a signal stub
+raises an inductance-uncertainty warning), stack height, and stack topology:
+Single, <strong>Staggered</strong> (preferred above 2 levels) or <strong>Stacked</strong> (risky above 2).</p>
+<p><strong>Operating conditions.</strong> Substrate εr, ambient, applied current, ΔT for
+ampacity, frequency for skin effect, and signal rise time for the
+lumped-versus-distributed regime check.</p>
+<p><strong>Outputs.</strong> Grouped into Electrical (inductance via the return-path-aware
+Howard Johnson form, capacitance via the Gunston elliptic-coaxial formula),
+Regime (is this still a lumped element at your edge rate), and Thermal /
+Ampacity. Beside the inductance, Goldfarb–Pucel's via-to-plane inductance is
+shown for a microvia landing on a solid plane: a 3-D field solver confirmed it
+within 2 % for depths of 100–631 µm. Reliability advisories — aspect-ratio limits, weak-microvia-interface
+and first-reflow warnings per IPC-WP-023 — appear in the diagnostics strip.</p>
+<p><strong>Insight.</strong> The <strong>weak microvia interface (WMI)</strong> is the industry's main
+microvia failure mode: an incomplete metallurgical bond at the target pad that
+survives electrical test and then opens during thermal cycling or even during
+the first reflow. Stacked microvias concentrate stress at exactly that
+interface, which is why staggering is preferred once you go beyond two levels.</p>
+<h2 id="padstack-calculator">Padstack Calculator</h2>
+<p>Four small sub-tools sharing one page, selected from a dropdown.</p>
+<p><strong>Thru-hole pad.</strong> Inputs: hole diameter, minimum external annular ring,
+minimum internal annular ring, thermal isolation gap. Outputs: external and
+internal pad diameters, antipad, thermal-relief inner diameter and spoke width,
+per IPC-2221 minimums.</p>
+<p><strong>BGA land.</strong> The quick rule of thumb: NSMD land = 0.8 × ball, SMD land = ball,
+with a fabrication tolerance applied. <strong>For real BGA work use the <a href="#bga-pad-designer-nsmd--smd">BGA Pad
+Designer</a></strong> — this sub-tool has no pitch
+awareness, no mask-opening output and no registration input.</p>
+<p><strong>Conductor clearance (1 or 2 conductors).</strong> Given a pitch and your trace
+width and spacing, returns the largest pad diameter that still lets one or two
+traces pass between adjacent holes, and the annular ring that leaves.</p>
+<p><strong>Corner-to-corner.</strong> The Pythagorean diagonal of a rectangular pad or lead,
+plus a suggested drill window at 1.05–1.15× that diagonal.</p>
+<h2 id="bga-pad-designer-nsmd--smd">BGA Pad Designer (NSMD / SMD)</h2>
+<p>Sizes the complete BGA land — copper, solder mask and stencil aperture — for
+both mask constructions at once, and answers the specific question &quot;what is the
+smallest pad that still meets my fabricator's solder-mask registration?&quot;.</p>
+<p>Every input and every output on this page is in whichever unit you choose in
+the <strong>Units</strong> dropdown at the top, so you can work entirely in mm or entirely
+in mils.</p>
+<h3 id="choosing-the-geometry">Choosing the geometry</h3>
+<p>The <strong>Ball geometry preset</strong> dropdown is a shortcut, not a parts library. It
+lists the standard pitch and nominal-ball combinations a BGA comes in — 0.35 mm
+pitch through 1.27 mm — each tagged with the IPC-7351B density level that ball
+diameter falls into. &quot;Custom&quot; leaves whatever you already typed alone.</p>
+<p>Whatever your package drawing's <strong>&quot;b&quot; typical</strong> dimension actually says, type
+that in. Use the typical value, not the min or the max: the IPC land size is
+derived from the nominal ball.</p>
+<p><strong>Ball pitch</strong> is the finest pitch on the part if it has more than one region.
+Pitch does <strong>not</strong> change the IPC target land — it sets the ceilings, i.e. how
+much copper and how much mask dam physically fit.</p>
+<p><strong>Package-side pad Ø</strong> is optional. If the vendor publishes the pad or mask
+opening on the package itself, enter it and the tool compares it against the
+board-side target. Leave it at 0 to skip the check.</p>
+<h3 id="fabricator-capability">Fabricator capability</h3>
+<p><strong>Mask registration ± per side</strong> is the single most important input. It is how
+far your fab's solder mask can shift relative to the copper. 1 mil is the
+default and a reasonable modern assumption; use 2 mil for a low-cost fab, and
+25 µm or better if your fab images the mask with LDI. Every headline answer on
+the page moves when you change it.</p>
+<p>The rest describe your fab's limits: land design tolerance (IPC-7351B's
+±0.05 mm design window), minimum solder-mask dam (3 mil is the usual floor),
+minimum copper-to-copper gap, finished copper thickness (only affects the NSMD
+wetted-area figure), and stencil thickness for the paste-release check.</p>
+<h3 id="the-headline-answers">The headline answers</h3>
+<ul>
+<li><strong>Smallest SMD copper pad</strong> = mask opening + 2 × registration. Below this the
+mask can slip off the copper edge, and you get a partially mask-defined joint
+whose diameter nobody controls.</li>
+<li><strong>Smallest NSMD mask opening</strong> = land + 2 × registration. The mirror image:
+below this the mask can creep onto the land and shrink the joint.</li>
+</ul>
+<h3 id="nsmd-versus-smd">NSMD versus SMD</h3>
+<p><strong>NSMD</strong> — the copper land is <em>smaller</em> than the mask opening. Solder anchors
+the land's top face <strong>and</strong> its etched sidewall, which is why IPC-7095 makes it
+the default recommendation. The typical land is the IPC-7351B reduction from
+the ball diameter; min and max are that ± the land tolerance, with max clamped
+down if the pitch will not allow it.</p>
+<p><strong>SMD</strong> — the copper is <em>larger</em> than the mask opening, so the mask sets the
+joint diameter and must land on copper everywhere. The minimum copper pad is
+the registration-driven answer; the typical column follows the industry
+convention of drawing the copper at the ball diameter.</p>
+<p>Both cards also report the mask dam and copper gap at the typical size (compare
+these against your fab's minimums), the wetted solder area, and an estimated
+collapsed standoff height.</p>
+<h3 id="where-the-land-size-comes-from">Where the land size comes from</h3>
+<p>IPC-7351B sizes a BGA land as a percentage <strong>reduction</strong> from the nominal ball
+diameter, keyed on the <strong>ball diameter alone</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Density level</th>
+<th>Nominal ball</th>
+<th>Reduction</th>
+<th>Multiplier</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C (minimum)</td>
+<td>0.15 – 0.20 mm</td>
+<td>15 %</td>
+<td>× 0.85</td>
+</tr>
+<tr>
+<td>B (nominal)</td>
+<td>0.25 – 0.50 mm</td>
+<td>20 %</td>
+<td>× 0.80</td>
+</tr>
+<tr>
+<td>A (maximum)</td>
+<td>0.55 – 0.75 mm</td>
+<td>25 %</td>
+<td>× 0.75</td>
+</tr>
+</tbody>
+</table>
+<p>A ball on a boundary, or in one of the gaps the published table leaves, takes
+the lower band's percentage. IPC then applies a ±0.05 mm design tolerance,
+which is where the min and max columns come from.</p>
+<h3 id="supporting-outputs">Supporting outputs</h3>
+<p><strong>Wetted area</strong> quantifies the NSMD-versus-SMD trade instead of asserting it:
+NSMD adds the land's copper sidewall to the joint, SMD does not.</p>
+<p><strong>Collapsed standoff (est.)</strong> comes from a constant-volume truncated-sphere
+model — the ball's solder volume is conserved and the joint becomes a sphere
+truncated by the two wetting planes. It is a geometry estimate, not a reflow
+simulation: it ignores surface tension, package weight and printed paste
+volume. Use it comparatively, to see how standoff falls as the land grows.</p>
+<p><strong>Max stencil foil</strong> is the thickest stencil that still clears the IPC-7525B
+0.66 area-ratio floor for this aperture. Fine-pitch apertures routinely fail on
+a general-purpose 4 mil foil, and a thickness is a more useful answer than a
+verdict.</p>
+<p><strong>Insight.</strong> At 0.5 mm pitch and below, the NSMD-versus-SMD decision is usually
+made by your fab's mask registration, not by reliability theory. Enter the
+number they actually quote you, check whether the SMD minimum still leaves a
+workable copper gap, and choose from that.</p>
+</main>
+</body>
+</html>

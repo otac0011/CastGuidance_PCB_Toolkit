@@ -1,0 +1,222 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The PCB Design Wizard — CastGuidance PCB Toolkit</title>
+<style>:root{--bg:#1E1E1E;--panel:#252526;--line:#3F3F46;--fg:#E6E6E6;--dim:#A0A0A0;--accent:#D9842A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+  font:15px/1.65 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;display:flex}
+.sidebar{width:270px;min-height:100vh;background:var(--panel);
+  border-right:1px solid var(--line);padding:18px 0;position:sticky;top:0;
+  align-self:flex-start;max-height:100vh;overflow:auto;flex:0 0 270px}
+.brand{font-weight:600;color:var(--accent);padding:0 18px 14px;font-size:16px}
+.brand span{display:block;color:var(--dim);font-weight:400;font-size:13px}
+.sidebar a{display:block;padding:7px 18px;color:var(--fg);text-decoration:none;font-size:14px}
+.sidebar a:hover{background:#2D2D30}
+.sidebar a.current{color:var(--accent);border-left:3px solid var(--accent);padding-left:15px}
+main{flex:1;max-width:860px;padding:36px 44px 90px}
+h1{font-size:30px;margin:0 0 20px;color:var(--fg)}
+h2{font-size:22px;margin:38px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+h3{font-size:17px;margin:26px 0 8px;color:var(--accent)}
+h4{font-size:15px;margin:20px 0 6px;color:var(--fg)}
+p,li{color:#D2D2D2}
+a{color:var(--accent)}
+code{background:#2D2D30;padding:1px 5px;border-radius:3px;
+  font:13px/1.5 Consolas,Menlo,monospace;color:#E8C08A}
+pre{background:#2D2D30;padding:12px 14px;border-radius:4px;overflow-x:auto}
+pre code{background:none;padding:0}
+table{border-collapse:collapse;margin:16px 0;width:100%;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:7px 11px;text-align:left;font-size:14px}
+th{background:var(--panel);color:var(--accent)}
+blockquote{border-left:3px solid var(--accent);margin:16px 0;padding:2px 16px;color:var(--dim)}
+@media(max-width:820px){body{display:block}.sidebar{width:auto;position:static;
+  max-height:none;flex:none}main{padding:24px 20px 60px}}</style>
+</head>
+<body>
+<nav class="sidebar"><div class="brand">CastGuidance<span>PCB Toolkit</span></div><a href="design-wizard.html" class="current">The PCB Design Wizard</a><a href="dfm-thermal-emc.html">DFM, thermal and EMC</a><a href="faq.html">Frequently asked questions</a><a href="files-and-formats.html">Files and exports</a><a href="getting-started.html">Getting started</a><a href="index.html">CastGuidance PCB Toolkit — User Manual</a><a href="openems.html">The 3D field solver</a><a href="power-integrity.html">Power integrity and power electronics</a><a href="reference-calculators.html">Reference calculators</a><a href="rf-microwave.html">RF and microwave</a><a href="signal-integrity.html">Signal integrity</a><a href="stackup-and-materials.html">Stackup and materials</a><a href="trace-and-routing.html">Trace and routing</a><a href="units-and-conventions.html">Units and conventions</a><a href="verification-and-limits.html">Verification and limits</a><a href="vias-and-padstacks.html">Vias and padstacks</a></nav>
+<main><h1 id="the-pcb-design-wizard">The PCB Design Wizard</h1>
+<p>A stepped questionnaire that turns a description of the board you are about to
+build into a starting stackup, a set of trace rules, a via schedule and thermal
+guidance. It is pinned at the top of the tool menu because it is the natural
+entry point for a new project.</p>
+<h2 id="step-1--pick-a-preset">Step 1 — pick a preset</h2>
+<p>Start from a preset that resembles your board — a USB-C charger, an RF
+prototype, a DDR4 motherboard — or choose <strong>Custom</strong> to answer everything from
+scratch. A preset only pre-fills the answers; every one of them is editable in
+step 2.</p>
+<h2 id="step-2--answer-the-questions">Step 2 — answer the questions</h2>
+<p>The wizard asks about the things that actually drive a stackup decision:</p>
+<ul>
+<li>Board class and reliability target</li>
+<li>Target signalling speeds and which interfaces are on the board</li>
+<li>Intended manufacturer or fab class</li>
+<li>Layer-count budget</li>
+<li>Mechanical constraints — board thickness, size, connector heights</li>
+<li>Whether there is RF content or it is purely digital</li>
+<li>Target production volume</li>
+<li>How sensitive the project is to bill-of-materials cost</li>
+</ul>
+<p>Answer what you know and leave the rest at their preset values. The wizard is
+deliberately tolerant of partial information; it will tell you where an
+assumption drove a recommendation.</p>
+<h2 id="step-3--the-report">Step 3 — the report</h2>
+<p>The report summarises:</p>
+<ul>
+<li>The <strong>top three recommended stackups</strong> with the rationale for each, so you
+can see why one was ranked above another rather than being handed a single
+answer.</li>
+<li>Recommended <strong>trace and space rules</strong> consistent with that stackup and your
+fab class.</li>
+<li>A suggested <strong>via schedule</strong> — which via types on which layer transitions.</li>
+<li><strong>Thermal guidance</strong> for the power content you described.</li>
+</ul>
+<h3 id="differential-pair-widths">Differential pair widths</h3>
+<p>The wizard sizes each differential pair's legs for the bus's target Zdiff at
+the 2×-dielectric gap, on the 2D field solver's
+<a href="trace-and-routing.html#the-impedance-surrogate">surrogate</a>. Before 2026-10-20 it
+sized the legs for a single-ended target and quoted a closed-form Zdiff that
+reads 8–15 % high on surface pairs. The note on each pair rule says which
+model computed it.</p>
+<h3 id="no-power-planes">No power planes</h3>
+<p>Every plane layer in a recommended stackup is <strong>GND</strong>. A 4-layer board is always
+<strong>SIG / GND / GND / SIG</strong>; 6- and 8-layer boards follow the same rule
+(SIG / GND / SIG / SIG / GND / SIG and SIG / GND / SIG / GND / GND / SIG / GND /
+SIG). Power is routed on the signal layers as <strong>wide traces or local pours</strong>,
+sized for the rail's current with <a href="trace-and-routing.html#conductor-properties">Conductor
+Properties</a>, and kept short from the
+regulator to the load.</p>
+<p>The reasoning: a power plane used as a signal's reference forces every return
+current that changes layers to detour through a decoupling capacitor, while a
+second GND plane gives it a direct path through a stitching via. The &quot;free&quot;
+capacitance of a power/ground pair is small on a standard 1.6 mm build (the
+L2–L3 core is 1.26 mm, about 20 pF/in²), so it buys nothing the decoupling
+capacitors do not already supply. Stitch the GND planes together with vias at
+every layer change and along the board edge.</p>
+<p><strong>Export to HTML or Markdown</strong> saves the report so it can live with the
+project. This is the intended output: a document you attach to the design so
+that six months later the reasoning behind the stackup is still recoverable.</p>
+<h2 id="how-to-use-the-result">How to use the result</h2>
+<p>Treat the report as a <strong>starting point that survives contact with the fab</strong>,
+not as a specification. The recommended stackup is a well-reasoned default for
+the constraints you described; your fabricator will have their own preferred
+core and prepreg inventory, and the right move is to send them the report and
+let them propose the nearest stackup they actually stock.</p>
+<p>Then take the numbers from their stackup back into the individual tools —
+<a href="trace-and-routing.html#trace-impedance-openems-3d">Trace Impedance</a> for the real
+dielectric heights, <a href="trace-and-routing.html#differential-pair-designer">Differential Pair
+Designer</a> for the pair
+geometry — to confirm the rules still hold on the stackup you can buy.</p>
+<h2 id="bulk-capacitance-wizard">Bulk Capacitance Wizard</h2>
+<p>The second wizard in the group, listed under the PCB Design Wizard. It sizes
+the bulk / total capacitance of <strong>one power rail</strong> and, at every step, tells
+you <strong>which datasheet to open and where in it to look</strong> for each number — the
+section, table or graph, and what to use when the datasheet is silent.</p>
+<h3 id="the-five-steps">The five steps</h3>
+<ol>
+<li><p><strong>The rail.</strong> What feeds it (buck, boost, LDO, or an off-board supply
+through a connector), its voltage, the dynamic tolerance left for
+transients, the largest load step and the maximum load. The tolerance comes
+from the load IC's <em>Recommended Operating Conditions</em> window minus the
+regulator's DC accuracy and ripple; the load step from the load's supply
+current or the vendor's power estimator.</p>
+</li>
+<li><p><strong>The regulator datasheet.</strong> For a switcher: minimum input voltage,
+switching frequency, inductor (<em>Detailed Design Procedure → Inductor
+selection</em>), loop crossover (<em>Output capacitor selection</em> or the Bode plot;
+f_sw/10 when not given) and ripple budget. For an LDO or off-board supply:
+the response time read off the <em>Load Transient Response</em> plot. Then the
+datasheet's minimum and maximum C_OUT, soft-start time and current limit.</p>
+</li>
+<li><p><strong>The load datasheets.</strong> The bulk and per-pin decoupling each load IC asks
+for on this rail (<em>Power Supply Recommendations</em>, <em>Layout Guidelines</em>, the
+<em>Typical Application</em> schematic, or for FPGAs and SoCs the separate
+hardware design guide).</p>
+</li>
+<li><p><strong>The capacitor.</strong> MLCC dielectric, case size and voltage rating — derated
+for DC bias and temperature with the same model as <a href="power-integrity.html#mlcc-dc-bias-derating">MLCC DC-Bias
+Derating</a> — or polymer /
+electrolytic, plus tolerance, and the part's ESR (leave 0 for an MLCC to
+use the typical X5R/X7R law; a polymer part needs its datasheet's).</p>
+</li>
+<li><p><strong>Result.</strong> Every criterion as an <em>effective</em> capacitance, the one that
+governs, the nominal value and the number of parts to place, the maximum
+ESR, the input-capacitor size and RMS current, and a soft-start inrush
+check. Export it as text to keep with the design.</p>
+</li>
+</ol>
+<h3 id="what-the-bulk-capacitance-wizard-checks">What the Bulk Capacitance Wizard checks</h3>
+<table>
+<thead>
+<tr>
+<th>Criterion</th>
+<th>Formula</th>
+<th>Applies to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Output ripple</td>
+<td>C ≥ ΔI_L / (8·f_sw·ΔV_ripple) (boost: I_out·D / (f_sw·ΔV))</td>
+<td>Buck, boost</td>
+</tr>
+<tr>
+<td>Load step inside the loop bandwidth</td>
+<td>C ≥ ΔI / (2π·f_c·ΔV)</td>
+<td>Buck, boost</td>
+</tr>
+<tr>
+<td>Load-step droop (inductor slew)</td>
+<td>C ≥ L·ΔI² / (2·ΔV·(V_in − V_out))</td>
+<td>Buck</td>
+</tr>
+<tr>
+<td>Load-release overshoot</td>
+<td>C ≥ L·ΔI² / (2·ΔV·V_out)</td>
+<td>Buck</td>
+</tr>
+<tr>
+<td>Hold-up until the source responds</td>
+<td>C ≥ ΔI·t_response / ΔV</td>
+<td>LDO, off-board</td>
+</tr>
+<tr>
+<td>Regulator minimum C_OUT</td>
+<td>as stated (effective)</td>
+<td>All</td>
+</tr>
+<tr>
+<td>Load datasheet recommendations</td>
+<td>Σ bulk + per-pin decoupling (nominal)</td>
+<td>All</td>
+</tr>
+</tbody>
+</table>
+<p>Upper limits are checked too: total capacitance above the regulator's maximum
+C_OUT, and soft-start charging current C·V_out/t_ss plus the load above the
+current limit, both raise a warning. Finish by checking the whole bank's Z(f)
+against the target impedance in the <a href="power-integrity.html#cap-bank-analyzer-zf">Cap Bank
+Analyzer</a>.</p>
+<h3 id="esr-check-and-the-hand-off-to-the-cap-bank-analyzer">ESR check and the hand-off to the Cap Bank Analyzer</h3>
+<p>The chosen part's ESR — the datasheet's, or for an MLCC the typical law
+11 mΩ·(C/1 µF)^−0.36 fitted to Samsung's curves — is divided by the number of
+parts placed and compared with the ripple budget's maximum ESR: over it is a
+warning, over half of it a note. The law is an ESR at self-resonance; well
+below that the dielectric's loss raises it, so for a tight budget read the
+part's ESR-vs-frequency curve at f_sw.</p>
+<p><strong>Check in Cap Bank Analyzer</strong> on the result step opens the analyzer with the
+bulk parts at their effective value and ESR, each load's datasheet bulk, the
+loads' per-pin decoupling grouped by value (taken as 0402, 0603 above 1 µF —
+set the real cases), the target impedance ΔV/ΔI, and a sweep from the loop
+crossover (below it the regulator holds the rail) to 100 MHz, about where board
+decoupling hands over to the package. A banner there lists what it assumed.</p>
+<h2 id="what-the-wizard-does-not-do">What the wizard does not do</h2>
+<p>It does not generate CAD files, design rules files, or a stackup document in
+any fab's native format. It does not know your fabricator's inventory. And it
+does not replace a conversation with the fab — on any board where impedance
+control matters, that conversation happens anyway, and the report is what makes
+it a short one.</p>
+</main>
+</body>
+</html>

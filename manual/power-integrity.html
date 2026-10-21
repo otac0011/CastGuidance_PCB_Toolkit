@@ -1,0 +1,172 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Power integrity and power electronics — CastGuidance PCB Toolkit</title>
+<style>:root{--bg:#1E1E1E;--panel:#252526;--line:#3F3F46;--fg:#E6E6E6;--dim:#A0A0A0;--accent:#D9842A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+  font:15px/1.65 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;display:flex}
+.sidebar{width:270px;min-height:100vh;background:var(--panel);
+  border-right:1px solid var(--line);padding:18px 0;position:sticky;top:0;
+  align-self:flex-start;max-height:100vh;overflow:auto;flex:0 0 270px}
+.brand{font-weight:600;color:var(--accent);padding:0 18px 14px;font-size:16px}
+.brand span{display:block;color:var(--dim);font-weight:400;font-size:13px}
+.sidebar a{display:block;padding:7px 18px;color:var(--fg);text-decoration:none;font-size:14px}
+.sidebar a:hover{background:#2D2D30}
+.sidebar a.current{color:var(--accent);border-left:3px solid var(--accent);padding-left:15px}
+main{flex:1;max-width:860px;padding:36px 44px 90px}
+h1{font-size:30px;margin:0 0 20px;color:var(--fg)}
+h2{font-size:22px;margin:38px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+h3{font-size:17px;margin:26px 0 8px;color:var(--accent)}
+h4{font-size:15px;margin:20px 0 6px;color:var(--fg)}
+p,li{color:#D2D2D2}
+a{color:var(--accent)}
+code{background:#2D2D30;padding:1px 5px;border-radius:3px;
+  font:13px/1.5 Consolas,Menlo,monospace;color:#E8C08A}
+pre{background:#2D2D30;padding:12px 14px;border-radius:4px;overflow-x:auto}
+pre code{background:none;padding:0}
+table{border-collapse:collapse;margin:16px 0;width:100%;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:7px 11px;text-align:left;font-size:14px}
+th{background:var(--panel);color:var(--accent)}
+blockquote{border-left:3px solid var(--accent);margin:16px 0;padding:2px 16px;color:var(--dim)}
+@media(max-width:820px){body{display:block}.sidebar{width:auto;position:static;
+  max-height:none;flex:none}main{padding:24px 20px 60px}}</style>
+</head>
+<body>
+<nav class="sidebar"><div class="brand">CastGuidance<span>PCB Toolkit</span></div><a href="design-wizard.html">The PCB Design Wizard</a><a href="dfm-thermal-emc.html">DFM, thermal and EMC</a><a href="faq.html">Frequently asked questions</a><a href="files-and-formats.html">Files and exports</a><a href="getting-started.html">Getting started</a><a href="index.html">CastGuidance PCB Toolkit — User Manual</a><a href="openems.html">The 3D field solver</a><a href="power-integrity.html" class="current">Power integrity and power electronics</a><a href="reference-calculators.html">Reference calculators</a><a href="rf-microwave.html">RF and microwave</a><a href="signal-integrity.html">Signal integrity</a><a href="stackup-and-materials.html">Stackup and materials</a><a href="trace-and-routing.html">Trace and routing</a><a href="units-and-conventions.html">Units and conventions</a><a href="verification-and-limits.html">Verification and limits</a><a href="vias-and-padstacks.html">Vias and padstacks</a></nav>
+<main><h1 id="power-integrity-and-power-electronics">Power integrity and power electronics</h1>
+<p>Keeping a rail quiet: what impedance you need, what your capacitors actually
+deliver, and what the mounting costs you.</p>
+<h2 id="pdn-target-and-plane-cap">PDN Target and Plane Cap</h2>
+<p>Sets the target impedance for a power rail and works out how much of it the
+plane capacitance alone can cover.</p>
+<p><strong>Inputs.</strong> Voltage rail (0.85 V, 1.0 V core, 1.8 V, 3.3 V, 5 V…), allowed
+ripple as a percentage or in mV, maximum current, and the transient fraction —
+what proportion of the maximum current is the actual step. Then the plane
+geometry: width, length, separation, dielectric εr, and the frequency of
+interest.</p>
+<p><strong>Outputs.</strong> Z_target from V_ripple ÷ I_transient, plane capacitance from the
+parallel-plate formula, the plane's Xc at your frequency, and the Xc-to-Z_target
+ratio — which tells you the frequency above which the planes alone stop being
+enough and discrete decoupling has to take over.</p>
+<p><strong>The core idea.</strong> A power delivery network is a filter problem, not a
+capacitance problem. What the load cares about is the impedance the rail
+presents at every frequency in the transient's spectrum: <code>Z_target = ΔV_allowed / ΔI_transient</code>. A 1.0 V rail allowing 3 % ripple with a 10 A step needs
+30 mV / 10 A = 3 mΩ, flat, out to the edge rate.</p>
+<p><strong>Insight.</strong> The transient fraction input matters more than people expect. The
+step is what the PDN sees, not the total current — a 20 A rail with a 20 %
+transient is a 4 A step and a much easier target than a 20 A step would be.</p>
+<h2 id="mlcc-dc-bias-derating">MLCC DC-Bias Derating</h2>
+<p>What a ceramic capacitor actually delivers once it is biased and warm.</p>
+<p><strong>Inputs.</strong> Nominal capacitance (the sticker value), rated voltage, the voltage
+you will actually apply, and the operating temperature.</p>
+<p><strong>Outputs.</strong> Effective capacitance under bias, the applied-to-rated voltage
+ratio, and a combined retention percentage broken into its voltage and
+temperature components.</p>
+<p><strong>Why this exists.</strong> Class II ceramics (X5R, X7R, Y5V) lose capacitance under
+DC bias, and the loss is severe. A part marked &quot;10 µF 10 V X7R 0603&quot; is
+measured at 0 V; at 5 V bias it commonly delivers 4 µF. Design a PDN with
+sticker values and you will be short by a factor of two.</p>
+<p><strong>Insight.</strong> Headroom and package size are what protect you. A 10 V part at
+10 % bias keeps around 95 %; a 6.3 V part at 80 % bias often drops to 20–30 %.
+A larger case size of the same value and voltage always derates less, because
+the dielectric is thicker. C0G/NP0 does not derate with bias at all, but is only
+available at small values.</p>
+<h2 id="mounting-inductance-l_mnt">Mounting Inductance (L_mnt)</h2>
+<p>The parasitic loop inductance a decoupling capacitor picks up from its pads and
+vias — usually larger than the capacitor's own ESL.</p>
+<p><strong>Inputs.</strong> Via height from the capacitor pad down to the reference plane, via
+diameter (8–12 mil typical), pad length, and the pad-to-via separation; for the
+AN 958 route also the power-to-GND via spacing and the capacitor's case size.</p>
+<p><strong>Outputs.</strong> Total mounting inductance, split into the via and pad/trace
+contributions, plus single-via inductance for reference.</p>
+<h3 id="the-an-958-via-pair-route">The AN 958 via-pair route</h3>
+<p>Beside the partial-inductance method the tool shows Intel AN 958's via-pair
+loop, <code>L = 10·h·ln(2s/D)</code> pH with h (depth to the plane), s (via spacing) and D
+(via diameter) in mils — Johnson's <code>(μ0/π)·H·ln(2S/D)</code> with μ0/π = 10.16 pH/mil
+rounded. Unlike the partial form, which takes each via alone, the loop form
+counts the two vias' mutual inductance: closer vias, less loop. It adds the
+body ESL by case size — KYOCERA AVX's measured table (0603 870 pH, 0805
+1050 pH, 1206 1200 pH, 1210 980 pH, unmounted, at 1 GHz), and for 0201 and
+0402 AVX's own curve fit, labelled as such — to give the mounted ESL the plane
+pair sees: body + via pair + pads. That is the number the Cap Bank Analyzer's
+model ESL uses.</p>
+<p><strong>Insight.</strong> Above roughly 100 MHz the mounting inductance dominates the
+capacitor's effective impedance entirely. An 0402 with 0.6 nH of ESL mounted
+with two through-board vias easily picks up 2 nH of mounting inductance,
+tripling the high-frequency impedance the rail actually sees. The fixes, in
+order of effectiveness: put the plane pair closer to the surface (shorter
+vias), put the vias inside or immediately beside the pads (shorter loop), use
+more vias in parallel, and only then chase a lower-ESL capacitor.</p>
+<h2 id="cap-bank-analyzer-zf">Cap Bank Analyzer (Z(f))</h2>
+<p>Plots the impedance of a whole decoupling bank against frequency and finds the
+anti-resonance peaks.</p>
+<p><strong>Inputs.</strong> Build the capacitor table at the top: value, case size, count, and
+the ESL and ESR of each part. Tick a row's model boxes and its ESL comes from
+the case's body ESL plus the mounting set below (AN 958's via pair and the pad
+traces as microstrips), its ESR from the typical X5R/X7R law; untick them to
+type the datasheet's. Then set the sweep range (10 kHz to 1 GHz is typical),
+the target impedance, and optionally the regulator as a series R–L.</p>
+<p><strong>Outputs.</strong> A log-log |Z(f)| plot with your target line overlaid, plus
+worst-case |Z|, the NISM flatness ratio Z_max / Z_min, the count and location
+of anti-resonance peaks, and an overall pass/fail against the target.</p>
+<p><strong>Anti-resonance is the whole point.</strong> Two capacitors of different values in
+parallel do not simply add. Between their self-resonant frequencies, one is
+inductive while the other is still capacitive, and they form a parallel LC tank
+that produces an impedance <em>peak</em> — often higher than either capacitor alone.
+Adding a third value to &quot;cover the gap&quot; frequently creates two peaks instead of
+one.</p>
+<p><strong>Insight.</strong> The modern approach is fewer distinct values, not more. Many
+capacitors of the same value in parallel lowers impedance without creating new
+peaks, because they all resonate together. The NISM flatness ratio is the
+number to minimise: a flat PDN is a well-behaved PDN.</p>
+<h3 id="typical-esr-and-the-157-rule">Typical ESR and the 1.57× rule</h3>
+<p>The model ESR is <code>11 mΩ·(C/1 µF)^−0.36</code>, a least-squares fit to 103 Samsung
+X5R/X7R parts (0201–1210, 0 V, 25 °C) at self-resonance — within ×1.15 of
+every value's median, within ×2.3 of Würth's, inside Xilinx UG483's allowed
+windows, and clamped to its 10 nF–100 µF range. It is a typical part's, not
+yours, and constant with frequency, so anti-resonance peaks come out slightly
+high (conservative). Polymer and tantalum parts have no generic default.</p>
+<p>A peak over the target is graded by Smith, Sandler and Bogatin's ringing rule:
+a resonant peak rings to about 0.64·ΔI·Z_peak, so a narrow peak up to ≈ 1.57×
+the target may still meet the ripple budget in the time domain (a note);
+beyond 1.57× it is a warning.</p>
+<h3 id="plane-pair-power-pour-or-none">Plane pair, power pour, or none</h3>
+<p>Pick how the capacitors reach the load. <strong>No plane pair</strong> sums the bank as if
+every part sat at the load. The PCB Design Wizard never recommends a power
+plane — every plane is GND and power runs as wide traces or pours — so on its
+stackups there is no cavity unless a power pour sits over a GND plane, and the
+trace from each capacitor to the load adds inductance this mode does not see:
+keep the parts at the pins. <strong>Power plane over GND</strong> and <strong>power pour over a
+GND plane</strong> model the pair (or the pour's rectangle) as a cavity: enter its
+size, the dielectric between the two copper layers, Dk and Df, the load's
+position and via pairs, and each row's x, y from the corner.</p>
+<h3 id="what-the-plane-pair-adds">What the plane pair adds</h3>
+<p>The cavity is the transmission-plane grid of the pair solved by its modes, the
+same model EyeOpener Lite checks against the exact modal expansion (median
+error 0.02–0.3 %, worst decile ≤ 1.1 %) and openEMS (resonances within 1.5–4.3 %). It reports each row's
+<strong>spreading inductance</strong> to the load — it adds to that row's ESL, and grows
+with distance as (μ0h/π)·ln(d/r) — the pair's own capacitance εA/h, its
+bare-cavity resonances, and |Z| at the load through the planes, drawn beside
+the lumped bank. It solves in the background on the desktop; in the browser
+press <strong>Solve plane pair</strong>. It assumes the GND plane is whole under the pair,
+the edges open, and the load's via pairs uncoupled to each other.</p>
+<h2 id="buck--boost-inductor">Buck / Boost Inductor</h2>
+<p>Inductor and output-capacitor sizing for a CCM switching converter.</p>
+<p><strong>Inputs.</strong> V_in, V_out, load current, switching frequency (500 kHz – 2 MHz for
+silicon, above 3 MHz for GaN), inductor ripple as a fraction of I_out (25–40 %
+is the usual choice), and the target output ripple voltage.</p>
+<p><strong>Outputs.</strong> Duty cycle, the required inductance, inductor ripple current ΔI_L,
+peak and RMS inductor current, average input current, and the minimum output
+capacitance with the maximum ESR that meets your ripple budget.</p>
+<p><strong>Insight.</strong> Size the inductor's saturation rating against the <strong>peak</strong>
+current, not the RMS or the average. A converter that saturates its inductor on
+a load step does not gently degrade — the inductance collapses, the current
+spikes and the switch usually dies. The 25–40 % ripple guideline is a
+compromise: less ripple needs a bigger inductor, more ripple needs a bigger
+output capacitor and costs efficiency in core loss.</p>
+</main>
+</body>
+</html>

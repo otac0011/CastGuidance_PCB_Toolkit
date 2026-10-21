@@ -1,0 +1,243 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Signal integrity — CastGuidance PCB Toolkit</title>
+<style>:root{--bg:#1E1E1E;--panel:#252526;--line:#3F3F46;--fg:#E6E6E6;--dim:#A0A0A0;--accent:#D9842A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+  font:15px/1.65 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;display:flex}
+.sidebar{width:270px;min-height:100vh;background:var(--panel);
+  border-right:1px solid var(--line);padding:18px 0;position:sticky;top:0;
+  align-self:flex-start;max-height:100vh;overflow:auto;flex:0 0 270px}
+.brand{font-weight:600;color:var(--accent);padding:0 18px 14px;font-size:16px}
+.brand span{display:block;color:var(--dim);font-weight:400;font-size:13px}
+.sidebar a{display:block;padding:7px 18px;color:var(--fg);text-decoration:none;font-size:14px}
+.sidebar a:hover{background:#2D2D30}
+.sidebar a.current{color:var(--accent);border-left:3px solid var(--accent);padding-left:15px}
+main{flex:1;max-width:860px;padding:36px 44px 90px}
+h1{font-size:30px;margin:0 0 20px;color:var(--fg)}
+h2{font-size:22px;margin:38px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+h3{font-size:17px;margin:26px 0 8px;color:var(--accent)}
+h4{font-size:15px;margin:20px 0 6px;color:var(--fg)}
+p,li{color:#D2D2D2}
+a{color:var(--accent)}
+code{background:#2D2D30;padding:1px 5px;border-radius:3px;
+  font:13px/1.5 Consolas,Menlo,monospace;color:#E8C08A}
+pre{background:#2D2D30;padding:12px 14px;border-radius:4px;overflow-x:auto}
+pre code{background:none;padding:0}
+table{border-collapse:collapse;margin:16px 0;width:100%;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:7px 11px;text-align:left;font-size:14px}
+th{background:var(--panel);color:var(--accent)}
+blockquote{border-left:3px solid var(--accent);margin:16px 0;padding:2px 16px;color:var(--dim)}
+@media(max-width:820px){body{display:block}.sidebar{width:auto;position:static;
+  max-height:none;flex:none}main{padding:24px 20px 60px}}</style>
+</head>
+<body>
+<nav class="sidebar"><div class="brand">CastGuidance<span>PCB Toolkit</span></div><a href="design-wizard.html">The PCB Design Wizard</a><a href="dfm-thermal-emc.html">DFM, thermal and EMC</a><a href="faq.html">Frequently asked questions</a><a href="files-and-formats.html">Files and exports</a><a href="getting-started.html">Getting started</a><a href="index.html">CastGuidance PCB Toolkit — User Manual</a><a href="openems.html">The 3D field solver</a><a href="power-integrity.html">Power integrity and power electronics</a><a href="reference-calculators.html">Reference calculators</a><a href="rf-microwave.html">RF and microwave</a><a href="signal-integrity.html" class="current">Signal integrity</a><a href="stackup-and-materials.html">Stackup and materials</a><a href="trace-and-routing.html">Trace and routing</a><a href="units-and-conventions.html">Units and conventions</a><a href="verification-and-limits.html">Verification and limits</a><a href="vias-and-padstacks.html">Vias and padstacks</a></nav>
+<main><h1 id="signal-integrity">Signal integrity</h1>
+<p>Where the loss goes, what the stubs cost you, how much jitter you can afford,
+and whether the bus is length-matched.</p>
+<h2 id="via-stub-impact-s21-eye-and-budget">Via Stub Impact (S21, eye and budget)</h2>
+<p>Quantifies how much of a high-speed channel's insertion-loss budget an open via
+stub eats, and tells you whether to back-drill.</p>
+<h3 id="protocol-preset">Protocol preset</h3>
+<p>Pick from PCIe Gen3/4/5/6, USB 2.0 / 3.2 Gen2 / USB4 Gen3 / USB4 v2,
+10G/25G-KR, 400GBASE-KR4, OIF CEI-56G / 112G, DisplayPort HBR3 / UHBR20, HDMI
+FRL, DDR4-3200, DDR5-6400/8400, LPDDR5-6400, SATA III, MIPI D-PHY 3.0, or
+Custom. Selecting a preset auto-fills the data rate, modulation, rise time,
+insertion-loss budget and FEC margin from the specification. <strong>Every field
+stays editable afterwards</strong> — the preset is a starting point, not a lock.</p>
+<h3 id="inputs">Inputs</h3>
+<p><strong>Stub geometry.</strong> Stub length, drill / antipad / pad diameters, plating
+thickness, the used (signal-carrying) via length, differential via spacing,
+substrate εr, loss tangent tan δ, and a via-fill picker (Air / Epoxy /
+Conductive). The diagram labels every dimension.</p>
+<p><strong>Channel context.</strong> Main trace Z₀ (usually 50 Ω per leg), a differential
+checkbox for two-via analysis, data rate, modulation (NRZ / PAM4 / PAM3), rise
+time, insertion-loss budget at Nyquist, and FEC margin.</p>
+<p><strong>Method picker.</strong> Coaxial open-stub (Pozar §3.5) or Johnson lumped-L + stub
+(High-Speed Signal Propagation ch. 7). The Johnson form is more accurate above
+about 20 GHz.</p>
+<h3 id="outputs">Outputs</h3>
+<p>A live <strong>channel S21 plot</strong> leads the section: an amber Δ|S21| curve over log
+frequency, a dashed-blue marker at Nyquist, and a dotted-red marker at the
+quarter-wave resonance.</p>
+<p>The numeric readouts cover via Z₀, used-barrel inductance, quarter-wave
+resonance frequency, stub Q, Nyquist frequency, insertion-loss adder at Nyquist
+and at 2 × Nyquist, notch depth, budget consumed (raw and after FEC credit),
+horizontal and vertical eye closure, PAM4 sub-eye, unit interval, and a
+colour-coded recommendation badge: <strong>OK / Watch / Back-drill recommended /
+Back-drill required</strong>.</p>
+<p><strong>S-param quality</strong> screens the swept stub network (the stub at a tee, Z₀ at
+both ports) for passivity, reciprocity, sampling and causality. A failing check
+appears as a message.</p>
+<h3 id="how-a-stub-hurts">How a stub hurts</h3>
+<p>An unused via barrel below your signal layer is an open-circuited transmission
+line stub. At the frequency where the stub is a quarter wavelength long it
+presents a short at the signal layer and drops a deep notch in the channel
+response. Below resonance it just adds capacitance and loss; near resonance it
+can take 10 dB or more out of the link.</p>
+<p><strong>Insight.</strong> The number to watch is the quarter-wave resonance relative to your
+Nyquist frequency. If resonance sits above 2 × Nyquist the stub is usually
+harmless. As it approaches Nyquist the notch lands inside your signal band and
+back-drilling stops being optional. Back-drilling costs roughly +17 % at a
+Chinese fab and +30 % at a US fab — see the <a href="dfm-thermal-emc.html#pcb-cost-estimator">PCB Cost
+Estimator</a>.</p>
+<h3 id="where-a-stub-really-resonates">Where a stub really resonates</h3>
+<p>The quarter-wave frequency, c / (4·L·√εr), is where an <em>unloaded</em> stub
+resonates. A real stub passes planes, and their capacitance loads it.</p>
+<table>
+<thead>
+<tr>
+<th>Stub</th>
+<th>Measured or solved notch</th>
+<th>Quarter wave</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Six-layer via, 1.7 mm</td>
+<td>17.35 GHz (openEMS)</td>
+<td>21.0 GHz</td>
+</tr>
+<tr>
+<td>26-layer backplane, 264 mil, Dk 1</td>
+<td>7.63 GHz (HFSS)</td>
+<td>11.2 GHz</td>
+</tr>
+<tr>
+<td>Same backplane as built</td>
+<td>4.38 GHz (measured)</td>
+<td>5.75 GHz</td>
+</tr>
+</tbody>
+</table>
+<p>There the quarter wave reads 21–47 % high, and the full-wave via solve finds up
+to 72 % on dense GND-only stacks (a plane every 0.2–0.3 mm). So the tool also
+shows the lowest the stub <strong>may</strong> resonate, the quarter wave ÷ 1.75, as a marker on the
+plot. It warns when that lands below 2× Nyquist.</p>
+<p>For the actual notch on your stack, the Via Properties tool's <a href="vias-and-padstacks.html#the-via-network">via
+network</a> card solves it round the via's
+axis (full wave) and brackets it between two network estimates. A stub through
+many closely spaced planes can resonate below the ÷ 1.75 marker; the card says
+when it does.</p>
+<h2 id="conductor-loss-roughness">Conductor Loss (Roughness)</h2>
+<p>Copper foil is not smooth. Its tooth profile lengthens the path skin-effect
+current must take, and above a few GHz that costs real dB.</p>
+<p><strong>Methodology dropdown.</strong> Hammerstad-Jensen, Hemispherical, or
+<strong>Cannonball-Huray</strong> (default). The Cannonball-Huray form — Simonovich 2015 —
+is the modern standard because it takes the <em>datasheet Rz</em> directly rather than
+requiring you to fit a surface-ratio parameter.</p>
+<p><strong>Inputs.</strong> Frequency, RMS roughness Δ for the Hammerstad and Hemispherical
+models, or datasheet Rz for Cannonball-Huray. Typical Rz values: STD foil
+5.7 µm, RTF 4.4 µm, VLP 3.5 µm, HVLP 2.0 µm.</p>
+<p><strong>Outputs.</strong> The loss multiplier K versus smooth copper, the difference in dB,
+and the skin depth δ.</p>
+<p><strong>Insight.</strong> When the skin depth becomes comparable to the tooth height, the
+multiplier climbs fast. At 10 GHz the skin depth in copper is about 0.66 µm —
+smaller than the tooth on standard foil. That is why 25 Gbps designs specify
+VLP or HVLP foil: the laminate resin might be identical, but the copper
+roughness alone can be a 30–60 % loss difference.</p>
+<h3 id="conductor-loss-on-a-real-line">Conductor Loss on a real line</h3>
+<p>K multiplies the loss of a <em>surface</em>, not of a line. The <strong>On a line</strong> section
+applies it to a cross-section: pick the topology and dimensions and the
+laminate's Dk and Df as the datasheet quotes them, and the 2D field solver
+gives the line's resistance per inch at DC, smooth and rough, the multiplier
+that results on this line, and the conductor loss αc = R/(2Z) in dB/in, smooth
+and rough. Z comes from the same solve with the laminate's Dk moved causally to
+the frequency (see <a href="stackup-and-materials.html#dielectric-dkdf-vs-frequency">Dielectric Dk/Df vs
+Frequency</a>). For a pair
+it is the odd mode, the differential signal.</p>
+<p><strong>Planes as rough as the trace</strong> (on by default) applies K to the reference
+planes' faces too. Untick it to treat the planes as smooth: the line's
+multiplier then falls well below K, because on a stripline the planes carry
+roughly a fifth to a half of the loss. R itself is checked against Wheeler's
+rule (see <a href="verification-and-limits.html#2d-conductor-loss-against-wheeler-and-pozar">Verification and limits</a>);
+the roughness models are not.</p>
+<h2 id="channel-insertion-loss-budget">Channel Insertion Loss Budget</h2>
+<p>Adds up every loss mechanism in a channel into one number you can compare
+against the specification's budget.</p>
+<p><strong>Line from.</strong> Two ways to describe the line:</p>
+<ul>
+<li><strong>Cross-section (2D field solver, causal laminate)</strong> — the default. Describe
+the line itself and let the solver find its loss.</li>
+<li><strong>Per-inch inputs</strong> — type Z₀, ε_eff and tan δ yourself, as earlier versions
+did. Nothing is moved with frequency, and R is the textbook ρ/(δ·2(w+t)).</li>
+</ul>
+<p><strong>Common inputs.</strong> Frequency (use Nyquist), trace length, the roughness model
+(Rz for Cannonball-Huray, RMS Δ for Hammerstad-Jensen), via stub length, and
+per-pair connector loss in dB.</p>
+<p><strong>Outputs.</strong> Total insertion loss with a per-component breakdown —
+dielectric, conductor, via stub, connector — plus α_d and α_c in dB/inch and
+the roughness multiplier K.</p>
+<p><strong>How to use it.</strong> The breakdown is the point. If dielectric dominates, a
+better laminate helps and wider traces do not. If conductor dominates, wider
+traces and smoother foil help and the laminate does not. Spending money on the
+wrong one is the most common channel-budget mistake.</p>
+<p><strong>Insight.</strong> Dielectric loss scales roughly linearly with frequency; conductor
+loss scales with the square root of frequency. So as data rates rise,
+dielectric loss becomes the dominant term — which is why the industry moved to
+low-Df laminates rather than just thicker copper.</p>
+<h3 id="insertion-loss-from-the-cross-section">Insertion loss from the cross-section</h3>
+<p>Pick the topology (any of the eight the Trace Impedance tool knows), W, T, H,
+h_top, s or s_b as the topology needs, and the laminate's Dk and Df <strong>as the
+datasheet quotes them, and at which frequency</strong>. The tool moves Dk and Df to
+your frequency with the Djordjevic–Sarkar model, solves the cross-section about
+a quarter of a second after you stop typing, and reports:</p>
+<ul>
+<li>the line's impedance (Zdiff and Zodd for a pair) and its εeff and delay;</li>
+<li>α_d from the field energy in each dielectric times its loss tangent;</li>
+<li>α_c = R/(2Z), with R from the solver's surface current (smooth, then times
+K, blended with DC) — shown per line with its smooth and DC values.</li>
+</ul>
+<p>Length, roughness, stub and connector edits re-cost the same solve instantly.
+<strong>Planes as rough as the trace</strong> works as in <a href="#conductor-loss-on-a-real-line">Conductor
+Loss</a>.</p>
+<h3 id="why-the-two-modes-differ">Why the two modes differ</h3>
+<p>On the default 5 mil stripline (50.5 Ω, Dk 3.5) the per-inch formula gives a
+smooth conductor loss of 0.175 dB/in at 10 GHz and the cross-section 0.285
+dB/in. ρ/(δ·2(w+t)) puts the current evenly round the strip and leaves out the
+planes; the real current crowds into the strip's edges and the planes carry
+their own share. The dielectric terms agree exactly when the frequency is the
+datasheet's — they diverge as you move away from it, because the per-inch mode
+holds Dk and Df flat.</p>
+<h2 id="jitter-budget-tj">Jitter Budget (Tj)</h2>
+<p>Total peak-to-peak jitter at a target bit error rate, using the Dual-Dirac
+model.</p>
+<p><strong>Inputs.</strong> Deterministic jitter Dj peak-to-peak in ps, random jitter Rj as an
+RMS value in ps, the baud rate, and the target BER (1e-9 / 1e-12 / 1e-15).</p>
+<p><strong>Outputs.</strong> Tj peak-to-peak at your BER, the unit interval, Tj as a percentage
+of the UI, and the Q factor the BER implies.</p>
+<p><strong>The model.</strong> Dual-Dirac separates jitter into a bounded deterministic part
+and an unbounded Gaussian part: <code>Tj(BER) = Dj + Q(BER) × Rj</code>, where Q is 12.7
+at 1e-12 and 14.07 at 1e-15. The two parts must be kept separate because only
+the random part grows as you demand a lower error rate.</p>
+<p><strong>Insight.</strong> Random jitter is the expensive one. Halving Dj improves Tj by that
+amount once; halving Rj improves it by roughly 6.4 ps per ps at 1e-12, and by
+more at lower BER. If your budget is blown, attack the reference clock and the
+PLL before you attack the routing.</p>
+<h2 id="ddr-length-matching">DDR Length Matching</h2>
+<p>Group skew analysis against JEDEC tolerances, with a per-signal trim
+recommendation.</p>
+<p><strong>Inputs.</strong> Pick the standard (DDR3 / DDR4 / DDR5 / LPDDR4 / LPDDR5) to load
+the JEDEC per-byte-lane tolerance, then fill the per-signal length table with
+the as-routed length of every DQ, DM, DQS, ADDR, CMD and CK signal. Set ε_eff
+for the propagation-velocity conversion.</p>
+<p><strong>Outputs.</strong> The JEDEC tolerance for the chosen standard, each signal's
+deviation from its group reference (DQS for DQ within a byte lane, CK for
+address and command), worst-case skew, shortest and longest signal, and a
+colour-coded in-spec / out-of-spec result.</p>
+<p><strong>The grouping is the important part.</strong> DDR is not matched to one global
+length. Each byte lane is matched to its own DQS strobe, and the
+address/command group is matched to CK. Byte lanes do <strong>not</strong> need to match
+each other — write levelling and read levelling absorb lane-to-lane skew. Trying
+to match everything to one number wastes routing area and serpentine length for
+no benefit.</p>
+<p><strong>Insight.</strong> Intra-pair skew on the differential strobes matters more than
+inter-signal skew within the lane, and it is the one thing training cannot fix.
+Match DQS+/DQS− to each other tightly, at the package pin if you can.</p>
+</main>
+</body>
+</html>

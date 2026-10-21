@@ -1,0 +1,118 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Getting started — CastGuidance PCB Toolkit</title>
+<style>:root{--bg:#1E1E1E;--panel:#252526;--line:#3F3F46;--fg:#E6E6E6;--dim:#A0A0A0;--accent:#D9842A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+  font:15px/1.65 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;display:flex}
+.sidebar{width:270px;min-height:100vh;background:var(--panel);
+  border-right:1px solid var(--line);padding:18px 0;position:sticky;top:0;
+  align-self:flex-start;max-height:100vh;overflow:auto;flex:0 0 270px}
+.brand{font-weight:600;color:var(--accent);padding:0 18px 14px;font-size:16px}
+.brand span{display:block;color:var(--dim);font-weight:400;font-size:13px}
+.sidebar a{display:block;padding:7px 18px;color:var(--fg);text-decoration:none;font-size:14px}
+.sidebar a:hover{background:#2D2D30}
+.sidebar a.current{color:var(--accent);border-left:3px solid var(--accent);padding-left:15px}
+main{flex:1;max-width:860px;padding:36px 44px 90px}
+h1{font-size:30px;margin:0 0 20px;color:var(--fg)}
+h2{font-size:22px;margin:38px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+h3{font-size:17px;margin:26px 0 8px;color:var(--accent)}
+h4{font-size:15px;margin:20px 0 6px;color:var(--fg)}
+p,li{color:#D2D2D2}
+a{color:var(--accent)}
+code{background:#2D2D30;padding:1px 5px;border-radius:3px;
+  font:13px/1.5 Consolas,Menlo,monospace;color:#E8C08A}
+pre{background:#2D2D30;padding:12px 14px;border-radius:4px;overflow-x:auto}
+pre code{background:none;padding:0}
+table{border-collapse:collapse;margin:16px 0;width:100%;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:7px 11px;text-align:left;font-size:14px}
+th{background:var(--panel);color:var(--accent)}
+blockquote{border-left:3px solid var(--accent);margin:16px 0;padding:2px 16px;color:var(--dim)}
+@media(max-width:820px){body{display:block}.sidebar{width:auto;position:static;
+  max-height:none;flex:none}main{padding:24px 20px 60px}}</style>
+</head>
+<body>
+<nav class="sidebar"><div class="brand">CastGuidance<span>PCB Toolkit</span></div><a href="design-wizard.html">The PCB Design Wizard</a><a href="dfm-thermal-emc.html">DFM, thermal and EMC</a><a href="faq.html">Frequently asked questions</a><a href="files-and-formats.html">Files and exports</a><a href="getting-started.html" class="current">Getting started</a><a href="index.html">CastGuidance PCB Toolkit — User Manual</a><a href="openems.html">The 3D field solver</a><a href="power-integrity.html">Power integrity and power electronics</a><a href="reference-calculators.html">Reference calculators</a><a href="rf-microwave.html">RF and microwave</a><a href="signal-integrity.html">Signal integrity</a><a href="stackup-and-materials.html">Stackup and materials</a><a href="trace-and-routing.html">Trace and routing</a><a href="units-and-conventions.html">Units and conventions</a><a href="verification-and-limits.html">Verification and limits</a><a href="vias-and-padstacks.html">Vias and padstacks</a></nav>
+<main><h1 id="getting-started">Getting started</h1>
+<h2 id="two-ways-to-run-the-toolkit">Two ways to run the toolkit</h2>
+<p><strong>In your browser.</strong> The web build runs the whole toolkit as WebAssembly — no
+install, no account, nothing uploaded. Everything computes on your own machine
+inside the browser tab. This is the fastest way to try a calculation.</p>
+<p><strong>On Windows, as a desktop app.</strong> The desktop build is the same application
+with one addition: it bundles the openEMS 3D field solver, so the <a href="trace-and-routing.html#trace-impedance-openems-3d">Trace
+Impedance</a> tool can run a real
+full-wave FDTD extraction instead of only the closed-form estimates. If you do
+not need 3D simulation, the browser build is functionally complete.</p>
+<p>Both builds are free and carry a licence that permits commercial use.</p>
+<h2 id="the-window">The window</h2>
+<p>The layout is the same in both builds.</p>
+<ul>
+<li><strong>Left — the tool menu.</strong> Eight category groups plus the Design Wizard pinned
+at the top. The groups read top-to-bottom like a design flow: stackup →
+routing → vias → signal integrity → power integrity → RF → DFM → reference.</li>
+<li><strong>Top of the menu — the search box.</strong> Type any part of a tool's name, an
+alias, or a tag. <code>Ctrl+P</code> jumps straight to it from anywhere.</li>
+<li><strong>Centre — the active tool.</strong> Every tool page is laid out the same way:
+inputs on the left, outputs on the right, with a labelled diagram above the
+inputs so you can confirm you are describing the right geometry.</li>
+<li><strong>Bottom of every tool page — the help panel.</strong> &quot;Help — what every input and
+output means&quot; expands into a walkthrough of that specific tool. It is the
+same text as this manual's tool reference, kept next to the controls.</li>
+<li><strong>Bottom of the window — the status bar.</strong> Shows a one-line summary of the
+active tool.</li>
+</ul>
+<p>On a narrow window the two columns stack and the menu collapses to an overlay;
+the hamburger button at the top left toggles it.</p>
+<h2 id="finding-the-right-tool">Finding the right tool</h2>
+<p>Search matches the tool's title, its aliases and its tags — so you do not have
+to know the toolkit's name for something. Typing <code>Onderdonk</code> finds Fusing
+Current, <code>Zdiff</code> finds the Differential Pair Designer, <code>AWG</code> finds Wire
+Ampacity, <code>creepage</code> finds Min Conductor Spacing, <code>NSMD</code> finds the BGA Pad
+Designer.</p>
+<p>If you do not know what you are looking for at all, open the
+<a href="design-wizard.html">Design Wizard</a> — it asks about the board you are building
+and points at the tools that matter for it.</p>
+<h2 id="how-a-tool-page-behaves">How a tool page behaves</h2>
+<p><strong>Everything is live.</strong> There is no Calculate button. Change an input and the
+outputs update as you type. The only exception is the 3D FDTD simulation on the
+impedance tool, which has an explicit <strong>Run 3D Simulation</strong> button because it
+takes tens of seconds to minutes.</p>
+<p><strong>Diagnostics appear below the outputs.</strong> Coloured banners carry three
+severities:</p>
+<ul>
+<li><strong>INFO</strong> — context worth knowing, not a problem.</li>
+<li><strong>WARN</strong> — the design will probably work but something is outside a normal
+range, or a manufacturability limit has been crossed.</li>
+<li><strong>ERROR</strong> — the inputs describe something that cannot be built, or a required
+value is missing or nonsensical.</li>
+</ul>
+<p>A tool never silently clamps a bad input and shows you a plausible number. If
+the geometry does not work, it says so.</p>
+<p><strong>Nothing is saved automatically.</strong> Inputs reset to sensible defaults each time
+you open a tool. Tools that produce a document — the Design Wizard, the LC
+Matching Ladder — have explicit export buttons; see
+<a href="files-and-formats.html">Files and exports</a>.</p>
+<h2 id="reading-an-output">Reading an output</h2>
+<p>Most outputs are shown in a monospaced font so columns line up, and most length
+outputs are given in both mil and mm, e.g. <code>9.45 mil  (0.240 mm)</code>. Where a tool
+has a unit selector, that selector governs the whole page — see
+<a href="units-and-conventions.html">Units and conventions</a>.</p>
+<p>Numbers that are estimates rather than derivations are labelled as such —
+<code>(est.)</code> in a column header, or an explicit sentence in the help panel. When a
+tool has more than one methodology (IPC-2152 vs IPC-2221, Binomial vs
+Chebyshev, Cannonball-Huray vs Hammerstad-Jensen), a dropdown at the top of the
+inputs selects it, and the choice is reported with the result.</p>
+<h2 id="what-the-toolkit-does-not-do">What the toolkit does not do</h2>
+<p>It does not phone home, does not require an account, and does not upload your
+design. The browser build in particular is entirely client-side — closing the
+tab discards everything.</p>
+<p>It also does not read your CAD files. There is no Gerber, ODB++, IPC-2581 or
+netlist import; every input is typed. See <a href="verification-and-limits.html#what-the-toolkit-does-not-do">Verification and
+limits</a> for the full
+list of boundaries.</p>
+</main>
+</body>
+</html>

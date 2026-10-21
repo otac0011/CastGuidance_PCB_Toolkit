@@ -1,0 +1,172 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stackup and materials — CastGuidance PCB Toolkit</title>
+<style>:root{--bg:#1E1E1E;--panel:#252526;--line:#3F3F46;--fg:#E6E6E6;--dim:#A0A0A0;--accent:#D9842A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+  font:15px/1.65 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;display:flex}
+.sidebar{width:270px;min-height:100vh;background:var(--panel);
+  border-right:1px solid var(--line);padding:18px 0;position:sticky;top:0;
+  align-self:flex-start;max-height:100vh;overflow:auto;flex:0 0 270px}
+.brand{font-weight:600;color:var(--accent);padding:0 18px 14px;font-size:16px}
+.brand span{display:block;color:var(--dim);font-weight:400;font-size:13px}
+.sidebar a{display:block;padding:7px 18px;color:var(--fg);text-decoration:none;font-size:14px}
+.sidebar a:hover{background:#2D2D30}
+.sidebar a.current{color:var(--accent);border-left:3px solid var(--accent);padding-left:15px}
+main{flex:1;max-width:860px;padding:36px 44px 90px}
+h1{font-size:30px;margin:0 0 20px;color:var(--fg)}
+h2{font-size:22px;margin:38px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+h3{font-size:17px;margin:26px 0 8px;color:var(--accent)}
+h4{font-size:15px;margin:20px 0 6px;color:var(--fg)}
+p,li{color:#D2D2D2}
+a{color:var(--accent)}
+code{background:#2D2D30;padding:1px 5px;border-radius:3px;
+  font:13px/1.5 Consolas,Menlo,monospace;color:#E8C08A}
+pre{background:#2D2D30;padding:12px 14px;border-radius:4px;overflow-x:auto}
+pre code{background:none;padding:0}
+table{border-collapse:collapse;margin:16px 0;width:100%;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:7px 11px;text-align:left;font-size:14px}
+th{background:var(--panel);color:var(--accent)}
+blockquote{border-left:3px solid var(--accent);margin:16px 0;padding:2px 16px;color:var(--dim)}
+@media(max-width:820px){body{display:block}.sidebar{width:auto;position:static;
+  max-height:none;flex:none}main{padding:24px 20px 60px}}</style>
+</head>
+<body>
+<nav class="sidebar"><div class="brand">CastGuidance<span>PCB Toolkit</span></div><a href="design-wizard.html">The PCB Design Wizard</a><a href="dfm-thermal-emc.html">DFM, thermal and EMC</a><a href="faq.html">Frequently asked questions</a><a href="files-and-formats.html">Files and exports</a><a href="getting-started.html">Getting started</a><a href="index.html">CastGuidance PCB Toolkit — User Manual</a><a href="openems.html">The 3D field solver</a><a href="power-integrity.html">Power integrity and power electronics</a><a href="reference-calculators.html">Reference calculators</a><a href="rf-microwave.html">RF and microwave</a><a href="signal-integrity.html">Signal integrity</a><a href="stackup-and-materials.html" class="current">Stackup and materials</a><a href="trace-and-routing.html">Trace and routing</a><a href="units-and-conventions.html">Units and conventions</a><a href="verification-and-limits.html">Verification and limits</a><a href="vias-and-padstacks.html">Vias and padstacks</a></nav>
+<main><h1 id="stackup-and-materials">Stackup and materials</h1>
+<p>The first decisions on a board: what laminate, how many layers, how thick, and
+whether the copper balance will let it come out flat.</p>
+<h2 id="material-comparison">Material Comparison</h2>
+<p>A side-by-side browser for the bundled PCB laminate library — Panasonic
+Megtron, Rogers, Isola, AGC, ITEQ, Elite and generic FR-4 among others. It
+performs no calculation; it exists so you can compare candidates on one screen
+instead of opening a dozen datasheet PDFs.</p>
+<p><strong>Filter row.</strong> The filter box does a substring match against family, vendor
+and product name. <strong>Sort by</strong> orders on Vendor, Product, Tg, Dk, Df or z-CTE.
+<strong>Compare selected only</strong> collapses the table to just the rows you have ticked.</p>
+<p><strong>Columns.</strong> Checkbox, Family, Vendor, Product, Tg (°C), Dk, Df, z-CTE, spec
+frequency (GHz), and an amber <strong>Open ⇗</strong> link that hands the manufacturer's
+datasheet to your browser.</p>
+<p><strong>What the columns mean.</strong></p>
+<ul>
+<li><strong>Tg</strong> — glass transition temperature. Above Tg the resin softens and z-axis
+expansion accelerates sharply. Lead-free assembly wants Tg ≥ 150 °C; multiple
+reflows or thick boards want 170 °C or better.</li>
+<li><strong>Dk / Df</strong> — see <a href="units-and-conventions.html#dielectric-constant">Units and
+conventions</a>. Both are quoted at
+the frequency in the <strong>Spec f</strong> column, which is why that column exists.</li>
+<li><strong>z-CTE</strong> — expansion through the thickness, in ppm/°C. This is what cracks
+plated barrels during thermal cycling. Low z-CTE matters far more than
+x/y-CTE for via reliability.</li>
+</ul>
+<p><strong>Insight.</strong> Do not compare Dk across two materials whose spec frequencies
+differ without first moving them to a common frequency. A material quoted at
+28 GHz will look worse than one quoted at 10 GHz even when it is better.</p>
+<h2 id="dielectric-dkdf-vs-frequency">Dielectric Dk/Df vs Frequency</h2>
+<p>Laminate datasheets give you Dk and Df at one frequency. Your design is at a
+different one. This tool moves the datasheet point using the
+<strong>Djordjevic-Sarkar causal wideband Debye model</strong>, which is the standard way to
+extrapolate a single measured point into a physically consistent curve.</p>
+<p><strong>Inputs.</strong> Pick a material from the dropdown to auto-fill datasheet Dk, Df and
+spec frequency, or choose <strong>Custom</strong> to type your own. Then set the <strong>target
+frequency</strong> where you want to know the values.</p>
+<p><strong>Outputs.</strong> Dk and Df at the target frequency, the change in Dk versus the
+datasheet, and the fitted <code>ε_∞</code> and <code>Δε</code> parameters that define the model.</p>
+<h3 id="exact-and-approximate-fits">Exact and approximate fits</h3>
+<p>By default the fit is <strong>exact at the datasheet point</strong>: ask for the datasheet's
+own frequency and you get its Dk and Df back, whatever the corners m₁ and m₂.
+Untick <strong>Exact fit</strong> for the approximation earlier versions used, which assumes
+the corners are far apart and drifts from the datasheet point when they are
+not. The line under the outputs always shows both, at the target and at the
+datasheet point. The same exact fit moves the laminate in the Trace Impedance
+tool's picker and in the Insertion Loss Budget and Conductor Loss tools' line
+sections, so all three agree with this page at the default corners (10 kHz and
+1 THz there; this page's defaults are 10³ and 10¹⁵ rad/s). A warning appears
+if the fit needs ε∞ below 1 — a loss too high for corners that close.</p>
+<p><strong>Why &quot;causal&quot; matters.</strong> A model that lets Dk stay flat while Df is non-zero
+is physically impossible — it implies a response before the stimulus. The
+Djordjevic-Sarkar form ties the two together correctly, which is why it is what
+serious channel simulators use. A flat-Dk assumption will make your simulated
+channel too fast and too lossless.</p>
+<p><strong>Insight.</strong> Dk falls with frequency and Df usually rises. Between 1 GHz and
+10 GHz a typical FR-4 loses 2–4 % of its Dk, which shifts a 50 Ω trace by
+roughly 1 Ω — small. Over the same span Df can nearly double, which is not
+small at all in a loss budget.</p>
+<h2 id="er-effective">Er Effective</h2>
+<p>Computes the effective dielectric constant a <strong>microstrip</strong> trace sees, using
+the Hammerstad-Jensen static solution plus the Kirschning-Jansen dispersion
+correction. There is no methodology dropdown; this is the accepted pair.</p>
+<p><strong>Inputs.</strong> Trace width W, height H to the reference plane, bulk substrate εr,
+and the frequency of interest.</p>
+<p><strong>Outputs.</strong> ε_eff at DC (no dispersion), ε_eff at your frequency, and the W/H
+ratio.</p>
+<p><strong>Insight.</strong> A low W/H ratio puts more of the field in the air above the trace
+and pulls ε_eff toward 1; a high W/H ratio buries the field in the laminate and
+pulls ε_eff toward the bulk Dk. This is why a narrow microstrip is <em>faster</em>
+than a wide one on the same board. For stripline you do not need this tool at
+all — the trace is surrounded by laminate, so ε_eff = Dk.</p>
+<h2 id="stackup-symmetry-and-bow">Stackup Symmetry and Bow</h2>
+<p>Predicts whether a stackup will warp, and checks the result against the
+IPC-6012E bow and twist limit for your board size.</p>
+<p><strong>Inputs.</strong> A table with one row per layer, each carrying that layer's copper
+weight and coverage as a percentage, or a preset to fill it (below). Plus the
+board length, which sets the IPC limit.</p>
+<p><strong>Outputs.</strong> Layer count, a symmetry score, a colour-coded warp risk (low /
+medium / high), and the IPC-6012E bow limit in absolute terms for your board.</p>
+<p><strong>How to read it.</strong> Boards warp because copper and resin shrink differently as
+the laminate cools from lamination temperature. A stackup that is a mirror
+image about its centreline shrinks evenly and comes out flat. One that is
+copper-heavy on top and sparse on the bottom curls. The symmetry score measures
+how well layer <em>n</em> from the top matches layer <em>n</em> from the bottom.</p>
+<p><strong>What to do about a bad score.</strong> Add copper thieving (non-functional copper
+pours) to the sparse layers to balance coverage, or restack so the heavy planes
+sit symmetrically about the centre. Both are free changes at design time and
+expensive after the first article comes back bowed.</p>
+<p><strong>Insight.</strong> IPC-6012E's limit is 0.75 % of the diagonal for surface-mount
+boards — on a 200 mm board that is 1.5 mm of bow, which sounds generous until
+you try to place a 0.5 mm-pitch BGA on it.</p>
+<h3 id="stackup-presets-gnd-planes-only">Stackup presets: GND planes only</h3>
+<p>The <strong>Preset</strong> list fills the table from seven curated stackups: 4, 6, 8 and
+10 layers, each in a best-SI and a high-density arrangement. The first is
+<strong>4-layer SIG/GND/GND/SIG (recommended)</strong>.</p>
+<p>Every plane in them is GND, the same policy as the
+<a href="design-wizard.html#no-power-planes">PCB Design Wizard</a>:</p>
+<ul>
+<li>power is routed on the signal layers as wide traces or local pours;</li>
+<li>the GND planes are stitched together with vias;</li>
+<li>every signal layer has a GND reference within 4.5 mil.</li>
+</ul>
+<p>The 6-layer high-density preset (S-G-S-S-G-S) and the 8-layer best-SI preset
+(S-G-S-G-G-S-G-S) are the wizard's own arrangements.</p>
+<p><strong>The one thing given up.</strong> A tight centre pair of planes 4 mil apart is two
+GND planes, not GND and power. So it loses the plane capacitance a GND–power
+pair would add: about 240 pF/in² at 4 mil and Dk 4.3. The decoupling
+capacitors supply that instead.</p>
+<p>A preset fills the rows with 1 oz copper, 90 % coverage on planes and 50 % on
+signal layers. Edit the coverages to match your layout before you trust the
+score. Watch the presets that pair a plane with a signal layer across the
+centre. For example, the 3-signal 6-layer preset mirrors L3 GND onto L4
+signal. Those score lower until the signal layer is copper-filled.</p>
+<h2 id="bga-escape-routing">BGA Escape Routing</h2>
+<p>Answers &quot;how many signal layers will it take to break this BGA out&quot;, from the
+pad geometry and your fab's design rules.</p>
+<p><strong>Inputs.</strong> Ball pitch, pad diameter, the pad-to-trace clearance from your DRC,
+and your trace width and spacing.</p>
+<p><strong>Outputs.</strong> Free space between adjacent pads, channels per row (how many
+traces physically fit between two balls), the trace+space channel pitch, and
+the number of signal layers needed for a full breakout.</p>
+<p><strong>The geometry.</strong> Free space = pitch − pad diameter − 2 × clearance. Channels =
+floor((free space + space) / (width + space)). One channel per row means you
+escape one row per layer, which is why fine-pitch parts explode layer counts.</p>
+<p><strong>Insight.</strong> At 0.5 mm pitch with an 0.24 mm land and 4 mil clearance there is
+essentially no surface channel left — that is the point at which via-in-pad or
+HDI microvia escape stops being an optimisation and becomes the only option.
+Size the land first in the <a href="vias-and-padstacks.html#bga-pad-designer-nsmd--smd">BGA Pad
+Designer</a>, then bring the land
+diameter here.</p>
+</main>
+</body>
+</html>
