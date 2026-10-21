@@ -268,8 +268,8 @@ to 10⁻⁶, so Dk(f) and Df(f) are causal by construction, and the fit returns 
 datasheet point exactly. The laminate builder reproduces Panasonic's Megtron 6
 and 7 Dk to 0.03 (EyeOpener Lite's laminate research has the per-family
 medians: 0.00–0.07 in Dk and 0.4–7 µm in thickness).</p>
-<h2 id="impedance-surrogate">Impedance surrogate</h2>
-<p>The surrogate is pre-solved 2D answers, interpolated. Width search, yield, the
+<h2 id="the-clemens-method">The Clemens Method</h2>
+<p>The Clemens Method is pre-solved 2D field solutions, interpolated. Width search, yield, the
 Differential Pair Designer's surface and the wizard's pair widths run on it. It
 is checked against real 2D solves at 40 random cross-sections per topology,
 none of them on its grid (benchmarks <code>surrogate-*</code>). Gate: worst 1 %, 95th
@@ -343,7 +343,66 @@ percentile 0.5 %.</p>
 </tr>
 </tbody>
 </table>
-<h3 id="surrogate-limits">Surrogate limits</h3>
+<h3 id="the-clemens-method-against-fdtd">The Clemens Method against FDTD</h3>
+<p>As a sanity check, seven typical FR-4 lines were solved in 3D with openEMS FDTD
+at Standard quality (benchmark <code>clemens-fdtd-typical</code>). The FDTD includes the
+line's dispersion and its own mesh error, so it checks the quasi-static answer
+without being a tighter reference than the 2D solver.</p>
+<table>
+<thead>
+<tr>
+<th>Line (Dk 4.2)</th>
+<th>FDTD</th>
+<th>Clemens Method</th>
+<th>2D solver</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>50 Ω microstrip</td>
+<td>49.75 Ω</td>
+<td>−0.22 %</td>
+<td>−0.20 %</td>
+</tr>
+<tr>
+<td>Edge-coupled microstrip</td>
+<td>104.73 Ω</td>
+<td>+0.02 %</td>
+<td>+0.01 %</td>
+</tr>
+<tr>
+<td>50 Ω stripline</td>
+<td>49.02 Ω</td>
+<td>+0.09 %</td>
+<td>+0.07 %</td>
+</tr>
+<tr>
+<td>Edge-coupled stripline</td>
+<td>94.38 Ω</td>
+<td>+0.13 %</td>
+<td>+0.28 %</td>
+</tr>
+<tr>
+<td>CPWG</td>
+<td>48.26 Ω</td>
+<td>−0.19 %</td>
+<td>−0.26 %</td>
+</tr>
+<tr>
+<td>Differential CPWG, h 4</td>
+<td>103.69 Ω</td>
+<td>−0.19 %</td>
+<td>−0.09 %</td>
+</tr>
+<tr>
+<td>Differential CPWG, h 6</td>
+<td>100.24 Ω</td>
+<td>−0.10 %</td>
+<td>−0.06 %</td>
+</tr>
+</tbody>
+</table>
+<h3 id="clemens-method-limits">Clemens Method limits</h3>
 <p>The tables cover W/H 0.1–8, T/H 0.01–0.8, εr 2–11 and each topology's gaps
 and heights over a stated range. Outside them, and with solder mask, the tools
 fall back to a real solve or the closed form and say so. A table is fingerprinted

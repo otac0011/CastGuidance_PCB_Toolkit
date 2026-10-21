@@ -208,27 +208,46 @@ them only when you press <strong>Solve the corners</strong>.</p>
 <h3 id="width-for-a-target-and-yield">Width for a target, and yield</h3>
 <p>A card under the corners answers two questions without you iterating by hand.</p>
 <p><strong>Find the width.</strong> Enter the target (Z₀, or Zdiff for a pair) and press
-<strong>Find the width</strong>. The tool searches the width on the impedance surrogate,
+<strong>Find the width</strong>. The tool searches the width by the
+<a href="#the-clemens-method">Clemens Method</a>,
 then solves that width on the real 2D field solver. If the solver disagrees, it
 takes the difference out once and solves again. It sets W to the answer and
 shows the solver's impedance there, usually within 0.2 % of the target in one
-or two solves. Solder mask is not in the surrogate: untick it, search, then
-re-tick.</p>
+or two solves. Solder mask is not in the Clemens Method's tables: untick it,
+search, then re-tick.</p>
 <p><strong>Yield.</strong> It simulates 2,000 builds on the fab class picked above, with each
 tolerance taken as ±3σ and independent. It reports the share within your band
 (±10 % by default) around the target, the mean, σ, and the 1st–99th
 percentile range. The corners are a worst case; the yield is how often it
 happens.</p>
-<h3 id="the-impedance-surrogate">The impedance surrogate</h3>
-<p>The surrogate is a table of pre-solved 2D answers, not a formula fitted to
-them. For each topology the generator solved about 300 to 8,000
-cross-sections. It stores Z_air (the line's impedance with the dielectric
-replaced by air), which depends only on the geometry's ratios, and the filling
-factor q = (εeff − 1)/(εr − 1). Z₀ = Z_air/√εeff exactly, so the table never
-stores the hard-to-fit part. It interpolates in ln of each ratio. Against
-real solves at random points it is within 1 % of the solver
-(<a href="verification-and-limits.html#impedance-surrogate">validation</a>). It is never the
-displayed reference: the 2D card always shows a real solve.</p>
+<h3 id="the-clemens-method">The Clemens Method</h3>
+<p>The Clemens Method gives a line's impedance from pre-solved 2D field
+solutions. It is named for the toolkit's author, as the Hammerstad–Jensen
+formulas are named for theirs. It appears as <strong>Z₀ — Clemens Method</strong> beside
+the closed forms, and in the 2D card's comparison lines.</p>
+<p><strong>How it works.</strong> It is a table of real 2D field solutions, not a formula
+fitted to them:</p>
+<ul>
+<li>For each topology the 2D field solver was run at about 300 to 10,000
+cross-sections (25,526 in all).</li>
+<li>The table stores two things. One is Z_air, the line's impedance with the
+dielectric replaced by air, which depends only on the geometry's ratios. The
+other is the filling factor q = (εeff − 1)/(εr − 1).</li>
+<li>Because Z₀ = Z_air/√εeff exactly, the hard-to-fit part never has to be
+fitted.</li>
+<li>Between points it interpolates in ln of each ratio.</li>
+</ul>
+<p><strong>How good it is.</strong></p>
+<ul>
+<li>Against real solves at random points it is within 0.25 % of the 2D solver
+(<a href="verification-and-limits.html#the-clemens-method">validation</a>).</li>
+<li>FDTD spot checks on typical geometries agree with it as closely as they agree
+with the solver.</li>
+</ul>
+<p><strong>What it is for.</strong> It is instant, so it drives everything that needs many
+solves: the width search, the yield, the Differential Pair Designer's surface
+and the wizard's pair widths. The 2D card's reference value is always a real
+solve.</p>
 <h3 id="glass-weave-skew-card">Glass-weave skew card</h3>
 <p>For the differential topologies a card estimates the intra-pair skew from the
 glass weave. It takes the laminate builder's glass style when the builder is
@@ -286,8 +305,8 @@ and HDMI, 120 Ω for CAN-FD. If the green band is empty, the usual fix is a
 thinner dielectric to the reference plane, not a different trace width.</p>
 <h3 id="how-far-to-trust-the-designers-surface">How far to trust the designer's surface</h3>
 <p>For <strong>edge-coupled microstrip</strong> and <strong>symmetric edge-coupled stripline</strong> the
-surface comes from the <a href="#the-impedance-surrogate">impedance surrogate</a>, within
-1 % of the 2D field solver. The line under the recommendation says so.</p>
+surface comes from the <a href="#the-clemens-method">Clemens Method</a>, within 0.25 % of
+the 2D field solver. The line under the recommendation says so.</p>
 <p>The other structures (embedded, asymmetric, broadside) still use the designer's
 closed form: a Hammerstad–Jensen single line and a coupling term
 0.347·e^(−2.655·s/h). Against the 2D field solver it reads Zdiff 8–15 % high on
@@ -298,7 +317,7 @@ For those structures, confirm the numbers in Trace Impedance.</p>
 <p>The corners card takes the recommended (W, S) to the fab's <strong>High Z</strong> and
 <strong>Low Z</strong> corners. It uses the same fab classes and tolerances as
 <a href="#fab-tolerance-corners">Trace Impedance</a>, computed with the same model as the
-sweep (the surrogate where it covers the structure). It shows:</p>
+sweep (the Clemens Method where it covers the structure). It shows:</p>
 <ul>
 <li>the Zdiff range;</li>
 <li>each tolerance alone at its limits, so you can see which one dominates (on a
