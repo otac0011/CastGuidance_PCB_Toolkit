@@ -2,6 +2,8 @@
 
 **Documentation hub:** <https://otac0011.github.io/CastGuidance_PCB_Toolkit/> — download links, user manual, verification details, datasheets.
 
+**Validation scoreboard:** <https://otac0011.github.io/CastGuidance_PCB_Toolkit/validation.html> — every tool against exact results, published papers and standards, solver results and measured data, with the known failures stated.
+
 > **Releases-only repository.** This repo hosts the prebuilt Windows installer / executable for CastGuidance PCB Toolkit. The source code is proprietary and lives in a private repository.
 
 ## Get the latest release
