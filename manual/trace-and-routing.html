@@ -55,9 +55,19 @@ typically λ/6 of the knee.</p>
 1.75 GHz and needs the same care as a much faster bus. Ask what the driver's
 rise time is, not what the frequency on the schematic says.</p>
 <h2 id="trace-impedance-openems-3d">Trace Impedance (openEMS 3D)</h2>
-<p>The main impedance tool. It solves the cross-section with a fast 2D field
-solver on every change, shows the closed-form estimates beside it, and on the
-desktop build it can run a genuine 3D full-wave FDTD extraction with openEMS.</p>
+<p>The main impedance tool. The inputs are on the left. The answer is at the
+top right: the line's impedance by the
+<a href="#the-clemens-method">Clemens Method</a>, checked by a 2D field solver that runs
+on every change. Everything else is under <strong>Show advanced</strong>: the 2D solver's
+details, fab-tolerance corners, width for a target and yield, the closed forms,
+and (on the desktop build) a 3D full-wave FDTD run with openEMS.</p>
+<p><strong>Results.</strong> The large number is Z₀ (Zdiff for a pair) by the Clemens Method,
+with εeff and the delay in ps/in under it; a pair also shows Zodd and Zcommon.
+The grey line under it is the 2D field solver's answer and how far the Clemens
+Method is from it, usually a few hundredths of a percent. Where the Clemens
+Method has no answer (solder mask is on, or the cross-section is outside its
+tables) the 2D field solver's answer takes its place, and an orange line says
+why.</p>
 <p><strong>Topology.</strong> Pick from Standard Microstrip, Embedded Microstrip, Differential
 Microstrip, CPWG, Differential CPWG, Stripline, Edge-Coupled Differential
 Stripline, or Broadside-Coupled Differential Stripline. The dimensioned diagram
@@ -70,7 +80,8 @@ under the picker says what it is and at what frequency.</p>
 <li><strong>Bundled material library</strong> (the default). The laminate library — Megtron,
 Rogers, Isola, AGC, ITEQ, FR-4 and others — with Dk and Df as the datasheet
 quotes them, or <strong>Custom</strong> for a manual Dk and Df. The <strong>Open datasheet ⇗</strong>
-button opens the manufacturer's PDF.</li>
+button opens the manufacturer's PDF. Resin content:
+<a href="#resin-content-on-library-materials">below</a>.</li>
 <li><strong>Laminate builder.</strong> Build the dielectric the way a fab does: pick the
 laminate <em>family</em> (29 of them, standard FR-4 to ultra-low-loss, each with the
 maker's own fitted resin), the <em>glass</em> it is sold in (only the grades that
@@ -139,6 +150,26 @@ quality settings do and why this section is desktop-only.</p>
 type and is as accurate as a commercial 2D solver for a uniform line — and keep
 the 3D run for what a cross-section cannot show: launches, discontinuities,
 dispersion. Running FDTD on every trial width is a waste of minutes.</p>
+<h3 id="resin-content-on-library-materials">Resin content on library materials</h3>
+<p>A datasheet's Dk is for one construction. A thin, resin-rich prepreg (1080 or
+106 at 65–75 % resin) reads lower than that; a glass-rich core (2116 or 7628 at
+40–50 %) reads higher. The <strong>Resin content</strong> slider under the material moves
+the Dk for this.</p>
+<ul>
+<li>It starts at the resin content the quoted Dk stands for, so until you move it
+the result is the datasheet's. Where the material matches a laminate-builder
+family, that is where the family's fitted model gives the quoted Dk (Megtron 6
+48 %, 370HR 51 %); otherwise 50 %.</li>
+<li>Away from it the Dk moves by the laminate builder's glass/resin mix, with the
+resin's own Dk solved so the mix passes through the quoted value.</li>
+<li>Ten points of resin moves the Dk about 3–5 % on low-Dk glass and 6–9 % on
+E-glass FR-4. Megtron 6 goes from 3.45 at 48 % to 3.31 at 58 %.</li>
+<li>Rogers, PTFE and FastRise materials are fixed constructions: the slider is
+greyed out and the note says why.</li>
+<li>A moved resin content is sent to the openEMS run as a custom Dk.</li>
+</ul>
+<p>For a full construction (glass style, plies, pressed thickness), use the
+laminate builder instead.</p>
 <h3 id="fab-tolerance-corners">Fab-tolerance corners</h3>
 <p>The card under the 2D result solves the cross-section twice more, at the fab's
 two impedance corners, and shows the Z₀ range (Zdiff for a pair) beside the
