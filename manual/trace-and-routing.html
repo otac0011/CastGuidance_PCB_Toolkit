@@ -55,19 +55,20 @@ typically λ/6 of the knee.</p>
 1.75 GHz and needs the same care as a much faster bus. Ask what the driver's
 rise time is, not what the frequency on the schematic says.</p>
 <h2 id="trace-impedance-openems-3d">Trace Impedance (openEMS 3D)</h2>
-<p>The main impedance tool. The inputs are on the left. The answer is at the
-top right: the line's impedance by the
-<a href="#the-clemens-method">Clemens Method</a>, checked by a 2D field solver that runs
-on every change. Everything else is under <strong>Show advanced</strong>: the 2D solver's
-details, fab-tolerance corners, width for a target and yield, the closed forms,
-and (on the desktop build) a 3D full-wave FDTD run with openEMS.</p>
+<p>The main impedance tool. The inputs are on the left. The results are on the
+right: the line's impedance by the <a href="#the-clemens-method">Clemens Method</a> at the
+top, and every other method under it. The tool's details are under <strong>Show
+advanced</strong>: the 2D solver's card, fab-tolerance corners, width for a target and
+yield, and (on the desktop build) the 3D full-wave FDTD run with openEMS.</p>
 <p><strong>Results.</strong> The large number is Z₀ (Zdiff for a pair) by the Clemens Method,
 with εeff and the delay in ps/in under it; a pair also shows Zodd and Zcommon.
-The grey line under it is the 2D field solver's answer and how far the Clemens
-Method is from it, usually a few hundredths of a percent. Where the Clemens
-Method has no answer (solder mask is on, or the cross-section is outside its
-tables) the 2D field solver's answer takes its place, and an orange line says
-why.</p>
+Where the Clemens Method has no answer (solder mask is on, or the cross-section
+is outside its tables) the 2D field solver's answer takes its place, and an
+orange line says why.</p>
+<p><strong>Every method.</strong> Under the headline, a table lists the 2D field solver,
+Hammerstad-Jensen, IPC-2141, Cohn (1955) and Ghione &amp; Naldi (1987), and the 3D
+FDTD answer once a run has returned. Each row shows its difference from the
+headline. A closed form that does not apply to the topology shows —.</p>
 <p><strong>Topology.</strong> Pick from Standard Microstrip, Embedded Microstrip, Differential
 Microstrip, CPWG, Differential CPWG, Stripline, Edge-Coupled Differential
 Stripline, or Broadside-Coupled Differential Stripline. The dimensioned diagram
