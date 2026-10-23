@@ -53,7 +53,7 @@ with tight gaps. The 3D solver is for what a 2D cross-section cannot see.</p>
 <li><strong>Closed forms</strong> — Cohn (1955), Hammerstad-Jensen, IPC-2141 and
 Ghione-Naldi. Instant, but fits with validated ranges.</li>
 <li><strong>The 2D field solver</strong> — a quasi-static solve of the cross-section that
-runs in-process (in the browser too) on every change, in 25–550 ms. For a
+runs in-process (in the browser too) when you press <strong>Solve 2D</strong>, in 25–550 ms. For a
 uniform line's Z₀ and εeff it is the reference: within 0.3 % of Cohn's exact
 stripline and inside the spread of six commercial solvers on a published
 benchmark (see <a href="verification-and-limits.html#the-2d-field-solver-validation">Verification and
@@ -170,9 +170,9 @@ analytic impedance estimates, the 2D field solver and the laminate builder,
 and all 48 other tools, work exactly the same in the browser. The 2D solver is
 pure managed code, compiled ahead of time to WebAssembly, so a solve takes
 about the same time in the browser as on a desktop (a microstrip in roughly
-0.1 s). The browser runs it on its one thread, so a slow pair geometry may
-pause the page briefly — untick <strong>Solve on every change</strong> and use <strong>Solve 2D
-now</strong> if that gets in the way.</p>
+0.1 s). It runs only when you press <strong>Solve 2D</strong>, so typing never waits on it;
+the browser runs it on its one thread, so a slow pair geometry may pause the
+page briefly while it solves.</p>
 <h2 id="what-ships-with-the-desktop-installer">What ships with the desktop installer</h2>
 <p>The Windows installer bundles a portable Python runtime, the openEMS native
 engine and its dependencies, and the sidecar script that connects them to the

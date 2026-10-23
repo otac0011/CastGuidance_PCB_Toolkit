@@ -69,6 +69,11 @@ orange line says why.</p>
 Hammerstad-Jensen, IPC-2141, Cohn (1955) and Ghione &amp; Naldi (1987), and the 3D
 FDTD answer once a run has returned. Each row shows its difference from the
 headline. A closed form that does not apply to the topology shows —.</p>
+<p><strong>Solve 2D.</strong> The Clemens Method and the closed forms update on every change.
+The 2D field solver runs only when you press <strong>Solve 2D</strong> under the table;
+after a change its row reads &quot;press Solve 2D&quot; until you press it again. Where
+the 2D solver is the headline (solder mask, or outside the Clemens Method's
+tables), the headline waits for the button too.</p>
 <p><strong>Topology.</strong> Pick from Standard Microstrip, Embedded Microstrip, Differential
 Microstrip, CPWG, Differential CPWG, Stripline, Edge-Coupled Differential
 Stripline, or Broadside-Coupled Differential Stripline. The dimensioned diagram
@@ -121,8 +126,8 @@ copper's top and walls (3.5, 0.8 mil and 0.5 mil by default). Only the 2D
 solver models it; the closed forms and the FDTD run do not. On the default
 4.2 mil microstrip it takes about 3 Ω off Z₀.</p>
 <p><strong>2D field solver — the reference.</strong> A quasi-static finite-volume solve of the
-cross-section, run in-process (in the browser too) about a quarter of a second
-after you stop typing, and again on <strong>Solve 2D now</strong>. It shows Z₀ (Zdiff for a
+cross-section, run in-process (in the browser too) when you press <strong>Solve 2D</strong>
+(or <strong>Solve 2D now</strong> on its card). It shows Z₀ (Zdiff for a
 pair) and εeff; for a pair also Zodd, Zeven, Zcommon, one line's Z11 and the
 odd and even εeff; the delay in ps/in and the dielectric loss in dB/in at the
 design frequency (from the energy-weighted loss tangent; for copper loss use the
@@ -132,8 +137,7 @@ which solves the same cross-section). Below them, every closed form is listed wi
 impedance: it is checked within 0.3 % against Cohn's exact stripline (see
 <a href="verification-and-limits.html#the-2d-field-solver-validation">Verification and limits</a>).
 A solve takes 17–400 ms on a desktop and about twice that in the browser; the
-status line shows the time and the grid size. Untick <strong>Solve on every change</strong>
-if a slow machine makes typing lag.</p>
+status line shows the time and the grid size.</p>
 <p><strong>Analytic outputs.</strong> Four independent closed-form estimates — Cohn (1955),
 Hammerstad-Jensen, IPC-2141 and Ghione-Naldi. Only the methods that apply to
 the chosen topology produce a number; the rest show <code>—</code>. For the differential
@@ -147,8 +151,9 @@ press Run, the card shows the mesh's cell count and the expected run time at
 each quality, warns above about two minutes, and disables Run when the mesh is
 over the solver's cell limit. See <a href="openems.html">The 3D field solver</a> for what the
 quality settings do and why this section is desktop-only.</p>
-<p><strong>Insight.</strong> Converge on a geometry with the 2D solver — it answers while you
-type and is as accurate as a commercial 2D solver for a uniform line — and keep
+<p><strong>Insight.</strong> Converge on a geometry with the Clemens Method — it answers while
+you type — then press <strong>Solve 2D</strong> to confirm with a solver as accurate as a
+commercial 2D solver for a uniform line, and keep
 the 3D run for what a cross-section cannot show: launches, discontinuities,
 dispersion. Running FDTD on every trial width is a waste of minutes.</p>
 <h3 id="resin-content-on-library-materials">Resin content on library materials</h3>
@@ -233,10 +238,9 @@ case, not a statistic: a real board lies inside it. A controlled-impedance
 fab also trims the widths toward the target, so what it delivers spreads
 less. No fab publishes its etch as a ± figure, so the width tolerance is the
 least certain number here.</p>
-<p><strong>Speed.</strong> The corners solve about 0.4 s after you stop typing, off the UI
+<p><strong>Speed.</strong> The corners solve when you press <strong>Solve the corners</strong>, off the UI
 thread on the desktop and in a few tenths of a second in the browser. They
-reuse the nominal answer. Untick <strong>Solve the corners on every change</strong> to run
-them only when you press <strong>Solve the corners</strong>.</p>
+reuse the nominal answer when it is current.</p>
 <h3 id="width-for-a-target-and-yield">Width for a target, and yield</h3>
 <p>A card under the corners answers two questions without you iterating by hand.</p>
 <p><strong>Find the width.</strong> Enter the target (Z₀, or Zdiff for a pair) and press
@@ -288,9 +292,9 @@ the dielectric source. Otherwise you pick the style on the card. See
 The card is the same in both tools.</p>
 <h3 id="broadside-coupled-pairs-use-the-2d-result">Broadside-coupled pairs: use the 2D result</h3>
 <p>For <strong>Broadside-Coupled Differential Stripline</strong> the 2D card is the result, not
-just the reference: its title says so, and it solves on every edit even with
-<strong>Solve on every change</strong> unticked (a homogeneous stripline is the quickest
-solve). The Cohn-type closed form in the Cohn row is marked <strong>unreliable</strong>: it
+just the reference: its title says so. Like every topology it solves when you
+press <strong>Solve 2D</strong>; the Clemens Method's headline is built from the same
+solver. The Cohn-type closed form in the Cohn row is marked <strong>unreliable</strong>: it
 uses only W and s_b and never sees the planes or H and h_top, and reads about
 48 % high on the default geometry (99.2 Ω against the 2D solver's 66.9 Ω). The
 2D odd mode agrees with the exact midplane identity to 0.02 %. The closed form
