@@ -41,8 +41,8 @@ blockquote{border-left:3px solid var(--accent);margin:16px 0;padding:2px 16px;co
 <p>Every calculation in the toolkit is done in SI base units — metres, amperes,
 volts, hertz, farads, henries. The unit you see on a field is a display
 convention applied on the way in and on the way out. This matters for one
-practical reason: <strong>switching a unit selector never changes the design</strong>, it
-only re-renders the same physical geometry in different numbers.</p>
+practical reason: <strong>switching units never changes the design</strong>, it only
+re-renders the same physical geometry in different numbers.</p>
 <h2 id="length">Length</h2>
 <table>
 <thead>
@@ -56,36 +56,45 @@ only re-renders the same physical geometry in different numbers.</p>
 <tr>
 <td>mil</td>
 <td>1 mil = 0.0254 mm exactly = 25.4 µm</td>
-<td>Default for most PCB geometry fields</td>
+<td>PCB geometry with the switch on mil</td>
 </tr>
 <tr>
 <td>mm</td>
 <td>—</td>
-<td>Package drawings, laminate thicknesses, drill sizes</td>
+<td>PCB geometry with the switch on mm</td>
 </tr>
 <tr>
 <td>µm</td>
 <td>—</td>
-<td>Copper plating, microvia geometry, surface roughness</td>
+<td>Copper and plating thickness, solder-mask thickness (mm setting)</td>
 </tr>
 <tr>
 <td>inch</td>
 <td>1 inch = 25.4 mm exactly</td>
-<td>Trace lengths in loss budgets</td>
+<td>Trace lengths in loss budgets (mil setting)</td>
 </tr>
 </tbody>
 </table>
 <p>A <strong>mil is one thousandth of an inch</strong>, not a millimetre. It is the dominant
-unit in North American PCB fabrication and in IPC's older standards, so most
-fields default to it. IPC's newer standards and every package drawing you will
-get from a semiconductor vendor are metric.</p>
-<p>Most length outputs are shown in both: <code>9.45 mil  (0.240 mm)</code>.</p>
-<h3 id="tools-with-a-unit-selector">Tools with a unit selector</h3>
-<p>The <a href="vias-and-padstacks.html#bga-pad-designer-nsmd--smd">BGA Pad Designer</a> has a
-single <strong>Units</strong> dropdown at the top of the page that governs every input and
-every output at once, so you can work entirely in mm or entirely in mils.
-Switching it converts what is displayed; it does not reinterpret what you
-typed. If you enter 0.30 mm and switch to mils you get 11.81 mil, not 0.30 mil.</p>
+unit in North American PCB fabrication and in IPC's older standards. IPC's
+newer standards and every package drawing you will get from a semiconductor
+vendor are metric.</p>
+<h3 id="the-units-switch">The units switch</h3>
+<p>The <strong>Units</strong> switch in the header bar (top right of the window) picks mm or
+mil for the whole app: every length field you type into and every length the
+tools report, on every page. The choice is remembered between sessions.</p>
+<ul>
+<li><strong>mm</strong> shows board geometry in mm, and thin layers (copper, plating, solder
+mask) in µm.</li>
+<li><strong>mil</strong> shows board geometry and thin layers in mil, and long runs (a trace
+length in a loss budget) in inches.</li>
+</ul>
+<p>Switching converts what is displayed; it does not reinterpret what you typed.
+If you enter 0.30 mm and switch to mil you get 11.81 mil, not 0.30 mil.</p>
+<p>A few things keep their own units on purpose: catalogue names such as
+&quot;BGA 0.8 mm pitch&quot; or a &quot;6/6 mil&quot; fab class, the side-by-side tables in
+Mechanical Tables, the Wire Ampacity length selector (m / ft / in), and the
+oz / mil copper-weight choice in Conductor Properties.</p>
 <h2 id="copper-weight-and-thickness">Copper weight and thickness</h2>
 <p>Copper is specified by <strong>weight per unit area</strong>, not by thickness, because that
 is how foil is made and sold.</p>
