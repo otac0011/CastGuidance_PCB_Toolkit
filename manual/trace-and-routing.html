@@ -446,6 +446,102 @@ adder) and say so on the fab drawing.</li>
 <p><strong>Bundle pitch.</strong> When the style's count is published, the card also gives the
 bundle pitch next to the pair pitch W + S. The worst case is near half the
 bundle pitch.</p>
+<h2 id="parallel-jumper-impedance">Parallel Jumper Impedance</h2>
+<p>When a differential pair passes through two <strong>zero-ohm jumpers side by side</strong>,
+the two parts form a short coupled line. The pair's impedance through them
+depends on how far apart they sit. Name the target (90, 95, 100 Ω, any number)
+and the tool returns the centre-to-centre pitch that gives it, and says whether
+that spacing is buildable.</p>
+<p><strong>Inputs.</strong></p>
+<ul>
+<li>Target Z_diff and tolerance.</li>
+<li>Part: an 0603, 0805 or 1206 zero-ohm jumper (Yageo RC outlines, editable
+under Show advanced).</li>
+<li><strong>Distance to the GND plane under the parts</strong>: the input that matters most.</li>
+<li>εr of that dielectric.</li>
+<li>The lands: pad length, pad width, and the gap between one part's two pads.</li>
+<li>Your <strong>minimum pad-to-pad gap</strong> between the two parts, in mil or mm
+(default 5 mil).</li>
+</ul>
+<p><strong>Outputs.</strong></p>
+<ul>
+<li>The pitch, and the matching gaps between the bodies and between the pads, in
+mm and mil.</li>
+<li>The pitch window for your tolerance.</li>
+<li>A verdict against your minimum pad gap, and the impedance you get at that
+gap.</li>
+<li>The reachable range: from parts at the minimum gap to parts far apart.</li>
+<li>A curve of Z_diff against pitch.</li>
+</ul>
+<p>Under Show advanced: the three sections and the end-face inductance.</p>
+<h3 id="how-the-jumper-calculator-works">How the jumper calculator works</h3>
+<p>No field solver runs; the result updates as you type. The footprint is three
+coupled-line sections in series:</p>
+<ul>
+<li>the pad beyond the part;</li>
+<li>the pad, solder and end cap;</li>
+<li>the jumper film on top of the ceramic body.</li>
+</ul>
+<p>Each section comes from Garg &amp; Bahl's coupled-microstrip capacitances. The
+gap dielectric between the films was fitted once to 2D field solves. The one
+truly 3D effect is the current climbing the end faces of the part. It is
+computed from partial-element (PEEC) inductance of the end-cap walls, with their
+images in the GND plane and the neighbouring part.</p>
+<p>The result is the <strong>section impedance</strong>: the characteristic impedance of a
+uniform line that behaves like the footprint, at low frequency. A 30 ps TDR
+can't fully resolve a 1–3 mm section, so it shows a smaller excursion.</p>
+<h3 id="how-far-to-trust-the-jumper-calculator">How far to trust the jumper calculator</h3>
+<p>The model was checked against 3D full-wave (openEMS) runs of the same two
+jumpers on boards 0.1 to 1.575 mm from GND, εr 3.5 to 4.3:</p>
+<ul>
+<li><strong>0603, 0805 and 1206 on a solid plane:</strong> within 1.6 %. On a 62 mil board
+that is a few hundredths of a millimetre of pitch.</li>
+<li><strong>A plane void under the pads:</strong> the formula reads about 8 % high (four 3D
+runs, 5.5 to 10.9 %). Ticking the void box divides that out.</li>
+<li><strong>Frequency:</strong> the footprint stops being a short lumped section in the tens
+of GHz. Its impedance then rises: for 0603 on 1.6 mm, +7 % at 10 GHz and
++20 % at 15 GHz.</li>
+<li><strong>Not measured:</strong> no coupon yet
+(<a href="verification-and-limits.html">gaps</a>).</li>
+</ul>
+<h3 id="jumper-spacing-in-practice">Jumper spacing in practice</h3>
+<table>
+<thead>
+<tr>
+<th>Part, 62 mil FR-4 (εr 4.3)</th>
+<th>100 Ω pitch</th>
+<th>Gap between pads</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0603</td>
+<td>≈ 1.07 mm</td>
+<td>≈ 0.14 mm (5.7 mil)</td>
+</tr>
+<tr>
+<td>0805</td>
+<td>≈ 1.60 mm</td>
+<td>≈ 0.30 mm (11.8 mil)</td>
+</tr>
+<tr>
+<td>1206</td>
+<td>≈ 2.10 mm</td>
+<td>≈ 0.35 mm (13.9 mil)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Closer means lower impedance.</strong> The two films couple strongly, so moving the
+parts together lowers Z_diff. On a 62 mil board each 0.1 mm of pitch is worth
+about 9 Ω.</li>
+<li><strong>With the plane close, pitch stops mattering.</strong> On 0.2 mm to GND, 0805 and
+1206 jumpers cannot reach 100 Ω at any spacing. The tool says so and suggests
+voiding the plane under the parts.</li>
+<li><strong>Neighbouring lanes.</strong> Jumpers of different lanes at a similar pitch couple
+just as strongly: the 3D runs showed −15 to −20 dB near-end crosstalk at
+20 GHz.</li>
+</ul>
 <h2 id="conductor-properties">Conductor Properties</h2>
 <p>Trace current capacity, resistance, voltage drop and skin depth.</p>
 <p><strong>Methodology dropdown.</strong> IPC-2152 (2009, modern empirical fit) or IPC-2221
