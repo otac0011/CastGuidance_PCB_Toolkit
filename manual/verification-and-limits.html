@@ -456,16 +456,68 @@ run, at 0° and at 45°.</p>
 </tbody>
 </table>
 <h3 id="flex-hatch-εeff-the-measured-board-and-limits">Flex hatch: εeff, the measured board and limits</h3>
-<p><strong>εeff.</strong> At 0° the tool's εeff is within 0.3 % of FDTD. At 45° it reads 3 %
-low: FDTD measures at 10–20 GHz, where a 45° hatch's period is about a twelfth
-of a wavelength, and that dispersion lifts εeff above the low-frequency value
-the tool gives.</p>
-<p><strong>The measured board.</strong> The tool and FDTD agree with each other, and both read
-about 10 % above the board's measured Zdiff (87–97.5 Ω). The thesis says its
-own design for those dimensions came out &quot;close to 100 Ω&quot;, which matches the
-tool. So the built board differs from its nominal stack, or the probes'
-de-embedding moved it. The validation report shows the measurement but does
-not gate on it.</p>
+<p><strong>εeff.</strong> At 0° the tool's εeff is within 0.3 % of FDTD; at 45° it reads 3 %
+below it. On the measured board, the 45° εeff lies between the two (see below).
+Treat the tool's delay as good to a few percent on a hatch, and less on coarse
+hatches: on a 600 µm grid it read 7 % under a coarse FDTD run.</p>
+<h3 id="flex-hatch-against-measured-boards">Flex hatch against measured boards</h3>
+<p><strong>The Okayama board, as drawn.</strong> The tool and FDTD agree with each other, and
+both read about 12 % above the board's measured Zdiff at every position. FDTD
+agreeing proves only that the two solvers agree, since both used the drawn
+stack.</p>
+<p><strong>The Okayama board, calibrated.</strong> Its measured group delay shows an εeff about
+11 % above the drawn stack's. Fitting every Dk × 1.126 and 78.6 µm lines (drawn
+70 µm) to one position's Zdiff and delay then predicts the rest of the board:</p>
+<table>
+<thead>
+<tr>
+<th>Predicted</th>
+<th>Tool</th>
+<th>Measured</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0°, pair over an opening</td>
+<td>97.9 Ω</td>
+<td>97.5 Ω</td>
+</tr>
+<tr>
+<td>45°, pair over a crossing</td>
+<td>88.5 Ω</td>
+<td>88.5 Ω</td>
+</tr>
+<tr>
+<td>45° εeff, from delay</td>
+<td>3.67</td>
+<td>3.70</td>
+</tr>
+<tr>
+<td>45°, highest position</td>
+<td>95.0 Ω</td>
+<td>94.5 Ω</td>
+</tr>
+<tr>
+<td>26.6°, lowest and highest</td>
+<td>90.9, 94.2 Ω</td>
+<td>90.0, 92.6 Ω</td>
+</tr>
+</tbody>
+</table>
+<p>The fitted values are a stand-in for the built stack, not a measurement of it.</p>
+<h3 id="flex-hatch-against-a-measured-series">Flex hatch against a measured series</h3>
+<p>Fujikura's US 9,795,027 B2 lists, from TDR on 100 mm lines, the width that gave
+50 Ω over an inclined grid at seven copper shares. With only the Dk set from the
+solid-plane row (80 µm), the tool reads the other six widths at a mean of
+50.1–52.1 Ω, as the width grows from 95 to 350 µm.</p>
+<p>The patent's speed column disagrees: it says the line gets up to 40 % faster,
+and the tool says about 10 % slower. FDTD of the 44 % row agrees with the tool
+(V/V₀ ≈ 0.90; the patent says 1.158), as do NPL's measured delays and Chien
+1994. The speed column is shown but not gated.</p>
+<p><strong>No board yet has everything.</strong> A patent is not peer reviewed, and neither
+source gives a measured solid line plus a microsection. The tool's impedance is
+well supported; absolute accuracy on a board you have not calibrated is not
+proven.</p>
 <p><strong>Limits.</strong></p>
 <ul>
 <li>The solve is low-frequency (quasi-static). Above the frequency where the
