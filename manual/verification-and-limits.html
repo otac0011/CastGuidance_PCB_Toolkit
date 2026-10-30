@@ -408,6 +408,72 @@ and heights over a stated range. Outside them, and with solder mask, the tools
 fall back to a real solve or the closed form and say so. A table is fingerprinted
 to the solver's source, and a test fails if the solver changes and the tables
 are not regenerated.</p>
+<h2 id="flex-lines-over-a-cross-hatched-plane">Flex: lines over a cross-hatched plane</h2>
+<p>The flex option combines two solves:</p>
+<ul>
+<li>the 2D solver's solid-plane answer;</li>
+<li>the ratios of L and C over the hatch to a solid plane, from a 3D
+electrostatic and a 3D magnetostatic solve of one period.</li>
+</ul>
+<p>It was checked against openEMS FDTD of a real flex board: the Okayama FPC
+(C. Wang, IEICE Electronics Express 2020). It has 70 µm lines 100 µm apart on
+25 µm polyimide, and 105 µm bars at a 500 µm pitch. Four line positions were
+run, at 0° and at 45°.</p>
+<table>
+<thead>
+<tr>
+<th>Pair centred on</th>
+<th>FDTD Zdiff</th>
+<th>Tool</th>
+<th>Difference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0°, a lengthwise bar</td>
+<td>98.8 Ω</td>
+<td>98.5 Ω</td>
+<td>−0.2 %</td>
+</tr>
+<tr>
+<td>0°, an opening</td>
+<td>110.6 Ω</td>
+<td>109.9 Ω</td>
+<td>−0.6 %</td>
+</tr>
+<tr>
+<td>45°, a crossing</td>
+<td>99.4 Ω</td>
+<td>99.0 Ω</td>
+<td>−0.3 %</td>
+</tr>
+<tr>
+<td>45°, an opening</td>
+<td>97.7 Ω</td>
+<td>99.2 Ω</td>
+<td>+1.5 %</td>
+</tr>
+</tbody>
+</table>
+<h3 id="flex-hatch-εeff-the-measured-board-and-limits">Flex hatch: εeff, the measured board and limits</h3>
+<p><strong>εeff.</strong> At 0° the tool's εeff is within 0.3 % of FDTD. At 45° it reads 3 %
+low: FDTD measures at 10–20 GHz, where a 45° hatch's period is about a twelfth
+of a wavelength, and that dispersion lifts εeff above the low-frequency value
+the tool gives.</p>
+<p><strong>The measured board.</strong> The tool and FDTD agree with each other, and both read
+about 10 % above the board's measured Zdiff (87–97.5 Ω). The thesis says its
+own design for those dimensions came out &quot;close to 100 Ω&quot;, which matches the
+tool. So the built board differs from its nominal stack, or the probes'
+de-embedding moved it. The validation report shows the measurement but does
+not gate on it.</p>
+<p><strong>Limits.</strong></p>
+<ul>
+<li>The solve is low-frequency (quasi-static). Above the frequency where the
+hatch cell is about a tenth of a wavelength, expect dispersion and loss it
+does not model.</li>
+<li>The hatch must repeat along the line.</li>
+<li>Only microstrip lines over one hatched plane are covered.</li>
+</ul>
 <h2 id="closed-forms-against-the-2d-solver">Closed forms against the 2D solver</h2>
 <p>The closed-form rows the tools show are compared with the 2D solver on each
 topology's defaults and across a range, with a 5 % gate (half of a typical
