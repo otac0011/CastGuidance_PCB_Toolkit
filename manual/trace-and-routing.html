@@ -74,6 +74,11 @@ The 2D field solver runs only when you press <strong>Solve 2D</strong> under the
 after a change its row reads &quot;press Solve 2D&quot; until you press it again. Where
 the 2D solver is the headline (solder mask, or outside the Clemens Method's
 tables), the headline waits for the button too.</p>
+<p><strong>On the web.</strong> The web version has no field solvers here: no 2D solve, no
+solder mask option, no 3D solve over a hatch. The Clemens Method answers every
+line, and a best fit answers a line over a hatch. Both were trained on the
+desktop's solvers, so nothing is solved as you type. The desktop app has
+everything.</p>
 <p><strong>Topology.</strong> Pick from Standard Microstrip, Embedded Microstrip, Differential
 Microstrip, CPWG, Differential CPWG, Stripline, Edge-Coupled Differential
 Stripline, or Broadside-Coupled Differential Stripline. The dimensioned diagram
@@ -126,7 +131,7 @@ copper's top and walls (3.5, 0.8 mil and 0.5 mil by default). Only the 2D
 solver models it; the closed forms and the FDTD run do not. On the default
 4.2 mil microstrip it takes about 3 Ω off Z₀.</p>
 <p><strong>2D field solver — the reference.</strong> A quasi-static finite-volume solve of the
-cross-section, run in-process (in the browser too) when you press <strong>Solve 2D</strong>
+cross-section, run in-process on the desktop when you press <strong>Solve 2D</strong>
 (or <strong>Solve 2D now</strong> on its card). It shows Z₀ (Zdiff for a
 pair) and εeff; for a pair also Zodd, Zeven, Zcommon, one line's Z11 and the
 odd and even εeff; the delay in ps/in and the dielectric loss in dB/in at the
@@ -136,8 +141,7 @@ which solves the same cross-section). Below them, every closed form is listed wi
 2D answer. Treat the 2D number as the reference for a uniform line's
 impedance: it is checked within 0.3 % against Cohn's exact stripline (see
 <a href="verification-and-limits.html#the-2d-field-solver-validation">Verification and limits</a>).
-A solve takes 17–400 ms on a desktop and about twice that in the browser; the
-status line shows the time and the grid size.</p>
+A solve takes 17–400 ms; the status line shows the time and the grid size.</p>
 <p><strong>Analytic outputs.</strong> Four independent closed-form estimates — Cohn (1955),
 Hammerstad-Jensen, IPC-2141 and Ghione-Naldi. Only the methods that apply to
 the chosen topology produce a number; the rest show <code>—</code>. For the differential
@@ -181,11 +185,17 @@ cell's length along the trace, and warns:</p>
 the hatch under it. <strong>Coverlay over traces</strong> and <strong>coverlay under hatch</strong> are
 the adhesive-plus-film layers on each side; 1.5 mil at Dk 3.3 is 12.5 µm of
 polyimide over 25 µm of adhesive.</p>
-<p><strong>Solve over the hatch.</strong> The answer depends on where the line sits over the
-hatch, and a flex fab cannot control that to better than about ±50 µm. So the
-tool solves five positions across half a period of the pattern and gives the
-range (with the mean). A 0° grid is the most position-sensitive and 10–40° the
-least (Okayama's measurements).</p>
+<h3 id="the-answer-over-a-hatch">The answer over a hatch</h3>
+<p>The answer depends on where the line sits over
+the hatch, and a flex fab cannot control that to better than about ±50 µm. So the
+tool gives five positions across half a period of the pattern as a range (with
+the mean). A 0° grid is the most position-sensitive and 10–40° the least
+(Okayama's measurements).</p>
+<p>A <strong>best fit</strong> answers as you type, with no solve. On the desktop, <strong>Solve over
+the hatch</strong> runs the 3D solve it was trained on. The fit covers these hatches:
+square at 0°, 45° and 26.57°, the rhombus at ±25.6°, and the triangle at 0°.
+Outside those, or outside its range of proportions, the card says why, and the
+desktop's button is the only answer.</p>
 <p>The result appears on the card, as a row in the methods table, and in a note
 under the headline: the headline itself stays the solid-plane answer.</p>
 <h3 id="how-the-hatch-is-solved">How the hatch is solved</h3>
@@ -206,8 +216,13 @@ circulating round every opening is found so that no flux passes through it.</li>
 <p>Each is divided by the same solve over a solid plane on the same grid, so the
 grid's error cancels. The ratios then scale the 2D solver's exact solid-plane
 answer: Z = Z_solid·√(L ratio / C ratio).</p>
-<p>It takes seconds per position on a desktop and longer in the browser, so it
-runs only when you press the button.</p>
+<p>It takes seconds per position, so it runs only when you press the button, and
+only on the desktop.</p>
+<p><strong>The best fit.</strong> One period's 3D solve is too slow to run as you type, so a
+fit stands in. It was trained, one family at a time, on thousands of solved
+cases, and it predicts the ratios and the air impedance by kriging on a smooth
+trend. Its errors against unseen cases, and against FDTD, are in
+<a href="verification-and-limits.html#flex-the-best-fit">Verification and limits</a>.</p>
 <h3 id="flex-hatch-presets">Flex hatch presets</h3>
 <table>
 <thead>

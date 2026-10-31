@@ -432,34 +432,39 @@ run, at 0° and at 45°.</p>
 <tr>
 <td>0°, a lengthwise bar</td>
 <td>98.8 Ω</td>
-<td>98.5 Ω</td>
-<td>−0.2 %</td>
+<td>98.8 Ω</td>
+<td>0.0 %</td>
 </tr>
 <tr>
 <td>0°, an opening</td>
 <td>110.6 Ω</td>
-<td>109.9 Ω</td>
-<td>−0.6 %</td>
+<td>110.2 Ω</td>
+<td>−0.3 %</td>
 </tr>
 <tr>
 <td>45°, a crossing</td>
 <td>99.4 Ω</td>
-<td>99.0 Ω</td>
-<td>−0.3 %</td>
+<td>99.3 Ω</td>
+<td>−0.1 %</td>
 </tr>
 <tr>
-<td>45°, an opening</td>
+<td>45°, half a lateral period over</td>
 <td>97.7 Ω</td>
-<td>99.2 Ω</td>
-<td>+1.5 %</td>
+<td>99.4 Ω</td>
+<td>+1.7 %</td>
 </tr>
 </tbody>
 </table>
 <h3 id="flex-hatch-εeff-the-measured-board-and-limits">Flex hatch: εeff, the measured board and limits</h3>
+<p>The fourth row is the same geometry as the third: half a lateral period from a
+crossing is a crossing again, staggered along the line. Their 1.7 % gap is what
+FDTD itself can tell apart.</p>
 <p><strong>εeff.</strong> At 0° the tool's εeff is within 0.3 % of FDTD; at 45° it reads 3 %
-below it. On the measured board, the 45° εeff lies between the two (see below).
-Treat the tool's delay as good to a few percent on a hatch, and less on coarse
-hatches: on a 600 µm grid it read 7 % under a coarse FDTD run.</p>
+below it. That gap is mostly FDTD's: on a rotated hatch its staircase reads εeff
+high, and its answer falls as the cells shrink, while halving the frequency
+leaves it where it is. On the measured board, the 45° εeff lies between the two
+(see below). Treat the tool's delay as good to a few percent on a hatch, and
+less on coarse hatches: on a 600 µm grid it read 7 % under a coarse FDTD run.</p>
 <h3 id="flex-hatch-against-measured-boards">Flex hatch against measured boards</h3>
 <p><strong>The Okayama board, as drawn.</strong> The tool and FDTD agree with each other, and
 both read about 12 % above the board's measured Zdiff at every position. FDTD
@@ -479,12 +484,12 @@ stack.</p>
 <tbody>
 <tr>
 <td>0°, pair over an opening</td>
-<td>97.9 Ω</td>
+<td>98.1 Ω</td>
 <td>97.5 Ω</td>
 </tr>
 <tr>
 <td>45°, pair over a crossing</td>
-<td>88.5 Ω</td>
+<td>88.7 Ω</td>
 <td>88.5 Ω</td>
 </tr>
 <tr>
@@ -494,12 +499,12 @@ stack.</p>
 </tr>
 <tr>
 <td>45°, highest position</td>
-<td>95.0 Ω</td>
+<td>95.2 Ω</td>
 <td>94.5 Ω</td>
 </tr>
 <tr>
 <td>26.6°, lowest and highest</td>
-<td>90.9, 94.2 Ω</td>
+<td>91.0, 94.4 Ω</td>
 <td>90.0, 92.6 Ω</td>
 </tr>
 </tbody>
@@ -526,6 +531,104 @@ does not model.</li>
 <li>The hatch must repeat along the line.</li>
 <li>Only microstrip lines over one hatched plane are covered.</li>
 </ul>
+<h3 id="flex-the-best-fit">Flex: the best fit</h3>
+<p>The web version has no field solvers on this page. A best fit, trained on the
+3D solve, gives the range of Z over a hatch from the values alone, in about a
+millisecond. It covers square hatches at 0°, 45° and 26.57°, the rhombus at
+±25.6° and the triangle at 0°, for W/H 0.5–8, S/H 0.5–8, T/H 0.1–1.5 and covers
+up to 3H. Outside that it says why and gives no number.</p>
+<p><strong>Against the solve it stands in for.</strong> On held-out cases, the mean Z error is
+0.4–1.0 % by hatch family, and 95 % of cases are within 3.2 %. The worst single
+cases are 7 % on rhombus pairs and 10 % on triangular and 0° pairs. εeff is
+within about 3 % on 95 % of cases, and 4.6 % on the triangle.</p>
+<h3 id="the-flex-best-fit-against-full-wave-fdtd">The flex best fit against full-wave FDTD</h3>
+<p>The fit never saw FDTD, and these stacks were chosen before any was compared.</p>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Cells</th>
+<th>FDTD Z</th>
+<th>Fit Z</th>
+<th>Z</th>
+<th>εeff</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>45°, dense pair</td>
+<td>15 µm</td>
+<td>94.4 Ω</td>
+<td>94.6 Ω</td>
+<td>+0.2 %</td>
+<td>−0.3 %</td>
+</tr>
+<tr>
+<td>45°, line over a crossing</td>
+<td>7.5 µm</td>
+<td>56.0 Ω</td>
+<td>55.5 Ω</td>
+<td>−0.9 %</td>
+<td>−3.0 %</td>
+</tr>
+<tr>
+<td>45°, line between crossings</td>
+<td>15 µm</td>
+<td>50.3 Ω</td>
+<td>50.7 Ω</td>
+<td>+0.8 %</td>
+<td>−5.3 % *</td>
+</tr>
+<tr>
+<td>45°, wide-pitch line</td>
+<td>30 µm</td>
+<td>86.9 Ω</td>
+<td>86.0 Ω</td>
+<td>−1.1 %</td>
+<td>−5.8 % *</td>
+</tr>
+<tr>
+<td>0°, pair over a bar</td>
+<td>4 µm</td>
+<td>95.9 Ω</td>
+<td>97.5 Ω</td>
+<td>+1.7 %</td>
+<td>−1.9 %</td>
+</tr>
+<tr>
+<td>0°, pair over an opening</td>
+<td>4 µm †</td>
+<td>87.4 Ω</td>
+<td>87.9 Ω</td>
+<td>+0.5 %</td>
+<td>−0.4 %</td>
+</tr>
+<tr>
+<td>0°, pair clear of the bars</td>
+<td>4 µm</td>
+<td>102.5 Ω</td>
+<td>104.1 Ω</td>
+<td>+1.5 %</td>
+<td>−2.0 %</td>
+</tr>
+</tbody>
+</table>
+<h3 id="reading-the-flex-fdtd-table">Reading the flex FDTD table</h3>
+<p>* Not gated. FDTD reads εeff high at these cells. The 45° crossing case fell
+from 3.48 to 3.41 as its cells went from 15 to 7.5 µm, and was still falling, with
+a limit near 3.35 (fit −1.2 %). These two were not rerun finer.</p>
+<p>† Stopped early, before FDTD went unstable, so this εeff is good to about 1 %.</p>
+<p>So expect Z within about 2 % at 0° and 45°. εeff reads 1–3 % low, and on 0°
+pairs the shortfall is the fit's own: on the recorded Okayama runs the 3D solve
+stays within 0.3 % of FDTD on Z and 1.6 % on εeff, and the fit reads 0.6–1.7 % off
+on Z and 1.4–3.3 % low on εeff.</p>
+<h3 id="the-flex-best-fit-other-hatches-and-limits">The flex best fit: other hatches and limits</h3>
+<p><strong>The other hatches.</strong> 26.57°, the rhombus and the triangle have no FDTD check.
+At 26.6° the fit, on the calibrated Okayama stack, reads 91.3–94.3 Ω against a
+measured 90.0–92.6 Ω. The rhombus and the triangle rest on the held-out cases
+only, which test the fit against the solve but not the solve itself.</p>
+<p><strong>Limits.</strong> A fit inherits the solve's limits, above, and has the same reach: it
+does not extrapolate past the ranges listed.</p>
 <h2 id="closed-forms-against-the-2d-solver">Closed forms against the 2D solver</h2>
 <p>The closed-form rows the tools show are compared with the 2D solver on each
 topology's defaults and across a range, with a 5 % gate (half of a typical
