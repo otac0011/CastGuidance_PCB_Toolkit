@@ -247,7 +247,7 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
   <div class="stats">
     <span><b>50</b> tools</span>
     <span><b>11</b> categories</span>
-    <span><b>18</b> bundled laminate datasheets</span>
+    <span><b>64</b> laminates with datasheet links</span>
     <span><b>20+</b> SerDes protocol presets</span>
   </div>
 </div>
@@ -299,18 +299,18 @@ SPDX-License-Identifier: LicenseRef-CastGuidance-PCB-Toolkit-EULA
 </section>
 
 <section id="datasheets">
-  <h2>Bundled laminate datasheets</h2>
-  <p class="section-lede">PDFs for every PCB laminate the toolkit lets you pick from (Panasonic, Rogers, Isola, AGC, ITEQ, Elite, FR-4 reference). Mirrored here so the in-app "Open Datasheet" button always has a live link.</p>
+  <h2>Laminate datasheets</h2>
+  <p class="section-lede">The values for every PCB laminate the toolkit lets you pick, one row per product and glass, each with a direct link to its datasheet. The same table the app's Material Comparison and Trace Impedance tools use.</p>
   <div class="cards">
     <div class="card">
       <a class="card-title" href="datasheets.html">Browse all datasheets</a>
-      <p>Sortable list of Panasonic Megtron 6/7/8, Rogers RO4350B / RO4003C / RT-duroid 5880, Isola 370HR / Astra / Tachyon / TerraGreen, AGC FastRise / Nelco / TLY, ITEQ IT-988GSE, EM-370Z / EM-528 — with Dk, Df, Tg, and z-CTE columns.</p>
-      <div class="meta">16 datasheets</div>
+      <p>Panasonic, Rogers, Isola, AGC (with Nelco and Taconic), Elite Material, ITEQ, TUC, Shengyi and Ventec, plus generic FR-4. Dk and Df as quoted and at 10 GHz, Tg with its method, z-CTE, resin content and the thicknesses sold, with a filter and a mm / mil switch.</p>
+      <div class="meta">64 laminates</div>
     </div>
     <div class="card">
-      <a class="card-title" href="https://otac0011.github.io/CastGuidance_PCB_Toolkit/datasheets/">Raw datasheets folder</a>
-      <p>Direct directory listing if you'd rather grep the filenames yourself. These are the exact URLs the desktop app fetches when you click "Open Datasheet".</p>
-      <div class="meta">GitHub Pages</div>
+      <a class="card-title" style="color: var(--text); cursor: default">Where the links go</a>
+      <p>46 rows open the maker's own sheet. 14 open a fab's copy, where the maker does not post one. Three open our copy, because the maker's link serves a blank PDF or none was found: <a href="datasheets/Isola_Tachyon_100G.pdf">Isola Tachyon 100G</a>, <a href="datasheets/Isola_TerraGreen_400G.pdf">TerraGreen 400G</a> and <a href="datasheets/AGC_FastRise_TC.pdf">AGC FastRise TC</a>.</p>
+      <div class="meta">Every link checked before each release</div>
     </div>
   </div>
 </section>

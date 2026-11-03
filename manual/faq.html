@@ -174,10 +174,10 @@ frequency, so a 10 GHz number is slightly low for a 2 GHz design. Use the
 to move it; between 1 and 10 GHz a typical FR-4 changes Dk by 2–4 %, which is
 roughly 1 Ω on a 50 Ω trace.</p>
 <h3 id="can-i-compare-two-materials-whose-datasheets-are-at-different-frequencies">Can I compare two materials whose datasheets are at different frequencies?</h3>
-<p>Not directly — you will get the wrong answer. A material specified at 28 GHz
-looks worse than one specified at 10 GHz even when it is better. Move both to a
-common frequency first. The <strong>Spec f</strong> column in Material Comparison exists
-precisely so you notice this.</p>
+<p>Not directly — you will get the wrong answer. A material specified at 14 GHz
+looks different from one specified at 1 GHz even when they are the same. Move
+both to a common frequency first. Material Comparison does this for you in its
+<strong>Dk 10G</strong> and <strong>Df 10G</strong> columns, and <strong>Quoted at</strong> shows what each sheet used.</p>
 <h3 id="what-is-tg-and-how-much-do-i-need">What is Tg and how much do I need?</h3>
 <p>Glass transition temperature — above it the resin softens and z-axis expansion
 accelerates sharply. Lead-free assembly wants Tg ≥ 150 °C; thick boards or

@@ -40,31 +40,63 @@ blockquote{border-left:3px solid var(--accent);margin:16px 0;padding:2px 16px;co
 <p>The first decisions on a board: what laminate, how many layers, how thick, and
 whether the copper balance will let it come out flat.</p>
 <h2 id="material-comparison">Material Comparison</h2>
-<p>A side-by-side browser for the bundled PCB laminate library — Panasonic
-Megtron, Rogers, Isola, AGC, ITEQ, Elite and generic FR-4 among others. It
-performs no calculation; it exists so you can compare candidates on one screen
-instead of opening a dozen datasheet PDFs.</p>
-<p><strong>Filter row.</strong> The filter box does a substring match against family, vendor
-and product name. <strong>Sort by</strong> orders on Vendor, Product, Tg, Dk, Df or z-CTE.
-<strong>Compare selected only</strong> collapses the table to just the rows you have ticked.</p>
-<p><strong>Columns.</strong> Checkbox, Family, Vendor, Product, Tg (°C), Dk, Df, z-CTE, spec
-frequency (GHz), and an amber <strong>Open ⇗</strong> link that hands the manufacturer's
-datasheet to your browser.</p>
-<p><strong>What the columns mean.</strong></p>
+<p>Every laminate the toolkit knows, on one screen: Panasonic Megtron, Isola, AGC,
+Rogers, ITEQ, EMC, TUC, Shengyi, Ventec and generic FR-4. That is every material
+in the Trace Impedance tool's picker, about 60 rows. It exists so you can compare
+candidates without opening a dozen datasheet PDFs, and every row opens its own
+datasheet when you want the source.</p>
+<p><strong>One row per product and glass.</strong> A material sold in both regular and low-Dk
+glass has two rows, because they are two products: Megtron 6 is R-5775(N) in
+low-Dk glass and R-5775(K)/(G) in E-glass, with different Dk, Df and weaves. The
+two rows sort next to each other. A row marked <strong>(inferred)</strong> is one whose maker
+does not name the glass; its table fits that glass. Hover the Glass cell for the
+maker's own words.</p>
+<p><strong>Filter row.</strong> The filter box matches vendor, product, loss class, glass and
+weave, so <code>megtron 6</code>, <code>low-dk</code>, <code>very low</code> and <code>1078</code> all work. <strong>Sort by</strong>
+orders on Vendor, Product, Tg, Dk or Df at 10 GHz, z-CTE or resin content; rows
+with no value go to the bottom. <strong>Compare selected only</strong> collapses the table to
+the rows you have ticked.</p>
+<h3 id="material-comparison-columns">Material Comparison columns</h3>
 <ul>
-<li><strong>Tg</strong> — glass transition temperature. Above Tg the resin softens and z-axis
-expansion accelerates sharply. Lead-free assembly wants Tg ≥ 150 °C; multiple
-reflows or thick boards want 170 °C or better.</li>
-<li><strong>Dk / Df</strong> — see <a href="units-and-conventions.html#dielectric-constant">Units and
-conventions</a>. Both are quoted at
-the frequency in the <strong>Spec f</strong> column, which is why that column exists.</li>
-<li><strong>z-CTE</strong> — expansion through the thickness, in ppm/°C. This is what cracks
-plated barrels during thermal cycling. Low z-CTE matters far more than
-x/y-CTE for via reliability.</li>
+<li><strong>Tg</strong> — glass transition temperature, with how it was measured. Above Tg the
+resin softens and z-axis expansion accelerates sharply. DSC, TMA and DMA can
+differ by tens of degrees on one material, so compare like with like.</li>
+<li><strong>z-CTE</strong> — expansion through the thickness below Tg, in ppm/°C. This is what
+cracks plated barrels during thermal cycling. A range is the maker's own.</li>
+<li><strong>Dk / Df</strong> — as the sheet quotes them; see <a href="units-and-conventions.html#dielectric-constant">Units and
+conventions</a>. <strong>Quoted at</strong> gives
+the frequency, and the resin content where the sheet states one. RF laminates
+show the design Dk, the one for impedance, with the process Dk in the note.</li>
+<li><strong>Dk 10G / Df 10G</strong> — the same values moved to 10 GHz through the
+Djordjevic-Sarkar model, so rows compare at one frequency. The resin content
+stays the sheet's, which is why the Trace Impedance tool's own construction
+is the number to design with.</li>
+<li><strong>Resin</strong> — typical resin content by weight: the median of the maker's prepreg
+rows, then their range. A plain range is the two resin contents a maker quotes
+when it publishes no table, as EMC does.</li>
 </ul>
-<p><strong>Insight.</strong> Do not compare Dk across two materials whose spec frequencies
-differ without first moving them to a common frequency. A material quoted at
-28 GHz will look worse than one quoted at 10 GHz even when it is better.</p>
+<h3 id="material-comparison-weaves-and-thicknesses">Material Comparison weaves and thicknesses</h3>
+<p>Under each row:</p>
+<ul>
+<li><strong>Prepreg</strong> lists each weave with its resin contents and pressed ply thickness.</li>
+<li><strong>Cores</strong> lists the core thicknesses, the weaves they are built from and their
+resin range.</li>
+<li><strong>Sold in</strong> lists the thicknesses of a product sold by thickness, such as
+Rogers laminates.</li>
+</ul>
+<p>These come from the makers' construction tables and follow the app's mm/mil
+switch. Where a maker publishes no table the row says so rather than guessing:
+EMC lists no weaves, and ITEQ has no public table for IT-988G.</p>
+<h3 id="material-comparison-datasheets">Material Comparison datasheets</h3>
+<p><strong>Open</strong> opens the sheet for that row; hover it to see where the link goes.
+Panasonic's links save the PDF to your Downloads folder instead of opening a tab.
+Links go to the maker where the maker's sheet could be found. The rest go to a
+fab's copy of it, which covers all of ITEQ and TUC and a few others. Tachyon 100G,
+TerraGreen 400G and FastRise TC use this toolkit's own copy, and generic FR-4 links
+370HR as a typical example. A link can move when a host changes its site.</p>
+<p><strong>Insight.</strong> Do not compare Dk at different resin contents. A datasheet's Dk
+describes one construction: a 75 % resin prepreg reads well below a 50 % core
+of the same material, a larger step than most gaps between neighbouring rows.</p>
 <h2 id="dielectric-dkdf-vs-frequency">Dielectric Dk/Df vs Frequency</h2>
 <p>Laminate datasheets give you Dk and Df at one frequency. Your design is at a
 different one. This tool moves the datasheet point using the

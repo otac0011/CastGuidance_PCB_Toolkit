@@ -88,12 +88,15 @@ you are describing the cross-section you meant.</p>
 drives the closed forms, the 2D field solver and the openEMS run, and the line
 under the picker says what it is and at what frequency.</p>
 <ul>
-<li><strong>Bundled material library</strong> (the default). The laminate library — Megtron,
+<li><p><strong>Bundled material library</strong> (the default). The laminate library — Megtron,
 Rogers, Isola, AGC, ITEQ, FR-4 and others — with Dk and Df as the datasheet
-quotes them, or <strong>Custom</strong> for a manual Dk and Df. The <strong>Open datasheet ⇗</strong>
-button opens the manufacturer's PDF. Resin content:
-<a href="#resin-content-on-library-materials">below</a>.</li>
-<li><strong>Laminate builder.</strong> Build the dielectric the way a fab does: pick the
+quotes them, at the frequency it quotes them, or <strong>Custom</strong> for a manual Dk
+and Df. These are the numbers <a href="stackup-and-materials.html#material-comparison">Material
+Comparison</a> shows, and Rogers
+entries carry the design Dk. The <strong>Open datasheet ⇗</strong> button opens the sheet
+they come from. Resin content: <a href="#resin-content-on-library-materials">below</a>.</p>
+</li>
+<li><p><strong>Laminate builder.</strong> Build the dielectric the way a fab does: pick the
 laminate <em>family</em> (29 of them, standard FR-4 to ultra-low-loss, each with the
 maker's own fitted resin), the <em>glass</em> it is sold in (only the grades that
 maker sells — Megtron 6 in low-Dk R-5775(N) or E-glass R-5775(K/G), for
@@ -105,11 +108,14 @@ thickness you want and the tool finds the resin content that gives it. The
 card shows the thickness in mil and mm, the glass fraction, and the Dk and Df
 at the family's fit frequency, at 1 GHz and at 10 GHz. More resin makes a ply
 thicker and its Dk lower; a resin content outside the style's usual range, an
-estimated style, or a grade with no published construction table is flagged.</li>
-<li><strong>RF laminate catalog.</strong> Rogers RO4000/RO3000/RT-duroid, Taconic and a few
+estimated style, or a grade with no published construction table is flagged.</p>
+</li>
+<li><p><strong>RF laminate catalog.</strong> Rogers RO4000/RO3000/RT-duroid, Taconic and a few
 datasheet-only materials, with the maker's <em>design</em> Dk (the one for
-impedance, not the process Dk) and the thicknesses each is sold in.</li>
-<li><strong>Custom Dk / Df.</strong> Type both.</li>
+impedance, not the process Dk) and the thicknesses each is sold in.</p>
+</li>
+<li><p><strong>Custom Dk / Df.</strong> Type both.</p>
+</li>
 </ul>
 <p><strong>Design frequency.</strong> The builder's and the catalog's Dk and Df are moved from
 the frequency they were fitted or quoted at to this one with the
@@ -300,13 +306,14 @@ and tan⁻¹ ⅓ (18.4°) do; 30° never does, so the shallow-angle preset uses
 the Dk for this.</p>
 <ul>
 <li>It starts at the resin content the quoted Dk stands for, so until you move it
-the result is the datasheet's. Where the material matches a laminate-builder
-family, that is where the family's fitted model gives the quoted Dk (Megtron 6
-48 %, 370HR 51 %); otherwise 50 %.</li>
+the result is the datasheet's. That is the resin content the sheet states
+where it states one (EM-528 50 %, IT-988GSE 53 %). Otherwise, where the
+material matches a laminate-builder family, it is where the family's fitted
+model gives the quoted Dk (Megtron 6 56 %, 370HR 55 %), and 50 % for the rest.</li>
 <li>Away from it the Dk moves by the laminate builder's glass/resin mix, with the
 resin's own Dk solved so the mix passes through the quoted value.</li>
 <li>Ten points of resin moves the Dk about 3–5 % on low-Dk glass and 6–9 % on
-E-glass FR-4. Megtron 6 goes from 3.45 at 48 % to 3.31 at 58 %.</li>
+E-glass FR-4. Megtron 6 goes from 3.34 at 56 % to 3.21 at 66 %.</li>
 <li>Rogers, PTFE and FastRise materials are fixed constructions: the slider is
 greyed out and the note says why.</li>
 <li>A moved resin content is sent to the openEMS run as a custom Dk.</li>
