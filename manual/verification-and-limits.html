@@ -62,8 +62,8 @@ pinned so it cannot drift silently.</li>
 list say what it would take.</li>
 </ul>
 <h3 id="the-scoreboard-in-numbers">The scoreboard in numbers</h3>
-<p>On 2026-10-26: 64 benchmarks, 555 gated checks, 535 within tolerance and 20
-known failures. Of the 51 tools, 36 pass (13 with a part still unchecked), 3
+<p>On 2026-11-04: 69 benchmarks, 656 gated checks, 636 within tolerance and 20
+known failures. Of the 52 tools, 37 pass (14 with a part still unchecked), 3
 have a known failure (Trace Impedance, Differential Pair Designer, Radiated
 Emissions) and 12 have no external check yet.</p>
 <h3 id="kinds-of-reference">Kinds of reference</h3>
@@ -409,7 +409,7 @@ fall back to a real solve or the closed form and say so. A table is fingerprinte
 to the solver's source, and a test fails if the solver changes and the tables
 are not regenerated.</p>
 <h2 id="flex-lines-over-a-cross-hatched-plane">Flex: lines over a cross-hatched plane</h2>
-<p>The flex option combines two solves:</p>
+<p><a href="trace-and-routing.html#flex-hatch-impedance">Flex Hatch Impedance</a> combines two solves:</p>
 <ul>
 <li>the 2D solver's solid-plane answer;</li>
 <li>the ratios of L and C over the hatch to a solid plane, from a 3D
@@ -532,7 +532,7 @@ does not model.</li>
 <li>Only microstrip lines over one hatched plane are covered.</li>
 </ul>
 <h3 id="flex-the-best-fit">Flex: the best fit</h3>
-<p>The web version has no field solvers on this page. A best fit, trained on the
+<p>The web version has no field solvers. A best fit, trained on the
 3D solve, gives the range of Z over a hatch from the values alone, in about a
 millisecond. It covers square hatches at 0°, 45° and 26.57°, the rhombus at
 ±25.6° and the triangle at 0°, for W/H 0.5–8, S/H 0.5–8, T/H 0.1–1.5 and covers

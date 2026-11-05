@@ -75,9 +75,8 @@ after a change its row reads &quot;press Solve 2D&quot; until you press it again
 the 2D solver is the headline (solder mask, or outside the Clemens Method's
 tables), the headline waits for the button too.</p>
 <p><strong>On the web.</strong> The web version has no field solvers here: no 2D solve, no
-solder mask option, no 3D solve over a hatch. The Clemens Method answers every
-line, and a best fit answers a line over a hatch. Both were trained on the
-desktop's solvers, so nothing is solved as you type. The desktop app has
+solder mask option. The Clemens Method answers every line; it was trained on
+the desktop's 2D solver, so nothing is solved as you type. The desktop app has
 everything.</p>
 <p><strong>Topology.</strong> Pick from Standard Microstrip, Embedded Microstrip, Differential
 Microstrip, CPWG, Differential CPWG, Stripline, Edge-Coupled Differential
@@ -166,139 +165,8 @@ you type — then press <strong>Solve 2D</strong> to confirm with a solver as ac
 commercial 2D solver for a uniform line, and keep
 the 3D run for what a cross-section cannot show: launches, discontinuities,
 dispersion. Running FDTD on every trial width is a waste of minutes.</p>
-<h3 id="flex-cross-hatched-ground-plane">Flex: cross-hatched ground plane</h3>
-<p>Flex circuits often hatch the ground plane: it keeps the circuit flexible, and on
-a thin film it raises an impedance that would otherwise be too low. Under <strong>Show
-advanced</strong>, tick <strong>The reference plane is a cross-hatch</strong> (microstrip lines:
-single, embedded, or an edge-coupled pair).</p>
-<p><strong>The hatch.</strong> Pick a preset or type your own:</p>
-<ul>
-<li><strong>Bar width</strong> and <strong>pitch</strong>: the pitch is centre to centre, so the opening is
-the pitch minus the bar.</li>
-<li><strong>Angle</strong> to the trace: 0° is a grid along the line, 45° a diamond, which is
-the common choice.</li>
-<li><strong>Shape</strong>: square/diamond, a rhombus stretched along the line, or triangles.</li>
-</ul>
-<p>Every preset names its sources; see
-<a href="#flex-hatch-presets">the presets</a>. The card shows the copper share and the
-cell's length along the trace, and warns:</p>
-<ul>
-<li>under 40 % copper (Polar);</li>
-<li>a cell longer than 50 mil along the trace (Sierra Circuits);</li>
-<li>bars or openings under 2–3 mil (what flex fabs build).</li>
-</ul>
-<p><strong>The stack.</strong> The line sits on the base film (H, at the dielectric's Dk), with
-the hatch under it. <strong>Coverlay over traces</strong> and <strong>coverlay under hatch</strong> are
-the adhesive-plus-film layers on each side; 1.5 mil at Dk 3.3 is 12.5 µm of
-polyimide over 25 µm of adhesive.</p>
-<h3 id="the-answer-over-a-hatch">The answer over a hatch</h3>
-<p>The answer depends on where the line sits over
-the hatch, and a flex fab cannot control that to better than about ±50 µm. So the
-tool gives five positions across half a period of the pattern as a range (with
-the mean). A 0° grid is the most position-sensitive and 10–40° the least
-(Okayama's measurements).</p>
-<p>A <strong>best fit</strong> answers as you type, with no solve. On the desktop, <strong>Solve over
-the hatch</strong> runs the 3D solve it was trained on. The fit covers these hatches:
-square at 0°, 45° and 26.57°, the rhombus at ±25.6°, and the triangle at 0°.
-Outside those, or outside its range of proportions, the card says why, and the
-desktop's button is the only answer.</p>
-<p>The result appears on the card, as a row in the methods table, and in a note
-under the headline: the headline itself stays the solid-plane answer.</p>
-<h3 id="how-the-hatch-is-solved">How the hatch is solved</h3>
-<p>Thin flex defeats the usual shortcuts.</p>
-<ul>
-<li><strong>2D slices.</strong> On a 25 µm film over a 0.5 mm hatch, the 2D slice method of the
-literature (Sun et al., IEEE TSIPI 2024) reads the capacitance 13 % low.</li>
-<li><strong>Plain 3D electrostatics.</strong> Taking the inductance from the air capacitance,
-as for an ordinary line, reads it 15 % low. The return current must follow
-the bars, which makes the line slower and its impedance higher.</li>
-</ul>
-<p>So the tool solves one period of the pattern in 3D, twice:</p>
-<ul>
-<li><strong>C:</strong> electrostatics with the dielectrics.</li>
-<li><strong>L:</strong> magnetostatics with the copper as a perfect conductor. The current
-circulating round every opening is found so that no flux passes through it.</li>
-</ul>
-<p>Each is divided by the same solve over a solid plane on the same grid, so the
-grid's error cancels. The ratios then scale the 2D solver's exact solid-plane
-answer: Z = Z_solid·√(L ratio / C ratio).</p>
-<p>It takes seconds per position, so it runs only when you press the button, and
-only on the desktop.</p>
-<p><strong>The best fit.</strong> One period's 3D solve is too slow to run as you type, so a
-fit stands in. It was trained, one family at a time, on thousands of solved
-cases, and it predicts the ratios and the air impedance by kriging on a smooth
-trend. Its errors against unseen cases, and against FDTD, are in
-<a href="verification-and-limits.html#flex-the-best-fit">Verification and limits</a>.</p>
-<h3 id="flex-hatch-presets">Flex hatch presets</h3>
-<table>
-<thead>
-<tr>
-<th>Preset</th>
-<th>Bars / pitch</th>
-<th>Copper</th>
-<th>Sources</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Standard diamond</td>
-<td>5 / 17.07 mil, 45°</td>
-<td>50 %</td>
-<td>Polar Si8000m/Si9000e guide, Sierra Circuits, Polar AP534</td>
-</tr>
-<tr>
-<td>Okayama measured</td>
-<td>105 / 500 µm, 45°</td>
-<td>38 %</td>
-<td>measured board: C. Wang, IEICE ELEX 2020</td>
-</tr>
-<tr>
-<td>Shallow angle 26.6°</td>
-<td>105 / 500 µm, tan⁻¹ ½</td>
-<td>38 %</td>
-<td>Wang/Iokibe/Toyota (measured at 26.5°); Nitto Denko patent</td>
-</tr>
-<tr>
-<td>Fine, 1-mil films</td>
-<td>100 / 383 µm, 45°</td>
-<td>45 %</td>
-<td>Altium teardown of a webcam flex</td>
-</tr>
-<tr>
-<td>Dense</td>
-<td>0.2 / 0.4 mm, 45°</td>
-<td>75 %</td>
-<td>GC Aero, Siemens</td>
-</tr>
-<tr>
-<td>Coarse shield</td>
-<td>120 / 920 µm, 45°</td>
-<td>24 %</td>
-<td>Nippon Mektron and AST patents; Yu &amp; Kam 2022</td>
-</tr>
-<tr>
-<td>Missouri S&amp;T benchmark</td>
-<td>0.3 / 1.3 mm, 45°</td>
-<td>41 %</td>
-<td>Sun et al. 2024</td>
-</tr>
-<tr>
-<td>Long diamond</td>
-<td>5 mil bars, 50 × 24 mil cell</td>
-<td>≈ 41 %</td>
-<td>Sierra Circuits (shape only)</td>
-</tr>
-<tr>
-<td>Triangular</td>
-<td>65 µm bars, 0.5 mm triangles</td>
-<td>40 %</td>
-<td>Nitto Denko patent</td>
-</tr>
-</tbody>
-</table>
-<p>A hatch must repeat along the line for the 3D solve: 0°, 45°, tan⁻¹ ½ (26.6°)
-and tan⁻¹ ⅓ (18.4°) do; 30° never does, so the shallow-angle preset uses
-26.6°, an angle the Okayama board measured.</p>
+<p><strong>Flex.</strong> A line over a cross-hatched ground plane has its own tool,
+<a href="#flex-hatch-impedance">Flex Hatch Impedance</a>.</p>
 <h3 id="resin-content-on-library-materials">Resin content on library materials</h3>
 <p>A datasheet's Dk is for one construction. A thin, resin-rich prepreg (1080 or
 106 at 65–75 % resin) reads lower than that; a glass-rich core (2116 or 7628 at
@@ -452,6 +320,161 @@ same lines. When the IPC-2141 row is more than 5 % off the 2D answer the 2D card
 shows a red warning saying by how much. The formula is kept as it was for
 parity with the original toolkit; use the 2D or Hammerstad–Jensen value
 (<a href="verification-and-limits.html#closed-forms-against-the-2d-solver">validation</a>).</p>
+<h2 id="flex-hatch-impedance">Flex Hatch Impedance</h2>
+<p>Flex circuits often hatch the ground plane: it keeps the circuit flexible, and on
+a thin film it raises an impedance that would otherwise be too low. This tool
+gives Z₀ of a line, or Zdiff of an edge-coupled pair, over such a hatch. The
+inputs are on the left. On the right are the answer, drawings of the hatch, and a
+plot of Z against where the line sits.</p>
+<p><strong>The line.</strong> A single line or an edge-coupled pair: trace width W, spacing s
+for a pair, and copper thickness T, which is the traces' and the hatch's.</p>
+<p><strong>The stack.</strong> The line sits on the base film (H, at its Dk), with the hatch
+under it. <strong>Coverlay over traces</strong> and <strong>coverlay under hatch</strong> are the
+adhesive-plus-film layers on each side, each with its thickness and Dk; 0 means
+none. 1.5 mil at Dk 3.3 is 12.5 µm of polyimide over 25 µm of adhesive. The
+coverlay over the traces surrounds them, and the one under the hatch surrounds
+its copper.</p>
+<h3 id="the-hatch">The hatch</h3>
+<p>Pick a preset or type your own:</p>
+<ul>
+<li><strong>Bar width</strong> and <strong>pitch</strong>: the pitch is centre to centre, so the opening is
+the pitch minus the bar.</li>
+<li><strong>Angle</strong> to the trace: 0° is a grid along the line, 45° a diamond, which is
+the common choice.</li>
+<li><strong>Shape</strong>: square/diamond, a rhombus stretched along the line, or triangles.</li>
+</ul>
+<p>Typing a dimension makes the hatch Custom. Every preset names its sources; see
+<a href="#flex-hatch-presets">the presets</a>. The text under the inputs gives the copper
+share, the opening and how far along the trace the pattern repeats, and warns:</p>
+<ul>
+<li>under 40 % copper (Polar);</li>
+<li>a repeat longer than 50 mil along the trace (Sierra Circuits);</li>
+<li>bars or openings under 2–3 mil (what flex fabs build).</li>
+</ul>
+<h3 id="the-answer-over-a-hatch">The answer over a hatch</h3>
+<p>The answer depends on where the line sits over the hatch, and a flex fab cannot
+control that to better than about ±50 µm. So the tool gives Z at five positions
+across half a period of the pattern, starting from a line centred over a
+crossing of the bars. The result is that range, with the mean, εeff, and the same
+line over a solid plane for comparison. A 0° grid is the most position-sensitive
+and 10–40° the least (Okayama's measurements).</p>
+<p>A <strong>best fit</strong> answers as you type, with no solve. On the desktop, <strong>Solve over
+the hatch</strong> runs the 3D solve it was trained on, and its answer replaces the
+fit's until you change an input. The fit covers these hatches: square at 0°, 45°
+and 26.57°, the rhombus at ±25.6°, and the triangle at 0°. Outside those, or
+outside its range of proportions, the tool says why, and the desktop's button is
+the only answer. The web version has the best fit only.</p>
+<h3 id="drawing-the-hatch">Drawing the hatch</h3>
+<p><strong>Top view.</strong> The hatch seen through the film, to scale, with the trace (or
+pair) over it. Above it: the band of line positions the answer covers, a tick at
+each solved position and a marker at the line's centre. The dashed line is the
+section's cut, and the bar under the view is a scale in the units the app shows.</p>
+<p><strong>Line position.</strong> Moves the line from centred over a crossing (left) to half a
+period on (right). That covers every position, because the pattern repeats past
+it. The text under the slider gives Z there, read between the solved positions
+when it falls between them, and the plot marks it.</p>
+<p><strong>Section.</strong> The cut across the line at the dashed line: coverlays, film,
+traces and the hatch copper the cut passes through. It has the top view's
+horizontal scale, so the two line up. The thicknesses are stretched to be seen,
+and the label says by how much. <strong>Section along the line</strong> moves the cut over
+one repeat of the pattern, so you can watch the copper under the line change.</p>
+<p><strong>The plot.</strong> Z (Zdiff) at the five solved positions, with the solid-plane
+answer as a dashed line and the slider's position marked.</p>
+<h3 id="how-the-hatch-is-solved">How the hatch is solved</h3>
+<p>Thin flex defeats the usual shortcuts.</p>
+<ul>
+<li><strong>2D slices.</strong> On a 25 µm film over a 0.5 mm hatch, the 2D slice method of the
+literature (Sun et al., IEEE TSIPI 2024) reads the capacitance 13 % low.</li>
+<li><strong>Plain 3D electrostatics.</strong> Taking the inductance from the air capacitance,
+as for an ordinary line, reads it 15 % low. The return current must follow
+the bars, which makes the line slower and its impedance higher.</li>
+</ul>
+<p>So the tool solves one period of the pattern in 3D, twice:</p>
+<ul>
+<li><strong>C:</strong> electrostatics with the dielectrics.</li>
+<li><strong>L:</strong> magnetostatics with the copper as a perfect conductor. The current
+circulating round every opening is found so that no flux passes through it.</li>
+</ul>
+<p>Each is divided by the same solve over a solid plane on the same grid, so the
+grid's error cancels. The ratios then scale the 2D solver's exact solid-plane
+answer: Z = Z_solid·√(L ratio / C ratio).</p>
+<p>It takes seconds per position, so it runs only when you press the button, and
+only on the desktop.</p>
+<p><strong>The best fit.</strong> One period's 3D solve is too slow to run as you type, so a
+fit stands in. It was trained, one family at a time, on thousands of solved
+cases, and it predicts the ratios and the air impedance by kriging on a smooth
+trend. Its errors against unseen cases, and against FDTD, are in
+<a href="verification-and-limits.html#flex-the-best-fit">Verification and limits</a>.</p>
+<h3 id="flex-hatch-presets">Flex hatch presets</h3>
+<table>
+<thead>
+<tr>
+<th>Preset</th>
+<th>Bars / pitch</th>
+<th>Copper</th>
+<th>Sources</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Standard diamond</td>
+<td>5 / 17.07 mil, 45°</td>
+<td>50 %</td>
+<td>Polar Si8000m/Si9000e guide, Sierra Circuits, Polar AP534</td>
+</tr>
+<tr>
+<td>Okayama measured</td>
+<td>105 / 500 µm, 45°</td>
+<td>38 %</td>
+<td>measured board: C. Wang, IEICE ELEX 2020</td>
+</tr>
+<tr>
+<td>Shallow angle 26.6°</td>
+<td>105 / 500 µm, tan⁻¹ ½</td>
+<td>38 %</td>
+<td>Wang/Iokibe/Toyota (measured at 26.5°); Nitto Denko patent</td>
+</tr>
+<tr>
+<td>Fine, 1-mil films</td>
+<td>100 / 383 µm, 45°</td>
+<td>45 %</td>
+<td>Altium teardown of a webcam flex</td>
+</tr>
+<tr>
+<td>Dense</td>
+<td>0.2 / 0.4 mm, 45°</td>
+<td>75 %</td>
+<td>GC Aero, Siemens</td>
+</tr>
+<tr>
+<td>Coarse shield</td>
+<td>120 / 920 µm, 45°</td>
+<td>24 %</td>
+<td>Nippon Mektron and AST patents; Yu &amp; Kam 2022</td>
+</tr>
+<tr>
+<td>Missouri S&amp;T benchmark</td>
+<td>0.3 / 1.3 mm, 45°</td>
+<td>41 %</td>
+<td>Sun et al. 2024</td>
+</tr>
+<tr>
+<td>Long diamond</td>
+<td>5 mil bars, 50 × 24 mil cell</td>
+<td>≈ 41 %</td>
+<td>Sierra Circuits (shape only)</td>
+</tr>
+<tr>
+<td>Triangular</td>
+<td>65 µm bars, 0.5 mm triangles</td>
+<td>40 %</td>
+<td>Nitto Denko patent</td>
+</tr>
+</tbody>
+</table>
+<p>A hatch must repeat along the line for the 3D solve: 0°, 45°, tan⁻¹ ½ (26.6°)
+and tan⁻¹ ⅓ (18.4°) do; 30° never does, so the shallow-angle preset uses
+26.6°, an angle the Okayama board measured.</p>
 <h2 id="differential-pair-designer">Differential Pair Designer</h2>
 <p>Not just a Z_diff calculator: a <strong>manufacturability finder</strong>. You name a target
 differential impedance and it sweeps a two-dimensional grid of trace widths and
