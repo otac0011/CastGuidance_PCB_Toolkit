@@ -14,7 +14,7 @@ Run `CastGuidancePCBToolkit-Setup-<version>.exe`. On first launch you'll be aske
 
 ## What it does
 
-A desktop tool for PCB engineering, 50 calculators and wizards across:
+A desktop tool for PCB engineering, 52 calculators and wizards across:
 
 - **Core PCB** — trace impedance from a built-in 2D field solver (validated to 0.2 % against exact results) plus Hammerstad-Jensen / Cohn closed forms and 3D FDTD Z₀ via openEMS, a laminate builder (glass style, resin content, 29 laminate families), current carrying (IPC-2152 + IPC-2221), fusing current, via R/L/C and stub analysis
 - **Signal Integrity** — channel insertion-loss budget, jitter budget, conductor + dielectric loss with surface-roughness models, **Via Stub Impact analyzer** with 20 SerDes protocol presets and 3D sensitivity surface
